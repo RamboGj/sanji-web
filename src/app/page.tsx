@@ -5,16 +5,20 @@ import Image from 'next/image'
 import robotIcon from '@/assets/robot.svg'
 
 import * as Tabs from '@radix-ui/react-tabs'
-import * as Switch from '@radix-ui/react-switch'
+// import * as Switch from '@radix-ui/react-switch'
 
 import { Footer } from '@/components/atoms/Footer'
 import { Header } from '@/components/atoms/Header'
 import { Heading } from '@/components/atoms/Heading'
 import { Button } from '@/components/atoms/Button'
 import { GearSix, Info } from '@phosphor-icons/react'
+import { Switch } from '@/components/atoms/Switch'
+import { useState } from 'react'
 
 export default function Home() {
   const snipesMock = Array.from({ length: 4 })
+
+  const [isChecked, setIsChecked] = useState<boolean>(false)
 
   const attributesMock = [
     {
@@ -58,6 +62,12 @@ export default function Home() {
       <main>
         <div>
           <div>
+            <Switch
+              checked={isChecked}
+              onCheckedChange={(e) => {
+                setIsChecked(e)
+              }}
+            />
             <div>
               <Image src={robotIcon} alt="Robot Icon" />
             </div>
@@ -95,9 +105,7 @@ export default function Home() {
                         <div>
                           <div>
                             <Heading variant="h3">Snipe $TokenX</Heading>
-                            <Switch.Root>
-                              <Switch.Thumb />
-                            </Switch.Root>
+                            <Switch />
                           </div>
                           <div>
                             {attributesMock.map(({ title, value }) => {

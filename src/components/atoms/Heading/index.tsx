@@ -31,7 +31,5 @@ export function Heading({ variant = 'h1', className, ...rest }: HeadingProps) {
 
   const HeadingTag: any = HeadingTagMapping[variant]
 
-  console.log('HeadingTag', HeadingTag)
-
   return <HeadingTag className={headingClassName} {...rest} />
 }

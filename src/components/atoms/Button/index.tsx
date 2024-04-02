@@ -42,8 +42,6 @@ interface ButtonLabelProps
     ComponentProps<'span'> {}
 
 function Button({ variant, className, ...rest }: ButtonProps) {
-  console.log('classname', className)
-
   const { container } = button({ className, variant })
 
   return <button className={container()} {...rest} />
