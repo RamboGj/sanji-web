@@ -3,7 +3,7 @@ import { ComponentProps } from 'react'
 import { VariantProps, tv } from 'tailwind-variants'
 
 const heading = tv({
-  base: 'leading-0 text-purple50 font-bold',
+  base: 'leading-none text-purple50 font-bold',
   variants: {
     variant: {
       h1: 'text-[2.5rem]',

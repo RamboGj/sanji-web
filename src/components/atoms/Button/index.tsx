@@ -42,7 +42,7 @@ interface ButtonLabelProps
     ComponentProps<'span'> {}
 
 function Button({ variant, className, ...rest }: ButtonProps) {
-  const { container } = button({ className, variant })
+  const { container } = button({ variant, className })
 
   return <button className={container()} {...rest} />
 }
