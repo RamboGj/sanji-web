@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import Image from 'next/image'
@@ -7,10 +8,24 @@ import { Heading } from '@/components/atoms/Heading'
 import { Paragraph } from '@/components/atoms/Paragraph'
 import { Footer } from '@/components/atoms/Footer'
 import { Header } from '@/components/atoms/Header'
+import { getProvider } from '@/utils/solana'
 import { useRouter } from 'next/navigation'
 
 export default function Home() {
   const { push } = useRouter()
+
+  async function onConnect() {
+    const provider = getProvider()
+
+    try {
+      const resp = await provider.connect()
+      console.log('resp', resp)
+      console.log(resp.publicKey.toString())
+      push('/')
+    } catch (err) {
+      // { code: 4001, message: 'User rejected the request.' }
+    }
+  }
 
   return (
     <main className="w-full flex items-center flex-col min-h-screen">
@@ -22,7 +37,11 @@ export default function Home() {
             Sign in with your phantom wallet in order to enter the dapp
           </Paragraph>
 
-          <Button variant="ghost" onClick={() => push('/')}>
+          {/* <Paragraph className="mt-3 text-center">STATUS: {status}</Paragraph>
+          <Paragraph className="mt-3 text-center">account: {account}</Paragraph>
+          <Paragraph className="mt-3 text-center">chain: {chain}</Paragraph> */}
+
+          <Button variant="ghost" onClick={onConnect}>
             <Button.Icon>
               <Image src={phenom} height={26} alt="Phantom Wallet Logo" />
             </Button.Icon>

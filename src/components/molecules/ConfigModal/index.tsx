@@ -4,8 +4,15 @@ import Input from '@/components/atoms/Input'
 import { XCircle } from '@phosphor-icons/react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { ModalProps } from '@/@types/app'
+import { getProvider } from '@/utils/solana'
 
 export function ConfigModal({ onClose }: ModalProps) {
+  async function handleDisconnect() {
+    const provider = getProvider()
+
+    provider.disconnect()
+  }
+
   return (
     <Dialog.Portal>
       <Dialog.Overlay className="bg-gray900/80 fixed inset-0" />
@@ -37,7 +44,7 @@ export function ConfigModal({ onClose }: ModalProps) {
         </div>
 
         <div className="flex flex-col items-stretch gap-4 mt-12">
-          <Button variant="danger" onClick={onClose}>
+          <Button variant="danger" onClick={handleDisconnect}>
             <Button.Label>Sign out</Button.Label>
           </Button>
         </div>
