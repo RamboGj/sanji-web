@@ -16,6 +16,7 @@ import { CreateSnipeModal } from '@/components/molecules/CreateSnipeModal'
 import { DeleteSnipeModal } from '@/components/molecules/DeleteSnipeModal'
 import { SnipeCard } from '@/components/molecules/SnipeCard'
 import { ConfigModal } from '@/components/molecules/ConfigModal'
+import Link from 'next/link'
 
 type ModalOpenProps =
   | 'create-snipe'
@@ -97,9 +98,11 @@ export default function Home() {
                   BOT 001
                 </Heading>
                 <div className="w-[282px]">
-                  <Button>
-                    <Button.Label>View Activity</Button.Label>
-                  </Button>
+                  <Link href="/activity">
+                    <Button>
+                      <Button.Label>View Activity</Button.Label>
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>
