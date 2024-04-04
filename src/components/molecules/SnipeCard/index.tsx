@@ -2,14 +2,14 @@ import { Heading } from '@/components/atoms/Heading'
 import { SnipeCell } from '@/components/atoms/SnipeCell'
 import { Switch } from '@/components/atoms/Switch'
 import { TrashButton } from '@/components/atoms/TrashButton'
-import { ComponentProps } from 'react'
+import { ComponentProps, useState } from 'react'
 import { VariantProps, tv } from 'tailwind-variants'
 
 const snipeCard = tv({
   slots: {
     container: 'bg-gray900 rounded-xl border p-8',
     headerContainer: 'w-full flex items-center justify-between',
-    actionsContainer: 'w-full flex items-center justify-between',
+    actionsContainer: 'flex items-center gap-3',
     cellListContainer: 'grid grid-cols-5 gap-y-8 mt-6',
     cellItemContainer: 'col-span-1',
     titleStyle: 'text-purple50',
@@ -26,6 +26,9 @@ const snipeCard = tv({
       deprecated: {},
     },
   },
+  defaultVariants: {
+    status: 'default',
+  },
 })
 
 interface SnipeCardProps
@@ -36,6 +39,8 @@ interface SnipeCardProps
     title: string
     value: string
   }[]
+  onOpenTurnOnModal: () => void
+  onOpenDeleteModal: () => void
 }
 
 export function SnipeCard({
@@ -43,6 +48,8 @@ export function SnipeCard({
   data,
   status,
   className,
+  onOpenDeleteModal,
+  onOpenTurnOnModal,
   ...rest
 }: SnipeCardProps) {
   const {
@@ -54,6 +61,16 @@ export function SnipeCard({
     titleStyle,
   } = snipeCard({ className, status })
 
+  const [isOn, setIsOn] = useState<boolean>(false)
+
+  function handleSwitch() {
+    if (isOn) {
+      setIsOn(false)
+    } else {
+      onOpenTurnOnModal()
+    }
+  }
+
   return (
     <div className={container()} {...rest}>
       <header className={headerContainer()}>
@@ -61,8 +78,8 @@ export function SnipeCard({
           {title}
         </Heading>
         <div className={actionsContainer()}>
-          <TrashButton />
-          <Switch checked={status === 'default'} />
+          <TrashButton onClick={onOpenDeleteModal} />
+          <Switch checked={isOn} onClick={handleSwitch} />
         </div>
       </header>
       <ul className={cellListContainer()}>

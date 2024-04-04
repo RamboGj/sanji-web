@@ -7,8 +7,11 @@ import { Heading } from '@/components/atoms/Heading'
 import { Paragraph } from '@/components/atoms/Paragraph'
 import { Footer } from '@/components/atoms/Footer'
 import { Header } from '@/components/atoms/Header'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
+  const { push } = useRouter()
+
   return (
     <main className="w-full flex items-center flex-col min-h-screen">
       <Header />
@@ -19,7 +22,7 @@ export default function Home() {
             Sign in with your phantom wallet in order to enter the dapp
           </Paragraph>
 
-          <Button variant="ghost">
+          <Button variant="ghost" onClick={() => push('/')}>
             <Button.Icon>
               <Image src={phenom} height={26} alt="Phantom Wallet Logo" />
             </Button.Icon>
