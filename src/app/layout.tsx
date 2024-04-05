@@ -21,9 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AppContextProvider>
-        <body className={montserrat.className + ` bg-gray900`}>{children}</body>
-      </AppContextProvider>
+      {/* <AppContextProvider> */}
+      <body className={montserrat.className + ` bg-gray900`}>{children}</body>
+      {/* </AppContextProvider> */}
     </html>
   )
 }
