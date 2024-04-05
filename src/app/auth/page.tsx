@@ -11,19 +11,21 @@ import { Header } from '@/components/atoms/Header'
 import { getProvider } from '@/utils/solana'
 import { useRouter } from 'next/navigation'
 
-export default function Home() {
+export default function AuthPage() {
   const { push } = useRouter()
 
   async function onConnect() {
-    const provider = getProvider()
+    if (typeof window !== 'undefined') {
+      const provider = getProvider()
 
-    try {
-      const resp = await provider.connect()
-      console.log('resp', resp)
-      console.log(resp.publicKey.toString())
-      push('/')
-    } catch (err) {
-      // { code: 4001, message: 'User rejected the request.' }
+      try {
+        const resp = await provider.connect()
+        console.log('resp', resp)
+        console.log(resp.publicKey.toString())
+        push('/')
+      } catch (err) {
+        // { code: 4001, message: 'User rejected the request.' }
+      }
     }
   }
 
@@ -36,10 +38,6 @@ export default function Home() {
           <Paragraph className="mt-3 text-center mb-[100px]">
             Sign in with your phantom wallet in order to enter the dapp
           </Paragraph>
-
-          {/* <Paragraph className="mt-3 text-center">STATUS: {status}</Paragraph>
-          <Paragraph className="mt-3 text-center">account: {account}</Paragraph>
-          <Paragraph className="mt-3 text-center">chain: {chain}</Paragraph> */}
 
           <Button variant="ghost" onClick={onConnect}>
             <Button.Icon>

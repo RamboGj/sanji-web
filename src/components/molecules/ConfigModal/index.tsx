@@ -8,9 +8,11 @@ import { getProvider } from '@/utils/solana'
 
 export function ConfigModal({ onClose }: ModalProps) {
   async function handleDisconnect() {
-    const provider = getProvider()
+    if (typeof window !== 'undefined') {
+      const provider = getProvider()
 
-    provider.disconnect()
+      provider.disconnect()
+    }
   }
 
   return (

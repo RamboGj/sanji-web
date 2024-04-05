@@ -1,7 +1,8 @@
-export const isPhantomInstalled = window.phantom?.solana?.isPhantom
+export const isPhantomInstalled =
+  typeof window !== 'undefined' ? window.phantom?.solana?.isPhantom : null
 
 export function getProvider() {
-  if ('phantom' in window && typeof window !== 'undefined') {
+  if (typeof window !== 'undefined' && 'phantom' in window) {
     const provider = window.phantom?.solana
 
     if (provider?.isPhantom) {
@@ -13,7 +14,9 @@ export function getProvider() {
 }
 
 export async function onDisconnect() {
-  const provider = getProvider()
+  if (typeof window !== 'undefined') {
+    const provider = getProvider()
 
-  await provider.disconnect()
+    await provider.disconnect()
+  }
 }
