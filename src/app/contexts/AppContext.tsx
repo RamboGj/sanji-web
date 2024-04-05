@@ -15,7 +15,7 @@ export const AppContext = createContext({} as AppContextProps)
 export function AppContextProvider({ children }: AppContextProviderProps) {
   const { push } = useRouter()
 
-  const provider = getProvider()
+  const provider = typeof window !== 'undefined' ? getProvider() : null
 
   async function onVerifyIsLoggedIn() {
     const provider = getProvider()

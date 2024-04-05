@@ -1,7 +1,7 @@
 export const isPhantomInstalled = window.phantom?.solana?.isPhantom
 
 export function getProvider() {
-  if ('phantom' in window) {
+  if ('phantom' in window && typeof window !== 'undefined') {
     const provider = window.phantom?.solana
 
     if (provider?.isPhantom) {
