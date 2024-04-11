@@ -5,6 +5,7 @@ import { XCircle } from '@phosphor-icons/react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { ModalProps } from '@/@types/app'
 import { getProvider } from '@/utils/solana'
+import { deleteCookie } from 'cookies-next'
 
 export function ConfigModal({ onClose }: ModalProps) {
   async function handleDisconnect() {
@@ -12,6 +13,7 @@ export function ConfigModal({ onClose }: ModalProps) {
       const provider = getProvider()
 
       provider.disconnect()
+      deleteCookie('@sanji:public-key')
     }
   }
 

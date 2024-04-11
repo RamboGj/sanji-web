@@ -1,3 +1,5 @@
+import { deleteCookie } from 'cookies-next'
+
 export const isPhantomInstalled =
   typeof window !== 'undefined' ? window.phantom?.solana?.isPhantom : null
 
@@ -18,5 +20,6 @@ export async function onDisconnect() {
     const provider = getProvider()
 
     await provider.disconnect()
+    deleteCookie('@sanji:public-key')
   }
 }

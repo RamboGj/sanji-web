@@ -1,6 +1,7 @@
 'use client'
 
 import { getProvider } from '@/utils/solana'
+import { deleteCookie } from 'cookies-next'
 import { useRouter } from 'next/navigation'
 import { ReactNode, createContext, useEffect } from 'react'
 
@@ -24,7 +25,7 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
       .connect({ onlyIfTrusted: true })
       .then(({ publicKey }: { publicKey: string }) => {
         console.log('publicKey', publicKey.toString())
-        push('/')
+        console.log(window.location.href)
       })
       .catch(() => {
         console.log('err')
@@ -38,6 +39,7 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
 
   useEffect(() => {
     provider.on('disconnect', () => {
+      deleteCookie('@sanji:public-key')
       push('/auth')
     })
   }, [provider])

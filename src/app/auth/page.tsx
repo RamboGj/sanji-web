@@ -10,6 +10,7 @@ import { Footer } from '@/components/atoms/Footer'
 import { Header } from '@/components/atoms/Header'
 import { getProvider } from '@/utils/solana'
 import { useRouter } from 'next/navigation'
+import { setCookie } from 'cookies-next'
 
 export default function AuthPage() {
   const { push } = useRouter()
@@ -22,6 +23,7 @@ export default function AuthPage() {
         const resp = await provider.connect()
         console.log('resp', resp)
         console.log(resp.publicKey.toString())
+        setCookie('@sanji:public-key', resp.publicKey.toString())
         push('/')
       } catch (err) {
         // { code: 4001, message: 'User rejected the request.' }
