@@ -71,10 +71,10 @@ export function TurnOnSnipeModal({ onClose }: ModalProps) {
   ]
   return (
     <Dialog.Portal>
-      <Dialog.Overlay className="bg-gray900/80 fixed inset-0" />
-      <Dialog.Content className="fixed top-[50%] left-[50%] max-w-[596px] w-full translate-x-[-50%] translate-y-[-50%] bg-gray900 px-9 pt-6 pb-12 focus:outline-none border rounded-[20px] text-purple50 border-gray600">
+      <Dialog.Overlay className="fixed inset-0 bg-gray900/80" />
+      <Dialog.Content className="fixed left-[50%] top-[50%] w-full max-w-[596px] translate-x-[-50%] translate-y-[-50%] rounded-[20px] border border-gray600 bg-gray900 px-9 pb-12 pt-6 text-purple50 focus:outline-none">
         <div className="flex items-center justify-between">
-          <div className="opacity-0 w-6 h-6" />
+          <div className="h-6 w-6 opacity-0" />
           <Dialog.Title asChild>
             <Heading variant="h3" className="leading-none">
               TURN ON SNIPE
@@ -85,9 +85,9 @@ export function TurnOnSnipeModal({ onClose }: ModalProps) {
           </Dialog.Close>
         </div>
 
-        <div className="w-full h-px bg-gray500 mt-4" />
+        <div className="mt-4 h-px w-full bg-gray500" />
 
-        <div className="flex flex-col gap-y-6 mt-5">
+        <div className="mt-5 flex flex-col gap-y-6">
           <div className="flex flex-col items-start gap-y-3">
             <Paragraph variant="p1">
               Use admin’s default configuration
@@ -117,7 +117,7 @@ export function TurnOnSnipeModal({ onClose }: ModalProps) {
                 })}
               </div>
             ) : (
-              <div className="mt-4 grid grid-cols-2 gap-y-7 gap-x-8">
+              <div className="mt-4 grid grid-cols-2 gap-x-8 gap-y-7">
                 <div className="col-span-1">
                   <SnipeCell
                     title="Minting address"
@@ -133,7 +133,7 @@ export function TurnOnSnipeModal({ onClose }: ModalProps) {
                     cellDescription={'Mint is renounced'}
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-x-8 col-span-2">
+                <div className="col-span-2 grid grid-cols-2 gap-x-8">
                   <Input
                     className="col-span-1"
                     label="Quote amount"
@@ -162,7 +162,7 @@ export function TurnOnSnipeModal({ onClose }: ModalProps) {
                     tooltipContent="Place Cell description here."
                   />
 
-                  <div className="flex gap-3 flex-wrap mt-3">
+                  <div className="mt-3 flex flex-wrap gap-3">
                     {gasBidMocks.map(({ title, value }) => {
                       const isChecked = gasBid === value
 
@@ -171,10 +171,10 @@ export function TurnOnSnipeModal({ onClose }: ModalProps) {
                           <Checkbox.Root
                             onClick={() => setGasBid(value)}
                             checked={true}
-                            className={`w-6 h-6 border rounded-full ${isChecked ? 'bg-purple500 border-transparent' : 'border-gray500 '}`}
+                            className={`h-6 w-6 rounded-full border ${isChecked ? 'border-transparent bg-purple500' : 'border-gray500 '}`}
                             id={value}
                           />
-                          <span className="text-sm text-purple50 font-medium">
+                          <span className="text-sm font-medium text-purple50">
                             {title}
                           </span>
                         </div>
@@ -208,7 +208,7 @@ export function TurnOnSnipeModal({ onClose }: ModalProps) {
           </div>
         </div>
 
-        <div className="flex flex-col items-stretch gap-4 mt-12">
+        <div className="mt-12 flex flex-col items-stretch gap-4">
           <Button variant="primary" onClick={onClose}>
             <Button.Label>Turn on</Button.Label>
           </Button>
