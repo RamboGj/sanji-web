@@ -96,7 +96,7 @@ export function SnipeCard({
         })}
       </ul>
       <span
-        className="mt-8 flex justify-center text-lg font-semibold text-purple500"
+        className="mt-8 flex justify-center text-lg font-semibold text-purple500 lg:hidden"
         onClick={onOpenTurnOnModal}
         role="button"
       >
