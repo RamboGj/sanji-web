@@ -21,26 +21,12 @@ export const metadata: Metadata = {
     siteName: 'Sanji',
     description:
       'Welcome to our platform, where users can harness the power of automated bots to configure "snipes" on the Solana blockchain. Snipes are tailored settings that enable users to mark specific assets and execute purchases at opportune moments, securing coins at lower prices. Join us to streamline your cryptocurrency trading experience and maximize your investment potential on Solana',
-    images: [
-      {
-        url: '../assets/og.png',
-        width: 1200,
-        height: 600,
-        alt: 'Sanji opengraph image',
-      },
-    ],
   },
   twitter: {
     siteId: 'Sanji',
     title: 'Sanji',
     description:
       'Welcome to our platform, where users can harness the power of automated bots to configure "snipes" on the Solana blockchain. Snipes are tailored settings that enable users to mark specific assets and execute purchases at opportune moments, securing coins at lower prices. Join us to streamline your cryptocurrency trading experience and maximize your investment potential on Solana',
-    images: {
-      url: '../assets/og.png',
-      width: 1200,
-      height: 600,
-      alt: 'Sanji opengraph image',
-    },
   },
 }
 
