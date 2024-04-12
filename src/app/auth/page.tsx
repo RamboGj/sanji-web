@@ -30,14 +30,14 @@ export default function AuthPage() {
   }
 
   return (
-    <main className="w-full flex items-center flex-col min-h-screen">
+    <main className="flex min-h-screen w-full flex-col items-center">
       <Header />
-      <div className="mt-32 lg:mt-[200px] flex-1">
-        <div className="max-w-[465px] w-full flex flex-col items-center px-8 py-10 lg:bg-gray700 lg:border lg:border-gray500 rounded-[24px]">
+      <div className="mt-32 flex-1 lg:mt-[200px]">
+        <div className="flex w-full max-w-[465px] flex-col items-center rounded-[24px] px-8 py-10 lg:border lg:border-gray500 lg:bg-gray700">
           <Heading className="text-center leading-tight" variant="h2">
             Connect your wallet
           </Heading>
-          <Paragraph variant="p1" className="mt-3 text-center mb-[100px]">
+          <Paragraph variant="p1" className="mb-[100px] mt-3 text-center">
             Sign in with your phantom wallet in order to enter the dapp
           </Paragraph>
           <Button variant="ghost" onClick={onConnect}>
