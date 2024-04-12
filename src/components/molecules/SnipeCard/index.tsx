@@ -7,10 +7,12 @@ import { VariantProps, tv } from 'tailwind-variants'
 
 const snipeCard = tv({
   slots: {
-    container: 'bg-gray900 rounded-xl border p-8',
+    container:
+      'bg-gray900 rounded-[16px] lg:rounded-xl border px-4 py-6 lg:p-8',
     headerContainer: 'w-full flex items-center justify-between',
     actionsContainer: 'flex items-center gap-3',
-    cellListContainer: 'grid grid-cols-5 gap-y-8 mt-6',
+    cellListContainer:
+      'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-y-4 lg:gap-y-8 mt-6',
     cellItemContainer: 'col-span-1',
     titleStyle: 'text-purple50',
   },
@@ -79,7 +81,9 @@ export function SnipeCard({
         </Heading>
         <div className={actionsContainer()}>
           <TrashButton onClick={onOpenDeleteModal} />
-          <Switch checked={isOn} onClick={handleSwitch} />
+          <div className="hidden lg:block">
+            <Switch checked={isOn} onClick={handleSwitch} />
+          </div>
         </div>
       </header>
       <ul className={cellListContainer()}>
@@ -91,6 +95,13 @@ export function SnipeCard({
           )
         })}
       </ul>
+      <span
+        className="mt-8 flex justify-center text-lg font-semibold text-purple500"
+        onClick={onOpenTurnOnModal}
+        role="button"
+      >
+        Turn on
+      </span>
     </div>
   )
 }

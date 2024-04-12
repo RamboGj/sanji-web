@@ -5,7 +5,7 @@ import { InfoTooltip } from '../InfoTooltip'
 
 const snipeCell = tv({
   slots: {
-    container: 'flex flex-col gap-1.5',
+    container: 'flex flex-col gap-1.5 lg:gap-0',
     content: 'leading-none',
   },
   variants: {
@@ -44,12 +44,16 @@ export function SnipeCell({
   return (
     <div className={container()} {...rest}>
       <div className="flex items-center gap-2">
-        <Paragraph className="text-gray300 leading-none">{title}</Paragraph>
-        <InfoTooltip
-          content={cellDescription || 'Place Cell description here.'}
-        />
+        <Paragraph className="leading-none text-gray300">{title}</Paragraph>
+        <div className="hidden lg:block">
+          <InfoTooltip
+            content={cellDescription || 'Place Cell description here.'}
+          />
+        </div>
       </div>
-      <Paragraph className={content()}>{value}</Paragraph>
+      <Paragraph variant="p2" className={content()}>
+        {value}
+      </Paragraph>
     </div>
   )
 }

@@ -10,16 +10,17 @@ import { Header } from '@/components/atoms/Header'
 import { Heading } from '@/components/atoms/Heading'
 import { Button } from '@/components/atoms/Button'
 import { Gear, Plus } from '@phosphor-icons/react'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { TurnOnSnipeModal } from '@/components/molecules/TurnOnSnipeModal'
 import { CreateSnipeModal } from '@/components/molecules/CreateSnipeModal'
 import { DeleteSnipeModal } from '@/components/molecules/DeleteSnipeModal'
 import { SnipeCard } from '@/components/molecules/SnipeCard'
 import { ConfigModal } from '@/components/molecules/ConfigModal'
 import Link from 'next/link'
-import { onNotify } from '@/utils/alert'
+import { AppContext } from '@/app/contexts/AppContext'
+import { MobileBottomNavigation } from '../atoms/MobileBottomNavigation'
 
-type ModalOpenProps =
+export type ModalOpenProps =
   | 'create-snipe'
   | 'config'
   | 'delete-snipe'
@@ -29,7 +30,8 @@ type ModalOpenProps =
 
 export default function DashboardClientPage() {
   const [tab, setTab] = useState<string>('global')
-  const [modalOpen, setModalOpen] = useState<ModalOpenProps>('none')
+  const { modalOpen, setModalOpen } = useContext(AppContext)
+
   const snipesMock = Array.from({ length: 4 })
 
   function onClose() {
@@ -84,13 +86,13 @@ export default function DashboardClientPage() {
 
   return (
     <>
-      <div className="w-full h-full">
+      <div className="relative h-full w-full">
         <Header />
 
-        <main className="w-full px-[50px] mt-20 max-w-[1592px] mx-auto pb-[200px]">
-          <div className="flex items-start justify-between">
+        <main className="mx-auto mt-20 w-full max-w-[1592px] px-5 pb-[200px] lg:px-[50px]">
+          <div className="flex items-center justify-between lg:items-start">
             <div className="flex items-center gap-5">
-              <div className="w-[108px] h-[108px] bg-purple600 flex items-center justify-center rounded-[20px]">
+              <div className="hidden h-[108px] w-[108px] items-center justify-center rounded-[20px] bg-purple600 lg:flex">
                 <Image src={robotIcon} alt="Robot Icon" />
               </div>
 
@@ -98,24 +100,22 @@ export default function DashboardClientPage() {
                 <Heading className="leading-none" variant="h1">
                   BOT 001
                 </Heading>
-                <div className="w-[282px]">
-                  <Link href="/activity">
-                    <Button>
-                      <Button.Label>View Activity</Button.Label>
-                    </Button>
-                  </Link>
-                  <Button
-                    onClick={() => {
-                      onNotify('success', 'Hello')
-                    }}
-                  >
-                    <Button.Label>View teste</Button.Label>
+                <Link className="hidden w-[282px] lg:flex" href="/activity">
+                  <Button>
+                    <Button.Label>View Activity</Button.Label>
                   </Button>
-                </div>
+                </Link>
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div
+              role="button"
+              onClick={() => setModalOpen('create-snipe')}
+              className="lg:hidden"
+            >
+              <span className="text-[1.25rem] text-purple500">Add</span>
+            </div>
+            <div className="hidden items-center gap-4 lg:flex">
               <div className="w-[52px]">
                 <Button onClick={() => setModalOpen('create-snipe')}>
                   <Button.Icon>
@@ -133,14 +133,16 @@ export default function DashboardClientPage() {
             </div>
           </div>
 
-          <div className="w-full h-px bg-gray600 mt-6" />
+          <div className="mt-6 hidden h-px w-full bg-gray600 lg:block" />
 
-          <div className="mt-10">
-            <Heading variant="h2">Snipes</Heading>
+          <div className="mt-6 lg:mt-10">
+            <Heading className="hidden lg:flex" variant="h2">
+              Snipes
+            </Heading>
 
-            <div className="w-full rounded-xl bg-gray800 border border-gray600">
+            <div className="w-full rounded-xl lg:mt-5 lg:border lg:border-gray600 lg:bg-gray800">
               <Tabs.Root defaultValue="global">
-                <Tabs.List className="py-3 px-8 flex items-center gap-12">
+                <Tabs.List className="flex items-center gap-8 lg:gap-12 lg:px-8 lg:py-3">
                   {tabsTrigger.map(({ title, value }) => {
                     const isActive = value === tab
 
@@ -167,10 +169,10 @@ export default function DashboardClientPage() {
                   })}
                 </Tabs.List>
 
-                <div className="w-full h-px bg-gray600" />
+                <div className="hidden h-px w-full bg-gray600 lg:block" />
 
                 <Tabs.Content value="global">
-                  <ul className="flex flex-col items-stretch py-10 px-8 gap-10">
+                  <ul className="flex flex-col items-stretch gap-5 py-5 lg:gap-10 lg:px-8 lg:py-10">
                     {snipesMock.map((it, index) => {
                       return (
                         <li key={index}>
@@ -190,7 +192,7 @@ export default function DashboardClientPage() {
                   </ul>
                 </Tabs.Content>
                 <Tabs.Content value="active">
-                  <ul className="flex flex-col items-stretch py-10 px-8 gap-10">
+                  <ul className="flex flex-col items-stretch gap-5 py-5 lg:gap-10 lg:py-10">
                     <SnipeCard
                       onOpenDeleteModal={() => setModalOpen('delete-snipe')}
                       data={attributesMock}
@@ -205,7 +207,10 @@ export default function DashboardClientPage() {
         </main>
 
         <Footer />
+
+        <MobileBottomNavigation />
       </div>
+
       <Dialog.Root open={modalOpen !== 'none'}>
         {modalOpen === 'create-snipe' ? (
           <CreateSnipeModal onClose={onClose} />

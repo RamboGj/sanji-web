@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import Image from 'next/image'
@@ -21,9 +20,8 @@ export default function AuthPage() {
 
       try {
         const resp = await provider.connect()
-        console.log('resp', resp)
-        console.log(resp.publicKey.toString())
         setCookie('@sanji:public-key', resp.publicKey.toString())
+        console.log('push')
         push('/')
       } catch (err) {
         // { code: 4001, message: 'User rejected the request.' }
@@ -34,13 +32,14 @@ export default function AuthPage() {
   return (
     <main className="w-full flex items-center flex-col min-h-screen">
       <Header />
-      <div className="mt-[200px] flex-1">
-        <div className="max-w-[465px] w-full flex flex-col items-center px-8 py-10 bg-gray700 border border-gray500 rounded-[24px]">
-          <Heading variant="h2">Connect your wallet</Heading>
-          <Paragraph className="mt-3 text-center mb-[100px]">
+      <div className="mt-32 lg:mt-[200px] flex-1">
+        <div className="max-w-[465px] w-full flex flex-col items-center px-8 py-10 lg:bg-gray700 lg:border lg:border-gray500 rounded-[24px]">
+          <Heading className="text-center leading-tight" variant="h2">
+            Connect your wallet
+          </Heading>
+          <Paragraph variant="p1" className="mt-3 text-center mb-[100px]">
             Sign in with your phantom wallet in order to enter the dapp
           </Paragraph>
-
           <Button variant="ghost" onClick={onConnect}>
             <Button.Icon>
               <Image src={phenom} height={26} alt="Phantom Wallet Logo" />

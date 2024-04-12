@@ -8,7 +8,7 @@ import { getProvider } from '@/utils/solana'
 import { deleteCookie } from 'cookies-next'
 
 export function ConfigModal({ onClose }: ModalProps) {
-  async function handleDisconnect() {
+  function handleDisconnect() {
     if (typeof window !== 'undefined') {
       const provider = getProvider()
 

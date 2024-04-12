@@ -6,8 +6,8 @@ import { Paragraph } from '../Paragraph'
 const transactionCard = tv({
   slots: {
     container:
-      'bg-gray900 border border-gray600 rounded-[16px] p-8 flex items-center justify-between',
-    dataContainer: 'flex items-stretch gap-12',
+      'bg-gray900 border border-gray600 rounded-[16px] p-6 lg:p-8 flex-wrap lg:flex-nowrap flex items-center justify-between',
+    dataContainer: 'grid grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-4',
     dataItemContainer: 'flex flex-col gap-1.5',
   },
 })
@@ -69,7 +69,7 @@ export function TransactionCard({
       <ul className={dataContainer()}>
         {data.map(({ title, value }) => {
           return (
-            <li key={`${title}-${value}`}>
+            <li key={`${title}-${value}`} className="col-span-1">
               <div className={dataItemContainer()}>
                 <Paragraph className="leading-none text-gray300" variant="p1">
                   {title}
@@ -83,7 +83,7 @@ export function TransactionCard({
         })}
       </ul>
       <Link
-        className="text-purple600 hover:text-purple700 transition-colors duration-300 text-lg"
+        className="mx-auto mt-9 flex text-lg font-medium text-purple600 transition-colors duration-300 hover:text-purple700 lg:mx-0 lg:mt-0"
         href={transactionUrl || '#'}
       >
         View in block explorer

@@ -6,8 +6,8 @@ import { VariantProps, tv } from 'tailwind-variants'
 const button = tv({
   slots: {
     container:
-      'w-full h-[52px] w-full px-2 border rounded-lg hover:transtion-colors duration-300 group flex justify-center items-center',
-    label: 'text-purple50 text-lg font-bold drop-shadow-sm',
+      'w-full h-[42px] lg:h-[52px] w-full px-2 border rounded-lg hover:transtion-colors duration-300 group flex justify-center items-center',
+    label: 'text-purple50 text-sm lg:text-lg font-bold drop-shadow-sm',
   },
   variants: {
     variant: {

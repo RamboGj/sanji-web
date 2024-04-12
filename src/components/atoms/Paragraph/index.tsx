@@ -5,8 +5,8 @@ const paragraph = tv({
   base: 'leading-0 text-purple50 font-medium',
   variants: {
     variant: {
-      p1: 'text-lg',
-      p2: 'text-base',
+      p1: 'text-xs lg:text-lg leading-none',
+      p2: 'text-xs lg:text-base leading-none',
     },
   },
   defaultVariants: {
