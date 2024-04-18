@@ -63,6 +63,15 @@ const config: Config = {
           from: { opacity: '1', transform: 'translateY(0)' },
           to: { opacity: '0', transform: 'translateY(-20px) scaleX(0)' },
         },
+
+        modalEnter: {
+          from: {
+            opacity: '0',
+          },
+          to: {
+            opacity: '1',
+          },
+        },
       },
       animation: {
         slideDownAndFade:
@@ -74,6 +83,7 @@ const config: Config = {
           'slideRightAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)',
         enter: 'enter 400ms',
         leave: 'leave 400ms',
+        modalEnter: 'modalEnter 300ms',
       },
     },
   },

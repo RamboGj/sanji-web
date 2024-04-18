@@ -1,19 +1,8 @@
-import type { Metadata } from 'next'
-import { Montserrat } from 'next/font/google'
-import { AppContextProvider } from './contexts/AppContext'
-import { Toaster } from 'react-hot-toast'
-import './globals.css'
-import { SolanaContextProvider } from './contexts/SolanaContext'
-import { Header } from '@/components/atoms/Header'
-
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
-  variable: '--montserrat',
-})
+import { Metadata } from 'next'
+import { ReactNode } from 'react'
 
 export const metadata: Metadata = {
-  title: 'Sanji',
+  title: 'Sanji | Authorization',
   description:
     'Welcome to our platform, where users can harness the power of automated bots to configure "snipes" on the Solana blockchain. Snipes are tailored settings that enable users to mark specific assets and execute purchases at opportune moments, securing coins at lower prices. Join us to streamline your cryptocurrency trading experience and maximize your investment potential on Solana',
   openGraph: {
@@ -32,22 +21,6 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
-  return (
-    <html lang="en">
-      <AppContextProvider>
-        <SolanaContextProvider>
-          <body className={montserrat.className + ` bg-gray900`}>
-            <Header />
-            {children}
-          </body>
-          <Toaster position="top-right" />
-        </SolanaContextProvider>
-      </AppContextProvider>
-    </html>
-  )
+export default function AuthLayout({ children }: { children: ReactNode }) {
+  return children
 }

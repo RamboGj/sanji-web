@@ -1,5 +1,6 @@
 'use client'
 
+import { CircleNotch } from '@phosphor-icons/react'
 import { ComponentProps, ReactNode } from 'react'
 import { VariantProps, tv } from 'tailwind-variants'
 
@@ -35,16 +36,29 @@ const button = tv({
 
 interface ButtonProps
   extends ComponentProps<'button'>,
-    VariantProps<typeof button> {}
+    VariantProps<typeof button> {
+  isLoading?: boolean
+}
 
 interface ButtonLabelProps
   extends VariantProps<typeof button>,
     ComponentProps<'span'> {}
 
-function Button({ variant, className, ...rest }: ButtonProps) {
+function Button({
+  variant,
+  className,
+  isLoading,
+  children,
+  disabled,
+  ...rest
+}: ButtonProps) {
   const { container } = button({ variant, className })
 
-  return <button className={container()} {...rest} />
+  return (
+    <button disabled={isLoading || disabled} className={container()} {...rest}>
+      {isLoading ? <CircleNotch className="animate-spin" /> : <>{children}</>}
+    </button>
+  )
 }
 
 function ButtonLabel({ variant, ...rest }: ButtonLabelProps) {

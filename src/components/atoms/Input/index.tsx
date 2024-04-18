@@ -7,7 +7,7 @@ import { Label } from '../Label'
 
 const inputStyles = tv({
   slots: {
-    container: 'flex flex-col gap-2',
+    container: 'w-full flex flex-col gap-2',
     labelText: 'font-medium text-base lg:text-lg',
     errorText: 'text-red500 text-sm font-montserrat',
     input:

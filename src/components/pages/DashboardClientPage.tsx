@@ -6,7 +6,6 @@ import robotIcon from '@/assets/robot.svg'
 import * as Tabs from '@radix-ui/react-tabs'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Footer } from '@/components/atoms/Footer'
-import { Header } from '@/components/atoms/Header'
 import { Heading } from '@/components/atoms/Heading'
 import { Button } from '@/components/atoms/Button'
 import { Gear, Plus } from '@phosphor-icons/react'
@@ -19,6 +18,7 @@ import { ConfigModal } from '@/components/molecules/ConfigModal'
 import Link from 'next/link'
 import { AppContext } from '@/app/contexts/AppContext'
 import { MobileBottomNavigation } from '../atoms/MobileBottomNavigation'
+import { useWallet } from '@solana/wallet-adapter-react'
 
 export type ModalOpenProps =
   | 'create-snipe'
@@ -32,7 +32,13 @@ export default function DashboardClientPage() {
   const [tab, setTab] = useState<string>('global')
   const { modalOpen, setModalOpen } = useContext(AppContext)
 
+  const { connected, wallet, publicKey } = useWallet()
+
   const snipesMock = Array.from({ length: 4 })
+
+  console.log('connected', connected)
+  console.log('wallet', wallet)
+  console.log('publicKey', publicKey?.toString())
 
   function onClose() {
     setModalOpen('none')
@@ -87,8 +93,6 @@ export default function DashboardClientPage() {
   return (
     <>
       <div className="relative h-full w-full">
-        <Header />
-
         <main className="mx-auto mt-20 w-full max-w-[1592px] px-5 pb-[200px] lg:px-[50px]">
           <div className="flex items-center justify-between lg:items-start">
             <div className="flex items-center gap-5">
@@ -100,6 +104,7 @@ export default function DashboardClientPage() {
                 <Heading className="leading-none" variant="h1">
                   BOT 001
                 </Heading>
+
                 <Link className="hidden w-[282px] lg:flex" href="/activity">
                   <Button>
                     <Button.Label>View Activity</Button.Label>
@@ -192,7 +197,7 @@ export default function DashboardClientPage() {
                   </ul>
                 </Tabs.Content>
                 <Tabs.Content value="active">
-                  <ul className="flex flex-col items-stretch gap-5 py-5 lg:gap-10 lg:py-10">
+                  <ul className="flex flex-col items-stretch gap-5 py-5 lg:gap-10 lg:px-8 lg:py-10">
                     <SnipeCard
                       onOpenDeleteModal={() => setModalOpen('delete-snipe')}
                       data={attributesMock}

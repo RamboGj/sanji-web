@@ -1,7 +1,6 @@
 'use client'
 
 import { Footer } from '@/components/atoms/Footer'
-import { Header } from '@/components/atoms/Header'
 import { Heading } from '@/components/atoms/Heading'
 import { TransactionCard } from '@/components/atoms/TransactionCard'
 import { CaretLeft } from '@phosphor-icons/react'
@@ -24,8 +23,6 @@ export function ActivityClientPage() {
 
   return (
     <div className="relative h-full w-full">
-      <Header />
-
       <main className="mx-auto mt-20 w-full max-w-[1592px] px-5 pb-[200px] lg:px-[50px]">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-5">
