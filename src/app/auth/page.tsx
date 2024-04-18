@@ -15,8 +15,6 @@ export default function AuthPage() {
   const { connect } = useWallet()
   const { setVisible, visible } = useWalletModal()
 
-  console.log('')
-
   async function onConnect() {
     setVisible(true)
     try {
