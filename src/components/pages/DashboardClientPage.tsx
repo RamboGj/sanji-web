@@ -10,9 +10,8 @@ import { Button } from '@/components/atoms/Button'
 import { Gear, Target } from '@phosphor-icons/react'
 import { useContext, useState } from 'react'
 import { TurnOnSnipeModal } from '@/components/molecules/TurnOnSnipeModal'
-import { CreateSnipeModal } from '@/components/molecules/CreateSnipeModal'
+import { ChangeSnipeModal } from '@/components/molecules/ChangeSnipeModal'
 import { DeleteSnipeModal } from '@/components/molecules/DeleteSnipeModal'
-import { SnipeCard } from '@/components/molecules/SnipeCard'
 import { ConfigModal } from '@/components/molecules/ConfigModal'
 import Link from 'next/link'
 import { AppContext } from '@/app/contexts/AppContext'
@@ -21,6 +20,7 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { Switch } from '../atoms/Switch'
 import { Paragraph } from '../atoms/Paragraph'
 import { UseSnipeListFalseWarning } from '../molecules/UseSnipeListFalseWarning'
+import { BotDataProps } from '@/utils/types'
 
 export type ModalOpenProps =
   | 'create-snipe'
@@ -30,14 +30,26 @@ export type ModalOpenProps =
   | 'config'
   | 'none'
 
-export default function DashboardClientPage() {
-  const [tab, setTab] = useState<string>('global')
+interface DashboardClientPageProps {
+  data: BotDataProps
+}
+
+export default function DashboardClientPage({
+  data,
+}: DashboardClientPageProps) {
+  console.log('data inside', data)
+  const { modalOpen, setModalOpen, setBotData } = useContext(AppContext)
+
+  const [tab, setTab] = useState<string>('mySnipes')
   const [isBotOn, setIsBotOn] = useState<boolean>(false)
-  const { modalOpen, setModalOpen } = useContext(AppContext)
 
   const { connected, wallet, publicKey } = useWallet()
 
-  const snipesMock = Array.from({ length: 4 })
+  const snipeList = data?.snipeList?.split('\\n').filter((element) => {
+    return element.length > 0
+  })
+
+  setBotData(data)
 
   console.log('connected', connected)
   console.log('wallet', wallet)
@@ -47,49 +59,14 @@ export default function DashboardClientPage() {
     setModalOpen('none')
   }
 
-  const attributesMock = [
-    {
-      title: 'Minting address',
-      value: '0X...F9b',
-    },
-    {
-      title: 'Quote amount',
-      value: '299 $SOL',
-    },
-    {
-      title: 'Mint is renounced',
-      value: 'true',
-    },
-    {
-      title: 'Minimum pool size',
-      value: '1000 $SOL',
-    },
-    {
-      title: 'Gas bid',
-      value: 'low',
-    },
-    {
-      title: 'Auto sell',
-      value: 'false',
-    },
-    {
-      title: 'Sell delay',
-      value: '370ms',
-    },
-    {
-      title: 'Sell retries',
-      value: '5',
-    },
-  ]
-
   const tabsTrigger = [
     {
-      value: 'global',
-      title: 'Global',
+      value: 'mySnipes',
+      title: 'My Snipes',
     },
     {
-      value: 'active',
-      title: 'Active',
+      value: 'alpha',
+      title: 'Alpha',
     },
   ]
 
@@ -106,7 +83,7 @@ export default function DashboardClientPage() {
               <div className="flex flex-col gap-[10px]">
                 <div className="flex items-center gap-6">
                   <Heading className="leading-none" variant="h1">
-                    BOT 001
+                    BOT {data._id.slice(0, 10) + '...'}
                   </Heading>
                   {isBotOn ? (
                     <div className="flex items-center gap-1.5">
@@ -178,10 +155,12 @@ export default function DashboardClientPage() {
             </Heading>
 
             <div className="relative w-full rounded-xl lg:mt-5 lg:border lg:border-gray600 lg:bg-gray800">
-              <Tabs.Root defaultValue="global">
+              <Tabs.Root defaultValue="mySnipes">
                 <Tabs.List className="flex items-center gap-8 lg:gap-12 lg:px-8 lg:py-3">
                   {tabsTrigger.map(({ title, value }) => {
                     const isActive = value === tab
+
+                    console.log('isActive', isActive)
 
                     return (
                       <Tabs.Trigger
@@ -208,38 +187,50 @@ export default function DashboardClientPage() {
 
                 <div className="hidden h-px w-full bg-gray600 lg:block" />
 
-                <Tabs.Content value="global">
-                  <ul className="flex flex-col items-stretch gap-5 py-5 lg:gap-10 lg:px-8 lg:py-10">
-                    {snipesMock.map((it, index) => {
-                      return (
-                        <li key={index}>
-                          <SnipeCard
-                            onOpenDeleteModal={() =>
-                              setModalOpen('delete-snipe')
-                            }
-                            onOpenTurnOnModal={() =>
-                              setModalOpen('turn-on-snipe')
-                            }
-                            data={attributesMock}
-                            title="Snipe TokenX"
-                          />
-                        </li>
-                      )
-                    })}
-                  </ul>
+                <Tabs.Content value="mySnipes">
+                  {snipeList ? (
+                    <ul className="flex flex-col items-stretch gap-5 py-5 lg:gap-10 lg:px-8 lg:py-10">
+                      {snipeList?.map((element, index) => {
+                        return (
+                          <li key={index}>
+                            <div className="rounded-[16px] border border-gray600 bg-gray900 px-4 py-6 lg:rounded-xl lg:p-8">
+                              <Heading className="text-gray400" variant="h3">
+                                {element}
+                              </Heading>
+                            </div>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  ) : (
+                    <div className="flex flex-col items-stretch gap-5 py-5 lg:gap-10 lg:px-8 lg:py-10">
+                      <Paragraph>No snipe found.</Paragraph>
+                    </div>
+                  )}
                 </Tabs.Content>
-                <Tabs.Content value="active">
-                  <ul className="flex flex-col items-stretch gap-5 py-5 lg:gap-10 lg:px-8 lg:py-10">
-                    <SnipeCard
-                      onOpenDeleteModal={() => setModalOpen('delete-snipe')}
-                      data={attributesMock}
-                      title="Snipe TokenX"
-                      onOpenTurnOnModal={() => setModalOpen('turn-on-snipe')}
-                    />
-                  </ul>
+                <Tabs.Content value="alpha">
+                  {snipeList ? (
+                    <ul className="flex flex-col items-stretch gap-5 py-5 lg:gap-10 lg:px-8 lg:py-10">
+                      {snipeList?.map((element, index) => {
+                        return (
+                          <li key={index}>
+                            <div className="rounded-[16px] border border-gray600 bg-gray900 px-4 py-6 lg:rounded-xl lg:p-8">
+                              <Heading className="text-gray400" variant="h3">
+                                {element}
+                              </Heading>
+                            </div>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  ) : (
+                    <div className="flex flex-col items-stretch gap-5 py-5 lg:gap-10 lg:px-8 lg:py-10">
+                      <Paragraph>No snipe found.</Paragraph>
+                    </div>
+                  )}
                 </Tabs.Content>
               </Tabs.Root>
-              <UseSnipeListFalseWarning />
+              {data.useSnipeList ? null : <UseSnipeListFalseWarning />}
             </div>
           </div>
         </main>
@@ -249,7 +240,7 @@ export default function DashboardClientPage() {
 
       <Dialog.Root open={modalOpen !== 'none'}>
         {modalOpen === 'create-snipe' ? (
-          <CreateSnipeModal onClose={onClose} />
+          <ChangeSnipeModal data={data} onClose={onClose} />
         ) : null}
         {modalOpen === 'delete-snipe' ? (
           <DeleteSnipeModal onClose={onClose} />
@@ -257,7 +248,9 @@ export default function DashboardClientPage() {
         {modalOpen === 'turn-on-snipe' ? (
           <TurnOnSnipeModal onClose={onClose} />
         ) : null}
-        {modalOpen === 'config' ? <ConfigModal onClose={onClose} /> : null}
+        {modalOpen === 'config' && typeof data !== 'undefined' ? (
+          <ConfigModal data={data} onClose={onClose} />
+        ) : null}
       </Dialog.Root>
     </>
   )

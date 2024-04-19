@@ -7,13 +7,14 @@ import { ComponentProps, useContext } from 'react'
 
 import * as Dialog from '@radix-ui/react-dialog'
 import { ConfigModal } from '@/components/molecules/ConfigModal'
+import { BotDataProps } from '@/utils/types'
 
 interface MobileBottomNavigationProps extends ComponentProps<'div'> {}
 
 export function MobileBottomNavigation({
   ...rest
 }: MobileBottomNavigationProps) {
-  const { modalOpen, setModalOpen } = useContext(AppContext)
+  const { modalOpen, setModalOpen, botData } = useContext(AppContext)
 
   const pathname = usePathname()
   const { push } = useRouter()
@@ -54,7 +55,10 @@ export function MobileBottomNavigation({
         key={`mobile-bottom-navigation:${pathname}-${modalOpen}`}
         open={modalOpen === 'config'}
       >
-        <ConfigModal onClose={() => setModalOpen('none')} />
+        <ConfigModal
+          data={botData as BotDataProps}
+          onClose={() => setModalOpen('none')}
+        />
       </Dialog.Root>
     </>
   )

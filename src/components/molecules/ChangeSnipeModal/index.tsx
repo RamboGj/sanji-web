@@ -5,14 +5,48 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { useState } from 'react'
 import { ModalProps } from '@/@types/app'
 import { Label } from '@/components/atoms/Label'
+import { COOKIES_KEY } from '@/utils/cookies'
+import { getCookie } from 'cookies-next'
+import axios from 'axios'
+import { BotDataProps } from '@/utils/types'
+import { onNotify } from '@/utils/alert'
 
-export function CreateSnipeModal({ onClose }: ModalProps) {
-  const [snipeConfig, setSnipeConfig] = useState<string>('')
+interface ChangeSnipeModalProps extends ModalProps {
+  data: BotDataProps
+}
 
-  function handleSave() {
+export function ChangeSnipeModal({ data, onClose }: ChangeSnipeModalProps) {
+  const [snipeConfig, setSnipeConfig] = useState<string>(data?.snipeList || '')
+
+  async function onUpdateSnipeList() {
+    const jwt = getCookie(COOKIES_KEY.JWT)
+
     const textWithNewlines = snipeConfig.replace(/\n/g, '\\n') // Replace line breaks with \n
-    console.log('textWithNewlines', textWithNewlines)
+
+    try {
+      await axios(`https://api.natoshi.app/v1/bot/${data._id}`, {
+        method: 'PUT',
+        data: {
+          snipeList: textWithNewlines,
+        },
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }).then((res) => {
+        console.log('RES BOT', res)
+        onNotify('success', 'Snipe list configuration successfully updated.')
+      })
+    } catch (err) {
+      console.log('err', err)
+    }
   }
+
+  const defaultValue = snipeConfig
+    .split('\\n')
+    .filter((element) => {
+      return element.length > 0
+    })
+    .join('\n')
 
   return (
     <Dialog.Portal>
@@ -39,11 +73,12 @@ export function CreateSnipeModal({ onClose }: ModalProps) {
             htmlFor="snipeSettings"
           />
           <textarea
-            value={snipeConfig}
+            defaultValue={defaultValue}
+            value={defaultValue}
             onChange={(e) => {
               setSnipeConfig(e.target.value)
             }}
-            className="w-full overflow-y-scroll whitespace-pre-wrap rounded-lg border border-transparent bg-gray600 px-4 py-3 font-medium text-purple50 transition duration-500 placeholder:text-gray400 focus:border-purple500 focus:bg-gray700 focus:outline-none"
+            className="w-full resize-none overflow-y-scroll whitespace-pre-wrap rounded-lg border border-transparent bg-gray600 px-4 py-3 font-medium text-purple50 transition duration-500 placeholder:text-gray400 focus:border-purple500 focus:bg-gray700 focus:outline-none"
             placeholder={`EGGoorE6ULqPzJYVZNSmUrNkLqJtSjbbt9iCjr5AarCF\nLP:USDC-SOL\nLP:SOL-WIF\nLP:WIF-SOL`}
             name="snipeSettings"
             id="snipeSettings"
@@ -52,7 +87,7 @@ export function CreateSnipeModal({ onClose }: ModalProps) {
         </div>
 
         <div className="mt-12 flex flex-col items-stretch gap-4">
-          <Button variant="primary" onClick={handleSave}>
+          <Button variant="primary" onClick={onUpdateSnipeList}>
             <Button.Label>Save</Button.Label>
           </Button>
           <Button variant="ghost" onClick={onClose}>

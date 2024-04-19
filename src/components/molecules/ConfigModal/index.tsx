@@ -14,6 +14,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { onNotify } from '@/utils/alert'
+import { BotDataProps } from '@/utils/types'
+import { getCookie } from 'cookies-next'
+import { COOKIES_KEY } from '@/utils/cookies'
 
 const configSchema = z.object({
   quoteAmount: z.string().optional(),
@@ -24,11 +27,21 @@ const configSchema = z.object({
 
 type ConfigSchemaData = z.infer<typeof configSchema>
 
-export function ConfigModal({ onClose }: ModalProps) {
-  const [isMintRenounced, setIsMintRenounced] = useState<boolean>(false)
-  const [isAutoSell, setIsAutoSell] = useState<boolean>(false)
-  const [useSnipeList, setUseSnipeList] = useState<boolean>(false)
-  const [gasBid, setGasBid] = useState<string>('low')
+interface ConfigModalProps extends ModalProps {
+  data: BotDataProps
+}
+
+export function ConfigModal({ data, onClose }: ConfigModalProps) {
+  console.log('data config modal', data)
+
+  const [isMintRenounced, setIsMintRenounced] = useState<boolean>(
+    data?.checkIfMintIsRenounced || false,
+  )
+  const [isAutoSell, setIsAutoSell] = useState<boolean>(data?.autoSell || false)
+  const [useSnipeList, setUseSnipeList] = useState<boolean>(
+    data?.useSnipeList || false,
+  )
+  const [gasBid, setGasBid] = useState<string>(data?.gasLevel || 'Low')
 
   const {
     register,
@@ -36,35 +49,32 @@ export function ConfigModal({ onClose }: ModalProps) {
     formState: { errors },
   } = useForm<ConfigSchemaData>({
     defaultValues: {
-      quoteAmount: '',
-      minimumPoolSize: '',
-      sellDelay: '',
-      sellRetries: '',
+      quoteAmount: String(data?.quoteAmount) || '',
+      minimumPoolSize: String(data?.minPoolSize) || '',
+      sellDelay: String(data?.autoSellDelay) || '0',
+      sellRetries: String(data?.maxSellRetries) || '0',
     },
     resolver: zodResolver(configSchema),
   })
 
-  async function onSubmit(data: ConfigSchemaData) {
-    console.log('data', data)
-    console.log('useSnipeList', useSnipeList)
-    console.log('isMintRenounced', isMintRenounced)
-    console.log('gasBid', gasBid)
-    console.log('isAutoSell', isAutoSell)
-
-    const id = 0
+  async function onSubmit(formData: ConfigSchemaData) {
+    const jwt = getCookie(COOKIES_KEY.JWT)
 
     try {
-      await axios(`https://api.natoshi.app/v1/bot/${id}`, {
-        method: 'POST',
+      await axios(`https://api.natoshi.app/v1/bot/${data._id}`, {
+        method: 'PUT',
         data: {
-          quoteAmount: data.quoteAmount,
+          quoteAmount: formData.quoteAmount,
           useSnipeList,
-          minPoolSize: data.minimumPoolSize,
+          minPoolSize: formData.minimumPoolSize,
           checkIfMintIsRenounced: isMintRenounced,
           autoSell: isAutoSell,
-          maxSellRetries: data.sellRetries,
-          autoSellDelay: data.sellDelay,
+          maxSellRetries: formData.sellRetries,
+          autoSellDelay: formData.sellDelay,
           gasLevel: gasBid,
+        },
+        headers: {
+          Authorization: `Bearer ${jwt}`,
         },
       }).then((res) => {
         console.log('RES BOT', res)
@@ -78,19 +88,19 @@ export function ConfigModal({ onClose }: ModalProps) {
   const gasBidMocks = [
     {
       title: 'Low',
-      value: 'low',
+      value: 'Low',
     },
     {
       title: 'Medium',
-      value: 'medium',
+      value: 'Medium',
     },
     {
       title: 'High',
-      value: 'high',
+      value: 'High',
     },
     {
       title: 'Maximum',
-      value: 'maximum',
+      value: 'Maximum',
     },
   ]
 
