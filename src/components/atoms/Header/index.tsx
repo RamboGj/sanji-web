@@ -6,6 +6,8 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { SignOut } from '@phosphor-icons/react'
 import Link from 'next/link'
+import { deleteCookie } from 'cookies-next'
+import { COOKIES_KEY } from '@/utils/cookies'
 
 export function Header() {
   const pathname = usePathname()
@@ -17,6 +19,7 @@ export function Header() {
 
   async function onDisconnect() {
     await disconnect()
+    deleteCookie(COOKIES_KEY.JWT)
     push('/auth')
   }
 

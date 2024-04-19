@@ -1,16 +1,11 @@
 'use client'
 
 import { ModalOpenProps } from '@/components/pages/DashboardClientPage'
-import { getProvider } from '@/utils/solana'
-import { deleteCookie } from 'cookies-next'
-import { useRouter } from 'next/navigation'
 import {
   Dispatch,
   ReactNode,
   SetStateAction,
   createContext,
-  // useCallback,
-  useEffect,
   useState,
 } from 'react'
 
@@ -27,18 +22,6 @@ export const AppContext = createContext({} as AppContextProps)
 
 export function AppContextProvider({ children }: AppContextProviderProps) {
   const [modalOpen, setModalOpen] = useState<ModalOpenProps>('none')
-
-  const { push } = useRouter()
-
-  const provider = typeof window !== 'undefined' ? getProvider() : null
-
-  useEffect(() => {
-    provider.on('disconnect', () => {
-      console.log('chamou')
-      deleteCookie('@sanji:public-key')
-      push('/auth')
-    })
-  }, [provider])
 
   return (
     <AppContext.Provider

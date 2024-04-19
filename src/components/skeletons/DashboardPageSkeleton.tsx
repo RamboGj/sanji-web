@@ -3,8 +3,6 @@
 import 'react-loading-skeleton/dist/skeleton.css'
 import Skeleton from 'react-loading-skeleton'
 
-import { Header } from '../atoms/Header'
-import { Footer } from '../atoms/Footer'
 import { Heading } from '../atoms/Heading'
 
 export function DashboardPageSkeleton() {
@@ -13,8 +11,6 @@ export function DashboardPageSkeleton() {
 
   return (
     <div className="hidden h-full w-full lg:block">
-      <Header />
-
       <main className="mx-auto mt-[76px] w-full max-w-[1592px] px-4 pb-[200px] lg:px-[50px]">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-5">
@@ -140,8 +136,6 @@ export function DashboardPageSkeleton() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   )
 }

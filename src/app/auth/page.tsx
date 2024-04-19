@@ -46,7 +46,6 @@ export default function AuthPage() {
           {visible ? <WalletModal /> : null}
         </div>
       </div>
-      {/* <Footer /> */}
     </main>
   )
 }

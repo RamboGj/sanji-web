@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
-import { AppContextProvider } from './contexts/AppContext'
 import { Toaster } from 'react-hot-toast'
-import './globals.css'
-import { SolanaContextProvider } from './contexts/SolanaContext'
 import { Header } from '@/components/atoms/Header'
+import { AppContextProvider } from './contexts/AppContext'
+import { SolanaContextProvider } from './contexts/SolanaContext'
+import './globals.css'
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode

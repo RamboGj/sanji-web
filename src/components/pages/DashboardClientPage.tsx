@@ -5,10 +5,9 @@ import robotIcon from '@/assets/robot.svg'
 
 import * as Tabs from '@radix-ui/react-tabs'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Footer } from '@/components/atoms/Footer'
 import { Heading } from '@/components/atoms/Heading'
 import { Button } from '@/components/atoms/Button'
-import { Gear, Plus } from '@phosphor-icons/react'
+import { Gear, Target } from '@phosphor-icons/react'
 import { useContext, useState } from 'react'
 import { TurnOnSnipeModal } from '@/components/molecules/TurnOnSnipeModal'
 import { CreateSnipeModal } from '@/components/molecules/CreateSnipeModal'
@@ -19,6 +18,9 @@ import Link from 'next/link'
 import { AppContext } from '@/app/contexts/AppContext'
 import { MobileBottomNavigation } from '../atoms/MobileBottomNavigation'
 import { useWallet } from '@solana/wallet-adapter-react'
+import { Switch } from '../atoms/Switch'
+import { Paragraph } from '../atoms/Paragraph'
+import { UseSnipeListFalseWarning } from '../molecules/UseSnipeListFalseWarning'
 
 export type ModalOpenProps =
   | 'create-snipe'
@@ -30,6 +32,7 @@ export type ModalOpenProps =
 
 export default function DashboardClientPage() {
   const [tab, setTab] = useState<string>('global')
+  const [isBotOn, setIsBotOn] = useState<boolean>(false)
   const { modalOpen, setModalOpen } = useContext(AppContext)
 
   const { connected, wallet, publicKey } = useWallet()
@@ -101,9 +104,26 @@ export default function DashboardClientPage() {
               </div>
 
               <div className="flex flex-col gap-[10px]">
-                <Heading className="leading-none" variant="h1">
-                  BOT 001
-                </Heading>
+                <div className="flex items-center gap-6">
+                  <Heading className="leading-none" variant="h1">
+                    BOT 001
+                  </Heading>
+                  {isBotOn ? (
+                    <div className="flex items-center gap-1.5">
+                      <div className="h-3 w-3 rounded-full bg-[#47FFBB]" />
+                      <span className="text-sm tracking-widest text-[#47FFBB] ">
+                        RUNNING
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5">
+                      <div className="h-3 w-3 rounded-full bg-danger500" />
+                      <span className="text-sm tracking-widest text-danger500 ">
+                        OFFLINE
+                      </span>
+                    </div>
+                  )}
+                </div>
 
                 <Link className="hidden w-[282px] lg:flex" href="/activity">
                   <Button>
@@ -120,20 +140,32 @@ export default function DashboardClientPage() {
             >
               <span className="text-[1.25rem] text-purple500">Add</span>
             </div>
-            <div className="hidden items-center gap-4 lg:flex">
-              <div className="w-[52px]">
-                <Button onClick={() => setModalOpen('create-snipe')}>
-                  <Button.Icon>
-                    <Plus color="#FAF5FF" size={35} weight="bold" />
-                  </Button.Icon>
-                </Button>
+            <div className="flex flex-col items-end">
+              <div className="hidden items-center gap-4 lg:flex">
+                <div className="w-[52px]">
+                  <Button onClick={() => setModalOpen('create-snipe')}>
+                    <Button.Icon>
+                      <Target color="#FAF5FF" size={35} weight="bold" />
+                    </Button.Icon>
+                  </Button>
+                </div>
+                <div className="w-[52px]">
+                  <Button onClick={() => setModalOpen('config')}>
+                    <Button.Icon>
+                      <Gear color="#FAF5FF" size={35} />
+                    </Button.Icon>
+                  </Button>
+                </div>
               </div>
-              <div className="w-[52px]">
-                <Button onClick={() => setModalOpen('config')}>
-                  <Button.Icon>
-                    <Gear color="#FAF5FF" size={35} />
-                  </Button.Icon>
-                </Button>
+              <div className="mt-[10px] flex items-center">
+                <Paragraph className="w-32" variant="p2">
+                  {isBotOn ? 'Turn off BOT' : 'Turn on BOT'}
+                </Paragraph>
+
+                <Switch
+                  checked={isBotOn}
+                  onClick={() => setIsBotOn((prev) => !prev)}
+                />
               </div>
             </div>
           </div>
@@ -145,7 +177,7 @@ export default function DashboardClientPage() {
               Snipes
             </Heading>
 
-            <div className="w-full rounded-xl lg:mt-5 lg:border lg:border-gray600 lg:bg-gray800">
+            <div className="relative w-full rounded-xl lg:mt-5 lg:border lg:border-gray600 lg:bg-gray800">
               <Tabs.Root defaultValue="global">
                 <Tabs.List className="flex items-center gap-8 lg:gap-12 lg:px-8 lg:py-3">
                   {tabsTrigger.map(({ title, value }) => {
@@ -207,11 +239,10 @@ export default function DashboardClientPage() {
                   </ul>
                 </Tabs.Content>
               </Tabs.Root>
+              <UseSnipeListFalseWarning />
             </div>
           </div>
         </main>
-
-        <Footer />
 
         <MobileBottomNavigation />
       </div>

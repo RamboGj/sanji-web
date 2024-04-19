@@ -4,7 +4,7 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 async function onGetCookies() {
-  const response = cookies().get(COOKIES_KEY.PUBLIC_KEY)
+  const response = cookies().get(COOKIES_KEY.JWT)
 
   if (response) {
     await new Promise((resolve) => {

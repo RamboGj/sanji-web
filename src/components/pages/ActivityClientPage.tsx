@@ -1,6 +1,5 @@
 'use client'
 
-import { Footer } from '@/components/atoms/Footer'
 import { Heading } from '@/components/atoms/Heading'
 import { TransactionCard } from '@/components/atoms/TransactionCard'
 import { CaretLeft } from '@phosphor-icons/react'
@@ -49,7 +48,6 @@ export function ActivityClientPage() {
         </div>
       </main>
 
-      <Footer />
       <MobileBottomNavigation />
     </div>
   )

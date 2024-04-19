@@ -4,6 +4,7 @@ import React, { ComponentProps } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { tv } from 'tailwind-variants'
 import { Label } from '../Label'
+import { FieldError } from 'react-hook-form'
 
 const inputStyles = tv({
   slots: {
@@ -11,13 +12,12 @@ const inputStyles = tv({
     labelText: 'font-medium text-base lg:text-lg',
     errorText: 'text-red500 text-sm font-montserrat',
     input:
-      'rounded-lg font-medium bg-gray600 border border-transparent placeholder:text-gray400 focus:bg-gray700 focus:border-purple500 text-purple50 py-3 px-8 focus:outline-none transition duration-500',
+      'rounded-lg font-medium bg-gray600 border border-transparent placeholder:text-gray400 focus:bg-gray700 focus:border-purple500 text-purple50 py-3 px-4 focus:outline-none transition duration-500',
   },
 })
 
 interface InputProps extends ComponentProps<'input'> {
-  // errors?: FieldErrors
-  // error?: FieldError
+  error?: FieldError
   label: string
   id: string
   tooltipContent?: string
@@ -25,7 +25,7 @@ interface InputProps extends ComponentProps<'input'> {
 
 // eslint-disable-next-line react/display-name
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, tooltipContent = '', id, ...rest }, ref) => {
+  ({ className, label, tooltipContent = '', error, id, ...rest }, ref) => {
     const { container, input } = inputStyles({
       className,
     })
@@ -36,21 +36,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
         <input
           {...rest}
-          className={twMerge(
-            input(),
-            // error ? 'border-danger500 drop-shadow-danger' : '',
-          )}
+          className={twMerge(input(), error ? ' border-danger500' : '')}
           ref={ref}
           id={id}
         />
-        {/* {error ? (
-          <ErrorMessage
-            errors={errors}
-            name={id}
-            message={error.message}
-            render={() => <p className={errorText()}>{error?.message}</p>}
-          />
-        ) : null} */}
+        {error ? <div></div> : null}
       </div>
     )
   },

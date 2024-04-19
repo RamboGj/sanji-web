@@ -4,7 +4,6 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import Skeleton from 'react-loading-skeleton'
 
 import { Header } from '../atoms/Header'
-import { Footer } from '../atoms/Footer'
 import { Heading } from '../atoms/Heading'
 import { ClientWrapper } from '../atoms/ClientWrapper'
 import { CaretLeft } from '@phosphor-icons/react'
@@ -82,7 +81,6 @@ export function ActivityPageMobileSkeleton() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   )
 }

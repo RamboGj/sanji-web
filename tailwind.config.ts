@@ -16,6 +16,9 @@ const config: Config = {
 
         green200: '#47FFBB',
 
+        warning800: '#431407',
+        warning500: '#B45309',
+
         danger500: '#FF3232',
         danger600: '#CA1717',
         danger700: '#780101',

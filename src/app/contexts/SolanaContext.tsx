@@ -12,13 +12,9 @@ import { clusterApiUrl } from '@solana/web3.js'
 import { Adapter } from '@solana/wallet-adapter-base'
 import axios from 'axios'
 import base58 from 'bs58'
-import { setCookie } from 'cookies-next'
+import { getCookie, setCookie } from 'cookies-next'
 import { COOKIES_KEY } from '@/utils/cookies'
 import { useRouter } from 'next/navigation'
-// import {
-//   SolanaSignInInput,
-//   SolanaSignInOutput,
-// } from '@solana/wallet-standard-features'
 
 export function SolanaContextProvider({ children }: { children: ReactNode }) {
   const network = 'devnet' // Use 'mainnet-beta' for production
@@ -27,14 +23,13 @@ export function SolanaContextProvider({ children }: { children: ReactNode }) {
 
   const { push } = useRouter()
 
-  console.log('hello world')
-
   const autoSignIn = useCallback(async (adapter: Adapter) => {
-    console.log('HELLO')
-    // If the signIn feature is not available, return true
-    if (!('signIn' in adapter)) return true
+    const jwt = getCookie(COOKIES_KEY.JWT)
 
-    console.log('PASSOU')
+    console.log('jwt', jwt)
+
+    if (jwt) return true
+    if (!('signIn' in adapter)) return true
 
     const output = await adapter.signIn()
 
@@ -52,7 +47,7 @@ export function SolanaContextProvider({ children }: { children: ReactNode }) {
           message: output.signedMessage.toString(),
         },
       }).then((res) => {
-        setCookie(COOKIES_KEY.JWT, res.data.token)
+        setCookie(COOKIES_KEY.JWT, res.data.token, { maxAge: 60 * 60 * 24 })
         push('/setup')
       })
     } catch (err: any) {
@@ -67,25 +62,13 @@ export function SolanaContextProvider({ children }: { children: ReactNode }) {
             message: output.signedMessage.toString(),
           },
         }).then((res) => {
-          setCookie(COOKIES_KEY.JWT, res.data.token)
+          setCookie(COOKIES_KEY.JWT, res.data.token, { maxAge: 60 * 60 * 24 })
           push('/')
         })
       }
     }
 
     return false
-    // Verify the sign-in output against the generated input server-side
-    // const strPayload = JSON.stringify({ '', output })
-    // const verifyResponse = await fetch('/backend/verifySIWS', {
-    //   method: 'POST',
-    //   body: strPayload,
-    // })
-    // const success = await verifyResponse.json()
-
-    // // If verification fails, throw an error
-    // if (!success) throw new Error('Sign In verification failed!')
-
-    // return false
   }, [])
 
   return (
