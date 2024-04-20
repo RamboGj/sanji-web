@@ -12,11 +12,11 @@ import { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
 import { onNotify } from '@/utils/alert'
 import { BotDataProps } from '@/utils/types'
 import { getCookie } from 'cookies-next'
 import { COOKIES_KEY } from '@/utils/cookies'
+import { api } from '@/services/api'
 
 const configSchema = z.object({
   quoteAmount: z.string().optional(),
@@ -32,8 +32,6 @@ interface ConfigModalProps extends ModalProps {
 }
 
 export function ConfigModal({ data, onClose }: ConfigModalProps) {
-  console.log('data config modal', data)
-
   const [isMintRenounced, setIsMintRenounced] = useState<boolean>(
     data?.checkIfMintIsRenounced || false,
   )
@@ -61,12 +59,12 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
     const jwt = getCookie(COOKIES_KEY.JWT)
 
     try {
-      await axios(`https://api.natoshi.app/v1/bot/${data._id}`, {
+      await api(`https://api.natoshi.app/v1/bot/${data._id}`, {
         method: 'PUT',
         data: {
-          quoteAmount: formData.quoteAmount,
+          quoteAmount: formData.quoteAmount?.replace(',', '.'),
           useSnipeList,
-          minPoolSize: formData.minimumPoolSize,
+          minPoolSize: formData.minimumPoolSize?.replace(',', '.'),
           checkIfMintIsRenounced: isMintRenounced,
           autoSell: isAutoSell,
           maxSellRetries: formData.sellRetries,
@@ -107,7 +105,7 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
   return (
     <Dialog.Portal>
       <Dialog.Overlay className="fixed inset-0 bg-gray900/80" />
-      <Dialog.Content className="fixed left-[50%]  top-[50%] z-50 w-full max-w-[596px] translate-x-[-50%] translate-y-[-50%] rounded-[20px] border border-gray600 bg-gray900 px-9 pb-12 pt-6 text-purple50 focus:outline-none">
+      <Dialog.Content className="fixed left-[50%] top-[50%]  z-50 w-full max-w-[596px] translate-x-[-50%] translate-y-[-50%] rounded-[20px] border border-gray600 bg-gray900 px-9 pb-12 pt-6 text-purple50 focus:outline-none">
         <div className="flex items-center justify-between">
           <div className="h-6 w-6 opacity-0" />
           <Dialog.Title asChild>
@@ -142,7 +140,8 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
               <Input
                 {...register('quoteAmount')}
                 error={errors.quoteAmount}
-                type="number"
+                type="string"
+                min={0}
                 className="col-span-1"
                 label="Quote amount"
                 id="minting"
@@ -152,7 +151,8 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
               <Input
                 {...register('minimumPoolSize')}
                 error={errors.minimumPoolSize}
-                type="number"
+                type="string"
+                min={0}
                 className="col-span-1"
                 label="Minimum pool size"
                 id="minting"

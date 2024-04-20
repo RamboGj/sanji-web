@@ -6,7 +6,7 @@ const heading = tv({
   base: 'leading-none text-purple50 font-bold',
   variants: {
     variant: {
-      h1: 'text-[2.5rem]',
+      h1: 'text-[1.75rem] lg:text-[2.5rem]',
       h2: 'text-2xl lg:text-[2rem]',
       h3: 'text-lg lg:text-[1.5rem] font-semibold',
     },

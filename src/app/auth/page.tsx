@@ -26,7 +26,7 @@ export default function AuthPage() {
 
   return (
     <main className="flex min-h-screen w-full flex-col items-center">
-      <div className="mt-32 flex max-w-[465px] flex-col gap-5 lg:mt-[200px]">
+      <div className="mt-32 flex max-w-[465px] flex-col gap-5 lg:mt-20">
         <div className="flex w-full items-start gap-1.5 rounded-xl border border-[#431407]/60 bg-[#431407]/15 p-4">
           <Warning fill="#B45309" size={24} />
           <span className="text-sm text-gray400">

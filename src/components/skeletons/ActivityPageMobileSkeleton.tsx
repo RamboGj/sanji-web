@@ -3,7 +3,6 @@
 import 'react-loading-skeleton/dist/skeleton.css'
 import Skeleton from 'react-loading-skeleton'
 
-import { Header } from '../atoms/Header'
 import { Heading } from '../atoms/Heading'
 import { ClientWrapper } from '../atoms/ClientWrapper'
 import { CaretLeft } from '@phosphor-icons/react'
@@ -16,7 +15,6 @@ export function ActivityPageMobileSkeleton() {
 
   return (
     <div className="h-full w-full lg:hidden">
-      <Header />
       <main className="mx-auto mt-20 w-full max-w-[1592px] px-5 pb-20">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-5">

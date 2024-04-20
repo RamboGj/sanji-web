@@ -10,11 +10,11 @@ import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
 import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets'
 import { clusterApiUrl } from '@solana/web3.js'
 import { Adapter } from '@solana/wallet-adapter-base'
-import axios from 'axios'
 import base58 from 'bs58'
 import { getCookie, setCookie } from 'cookies-next'
 import { COOKIES_KEY } from '@/utils/cookies'
 import { useRouter } from 'next/navigation'
+import { api } from '@/services/api'
 
 export function SolanaContextProvider({ children }: { children: ReactNode }) {
   const network = 'devnet' // Use 'mainnet-beta' for production
@@ -39,7 +39,7 @@ export function SolanaContextProvider({ children }: { children: ReactNode }) {
     console.log('output', output)
 
     try {
-      await axios('https://api.natoshi.app/v1/user/register', {
+      await api('https://api.natoshi.app/v1/user/register', {
         method: 'POST',
         data: {
           walletAddress: publicKeyBase58,
@@ -54,7 +54,7 @@ export function SolanaContextProvider({ children }: { children: ReactNode }) {
       console.log('err', err.response.status)
 
       if (err.response.status === 409) {
-        await axios('https://api.natoshi.app/v1/user/login', {
+        await api('https://api.natoshi.app/v1/user/login', {
           method: 'POST',
           data: {
             walletAddress: publicKeyBase58,

@@ -10,4 +10,5 @@ export interface BotDataProps {
   maxSellRetries: number
   autoSellDelay: number
   gasLevel: 'Low' | 'Medium' | 'High' | 'Maximum'
+  running: boolean
 }

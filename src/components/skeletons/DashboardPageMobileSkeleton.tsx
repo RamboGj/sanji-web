@@ -3,7 +3,6 @@
 import 'react-loading-skeleton/dist/skeleton.css'
 import Skeleton from 'react-loading-skeleton'
 
-import { Header } from '../atoms/Header'
 import { Heading } from '../atoms/Heading'
 
 export function DashboardPageMobileSkeleton() {
@@ -12,8 +11,6 @@ export function DashboardPageMobileSkeleton() {
 
   return (
     <div className="h-full w-full lg:hidden">
-      <Header />
-
       <main className="mx-auto mt-20 w-full px-4 pb-20">
         <div className="flex items-center justify-between">
           <Skeleton

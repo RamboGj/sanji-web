@@ -1,23 +1,37 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { Heading } from '@/components/atoms/Heading'
-import { TransactionCard } from '@/components/atoms/TransactionCard'
 import { CaretLeft } from '@phosphor-icons/react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { MobileBottomNavigation } from '../atoms/MobileBottomNavigation'
+// import { COOKIES_KEY } from '@/utils/cookies'
+// import { getCookie } from 'cookies-next'
+import ReconnectingWebSocket from 'reconnecting-websocket'
 
 export function ActivityClientPage() {
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-
-  const txMocks = Array.from({ length: 10 })
-
-  console.log('isLoading', isLoading)
+  const [logs, setLogs] = useState<any>([])
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 5000)
+    // const jwt = getCookie(COOKIES_KEY.JWT)
+
+    const wsUrl = `wss://api.natoshi.app/v1/bot/logs?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJpYXQiOjE3MTM2MTk1MjMsImV4cCI6MTcxMzcwNTkyMywic3ViIjoiNjYyMmE5MmJjOTM3YjVlY2Q2NTI1MWQ1In0dEvuZbTmlw8WVjUzhYtABdZ5jYARMaQUYefIshX0MM`
+
+    const websocket = new ReconnectingWebSocket(wsUrl)
+
+    console.log('websocket', websocket)
+
+    websocket.onopen = () => console.log('WebSocket connected')
+    websocket.onmessage = (event) => {
+      console.log('event', event)
+      setLogs((prevLogs: any) => [...prevLogs, event.data])
+    }
+    websocket.onerror = (error) => console.error('WebSocket error:', error)
+
+    return () => {
+      websocket.close()
+    }
   }, [])
 
   return (
@@ -41,9 +55,7 @@ export function ActivityClientPage() {
 
         <div className="mt-5 lg:mt-10">
           <div className="flex w-full flex-col gap-y-5 rounded-xl lg:border lg:border-gray600 lg:bg-gray800 lg:px-8 lg:py-7">
-            {txMocks.map((it, index) => {
-              return <TransactionCard key={index} />
-            })}
+            <p>{logs}</p>
           </div>
         </div>
       </main>

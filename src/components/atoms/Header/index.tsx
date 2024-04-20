@@ -26,7 +26,7 @@ export function Header() {
   return (
     <header className="flex h-[72px] w-full justify-center border-b border-gray600">
       <nav
-        className={`flex w-full max-w-[1592px] items-center px-[50px] ${isAuthRouter ? 'justify-center' : 'justify-between'}`}
+        className={`flex w-full max-w-[1592px] items-center px-4 lg:px-[50px] ${isAuthRouter ? 'justify-center' : 'justify-between'}`}
       >
         <Link href="/">
           <Image src={sanji} alt="Sanji logo" />
@@ -36,7 +36,7 @@ export function Header() {
             className="group flex items-center gap-3"
             onClick={onDisconnect}
           >
-            <span className="text-danger500 group-hover:text-danger600">
+            <span className="hidden text-danger500 group-hover:text-danger600 lg:block">
               Sign out
             </span>
             <SignOut
