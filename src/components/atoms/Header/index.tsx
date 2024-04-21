@@ -20,6 +20,7 @@ export function Header() {
   async function onDisconnect() {
     await disconnect()
     deleteCookie(COOKIES_KEY.JWT)
+    deleteCookie(COOKIES_KEY.PUBLIC_KEY)
     push('/auth')
   }
 

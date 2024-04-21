@@ -24,6 +24,7 @@ async function onFetchBotData() {
 
   if (data.message === 'User not found with the provided token') {
     deleteCookie(COOKIES_KEY.JWT)
+    deleteCookie(COOKIES_KEY.PUBLIC_KEY)
     redirect('/auth')
   }
 

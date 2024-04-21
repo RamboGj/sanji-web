@@ -3,35 +3,63 @@
 
 import { Heading } from '@/components/atoms/Heading'
 import { CaretLeft } from '@phosphor-icons/react'
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { MobileBottomNavigation } from '../atoms/MobileBottomNavigation'
-// import { COOKIES_KEY } from '@/utils/cookies'
-// import { getCookie } from 'cookies-next'
-import ReconnectingWebSocket from 'reconnecting-websocket'
+import { api } from '@/services/api'
+import Link from 'next/link'
+import { getCookie } from 'cookies-next'
+import { COOKIES_KEY } from '@/utils/cookies'
+import { TransactionCard } from '../atoms/TransactionCard'
+
+interface ActivityProps {
+  success: boolean
+  message: string
+  result: {
+    timestamp: string
+    fee: number
+    fee_payer: string
+    signers: string[]
+    type: string
+    actions: [
+      {
+        info: {
+          sender: string
+          receiver: string
+          amount: number
+        }
+        source_protocol: '11111111111111111111111111111111'
+        type: 'SOL_TRANSFER'
+      },
+    ]
+  }[]
+}
 
 export function ActivityClientPage() {
-  const [logs, setLogs] = useState<any>([])
+  const [transactions, setTransactions] = useState<ActivityProps>()
+
+  async function onFetchLogs() {
+    const publicKey = getCookie(COOKIES_KEY.PUBLIC_KEY)
+
+    console.log('publicKey', publicKey)
+    api(
+      `https://api.shyft.to/sol/v1/transaction/history?network=mainnet-beta&tx_num=2&account=${publicKey}&enable_raw=true`,
+      {
+        headers: {
+          'x-api-key': 'J7Z8STyz1r_QiQfm',
+        },
+        method: 'GET',
+      },
+    )
+      .then((response) => {
+        console.log('responde', response)
+        setTransactions(response.data)
+      })
+      .then((result) => console.log(result))
+      .catch((error) => console.log('error', error))
+  }
 
   useEffect(() => {
-    // const jwt = getCookie(COOKIES_KEY.JWT)
-
-    const wsUrl = `wss://api.natoshi.app/v1/bot/logs?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJpYXQiOjE3MTM2MTk1MjMsImV4cCI6MTcxMzcwNTkyMywic3ViIjoiNjYyMmE5MmJjOTM3YjVlY2Q2NTI1MWQ1In0dEvuZbTmlw8WVjUzhYtABdZ5jYARMaQUYefIshX0MM`
-
-    const websocket = new ReconnectingWebSocket(wsUrl)
-
-    console.log('websocket', websocket)
-
-    websocket.onopen = () => console.log('WebSocket connected')
-    websocket.onmessage = (event) => {
-      console.log('event', event)
-      setLogs((prevLogs: any) => [...prevLogs, event.data])
-    }
-    websocket.onerror = (error) => console.error('WebSocket error:', error)
-
-    return () => {
-      websocket.close()
-    }
+    onFetchLogs()
   }, [])
 
   return (
@@ -55,7 +83,21 @@ export function ActivityClientPage() {
 
         <div className="mt-5 lg:mt-10">
           <div className="flex w-full flex-col gap-y-5 rounded-xl lg:border lg:border-gray600 lg:bg-gray800 lg:px-8 lg:py-7">
-            <p>{logs}</p>
+            <ul>
+              {transactions?.result.map(({ actions, fee, timestamp, type }) => {
+                return (
+                  <TransactionCard
+                    key={timestamp}
+                    amount={actions[0].info.amount}
+                    type={type}
+                    date={timestamp}
+                    fee={fee}
+                    from={actions[0].info.sender}
+                    to={actions[0].info.receiver}
+                  />
+                )
+              })}
+            </ul>
           </div>
         </div>
       </main>

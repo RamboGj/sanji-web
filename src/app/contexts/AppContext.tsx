@@ -44,6 +44,7 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
           console.log('interceptor')
           push('/auth')
           deleteCookie(COOKIES_KEY.JWT)
+          deleteCookie(COOKIES_KEY.PUBLIC_KEY)
         }
         return Promise.reject(error)
       },

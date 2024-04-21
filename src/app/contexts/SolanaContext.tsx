@@ -48,6 +48,9 @@ export function SolanaContextProvider({ children }: { children: ReactNode }) {
         },
       }).then((res) => {
         setCookie(COOKIES_KEY.JWT, res.data.token, { maxAge: 60 * 60 * 24 })
+        setCookie(COOKIES_KEY.PUBLIC_KEY, output.account.publicKey.toString(), {
+          maxAge: 60 * 60 * 24,
+        })
         push('/setup')
       })
     } catch (err: any) {
@@ -63,6 +66,13 @@ export function SolanaContextProvider({ children }: { children: ReactNode }) {
           },
         }).then((res) => {
           setCookie(COOKIES_KEY.JWT, res.data.token, { maxAge: 60 * 60 * 24 })
+          setCookie(
+            COOKIES_KEY.PUBLIC_KEY,
+            output.account.publicKey.toString(),
+            {
+              maxAge: 60 * 60 * 24,
+            },
+          )
           push('/')
         })
       }

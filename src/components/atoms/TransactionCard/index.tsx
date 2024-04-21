@@ -14,8 +14,8 @@ const transactionCard = tv({
 
 interface TransactionCardProps extends ComponentProps<'div'> {
   date?: string
-  amount?: string
-  fee?: string
+  amount?: number
+  fee?: number
   type?: string
   from?: string
   to?: string
@@ -26,9 +26,9 @@ export function TransactionCard({
   className,
   transactionUrl,
   date = '04/04/2024 16:32',
-  amount = '0.27 SOL',
+  amount = 0.27,
   type = 'SOL TRANSFER',
-  fee = '0.0001 SOL',
+  fee = 0.0001,
   from = '9B5X...Ns6g',
   to = '9B5X...Ns6g',
   ...rest
@@ -37,18 +37,34 @@ export function TransactionCard({
     className,
   })
 
+  const formattedDate = new Date(date).toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+
+  function formatAddress(address: string) {
+    return (
+      address.slice(0, 5) +
+      '...' +
+      address.slice(address.length - 4, address.length)
+    )
+  }
+
   const data = [
     {
       title: 'Date',
-      value: date,
+      value: formattedDate,
     },
     {
       title: 'Amount',
-      value: amount,
+      value: `${amount} $SOL`,
     },
     {
       title: 'Fee',
-      value: fee,
+      value: `${fee} $SOL`,
     },
     {
       title: 'Type',
@@ -56,11 +72,11 @@ export function TransactionCard({
     },
     {
       title: 'From',
-      value: from,
+      value: formatAddress(from),
     },
     {
       title: 'To',
-      value: to,
+      value: formatAddress(to),
     },
   ]
 
