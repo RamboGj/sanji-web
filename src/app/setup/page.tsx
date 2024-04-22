@@ -2,7 +2,6 @@
 
 import { Heading } from '@/components/atoms/Heading'
 import { Paragraph } from '@/components/atoms/Paragraph'
-import '@solana/wallet-adapter-react-ui/styles.css'
 import { useState } from 'react'
 import Input from '@/components/atoms/Input'
 import { Button } from '@/components/atoms/Button'
@@ -10,6 +9,7 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { getCookie } from 'cookies-next'
 import { COOKIES_KEY } from '@/utils/cookies'
+import '@solana/wallet-adapter-react-ui/styles.css'
 
 export default function SetupPage() {
   const [privateKey, setPrivateKey] = useState<string>('')
@@ -23,8 +23,6 @@ export default function SetupPage() {
 
     const jwt = getCookie(COOKIES_KEY.JWT)
 
-    console.log('jwt', jwt)
-
     try {
       await axios('https://api.natoshi.app/v1/bot', {
         method: 'POST',
@@ -34,12 +32,10 @@ export default function SetupPage() {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      }).then((res) => {
-        console.log('res', res)
+      }).then(() => {
         push('/')
       })
     } catch (err) {
-      console.log('ERR', err)
       setError('Invalid private key.')
       setIsLoading(false)
     }

@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { getCookie } from 'cookies-next'
 import { COOKIES_KEY } from '@/utils/cookies'
 import { TransactionCard } from '../atoms/TransactionCard'
+import { EmptyLog } from '../atoms/EmptyLogs'
 
 interface ActivityProps {
   success: boolean
@@ -39,23 +40,22 @@ export function ActivityClientPage() {
 
   async function onFetchLogs() {
     const publicKey = getCookie(COOKIES_KEY.PUBLIC_KEY)
+    const apiKey = process.env.NEXT_PUBLIC_SHYFT_API_KEY
 
-    console.log('publicKey', publicKey)
-    api(
+    await api(
       `https://api.shyft.to/sol/v1/transaction/history?network=mainnet-beta&tx_num=2&account=${publicKey}&enable_raw=true`,
       {
-        headers: {
-          'x-api-key': 'J7Z8STyz1r_QiQfm',
-        },
         method: 'GET',
+        headers: {
+          'x-api-key': apiKey,
+        },
       },
     )
       .then((response) => {
-        console.log('responde', response)
         setTransactions(response.data)
       })
-      .then((result) => console.log(result))
-      .catch((error) => console.log('error', error))
+      .then(() => {})
+      .catch(() => {})
   }
 
   useEffect(() => {
@@ -83,21 +83,27 @@ export function ActivityClientPage() {
 
         <div className="mt-5 lg:mt-10">
           <div className="flex w-full flex-col gap-y-5 rounded-xl lg:border lg:border-gray600 lg:bg-gray800 lg:px-8 lg:py-7">
-            <ul>
-              {transactions?.result.map(({ actions, fee, timestamp, type }) => {
-                return (
-                  <TransactionCard
-                    key={timestamp}
-                    amount={actions[0].info.amount}
-                    type={type}
-                    date={timestamp}
-                    fee={fee}
-                    from={actions[0].info.sender}
-                    to={actions[0].info.receiver}
-                  />
-                )
-              })}
-            </ul>
+            {transactions?.success && transactions?.result?.length > 0 ? (
+              <ul className="flex flex-col gap-5">
+                {transactions?.result.map(
+                  ({ actions, fee, timestamp, type }) => {
+                    return (
+                      <TransactionCard
+                        key={timestamp}
+                        amount={actions[0].info.amount}
+                        type={type}
+                        date={timestamp}
+                        fee={fee}
+                        from={actions[0].info.sender}
+                        to={actions[0].info.receiver}
+                      />
+                    )
+                  },
+                )}
+              </ul>
+            ) : (
+              <EmptyLog />
+            )}
           </div>
         </div>
       </main>

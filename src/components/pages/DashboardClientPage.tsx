@@ -14,7 +14,6 @@ import { ConfigModal } from '@/components/molecules/ConfigModal'
 import Link from 'next/link'
 import { AppContext } from '@/app/contexts/AppContext'
 import { MobileBottomNavigation } from '../atoms/MobileBottomNavigation'
-import { useWallet } from '@solana/wallet-adapter-react'
 import { Switch } from '../atoms/Switch'
 import { Paragraph } from '../atoms/Paragraph'
 import { UseSnipeListFalseWarning } from '../molecules/UseSnipeListFalseWarning'
@@ -41,14 +40,10 @@ interface DashboardClientPageProps {
 export default function DashboardClientPage({
   data,
 }: DashboardClientPageProps) {
-  console.log('data inside', data)
-  console.log('data running', data?.running)
   const { modalOpen, setModalOpen, setBotData } = useContext(AppContext)
 
   const [tab, setTab] = useState<string>('mySnipes')
   const [isRunning, setIsRunning] = useState<boolean>(data?.running || false)
-
-  const { connected, wallet, publicKey } = useWallet()
 
   const snipeList = data?.snipeList?.split('\\n').filter((element) => {
     return element.length > 0
@@ -75,15 +70,9 @@ export default function DashboardClientPage({
         }
       })
     } catch (err) {
-      console.log('err', err)
+      console.log(err)
     }
   }
-
-  console.log('modalOpen', modalOpen)
-
-  console.log('connected', connected)
-  console.log('wallet', wallet)
-  console.log('publicKey', publicKey?.toString())
 
   function onClose() {
     setModalOpen('none')
@@ -192,8 +181,6 @@ export default function DashboardClientPage({
                 <Tabs.List className="flex items-center gap-8 lg:gap-12 lg:px-8 lg:py-3">
                   {tabsTrigger.map(({ title, value }) => {
                     const isActive = value === tab
-
-                    console.log('isActive', isActive)
 
                     return (
                       <Tabs.Trigger

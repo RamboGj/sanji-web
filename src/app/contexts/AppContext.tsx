@@ -41,7 +41,6 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
       },
       (error) => {
         if (error.response.status === 401) {
-          console.log('interceptor')
           push('/auth')
           deleteCookie(COOKIES_KEY.JWT)
           deleteCookie(COOKIES_KEY.PUBLIC_KEY)

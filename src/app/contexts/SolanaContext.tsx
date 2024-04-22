@@ -26,8 +26,6 @@ export function SolanaContextProvider({ children }: { children: ReactNode }) {
   const autoSignIn = useCallback(async (adapter: Adapter) => {
     const jwt = getCookie(COOKIES_KEY.JWT)
 
-    console.log('jwt', jwt)
-
     if (jwt) return true
     if (!('signIn' in adapter)) return true
 
@@ -35,8 +33,6 @@ export function SolanaContextProvider({ children }: { children: ReactNode }) {
 
     const signatureBase58 = base58.encode(output.signature)
     const publicKeyBase58 = base58.encode(output.account.publicKey)
-
-    console.log('output', output)
 
     try {
       await api('https://api.natoshi.app/v1/user/register', {
@@ -48,14 +44,12 @@ export function SolanaContextProvider({ children }: { children: ReactNode }) {
         },
       }).then((res) => {
         setCookie(COOKIES_KEY.JWT, res.data.token, { maxAge: 60 * 60 * 24 })
-        setCookie(COOKIES_KEY.PUBLIC_KEY, output.account.publicKey.toString(), {
+        setCookie(COOKIES_KEY.PUBLIC_KEY, publicKeyBase58, {
           maxAge: 60 * 60 * 24,
         })
         push('/setup')
       })
     } catch (err: any) {
-      console.log('err', err.response.status)
-
       if (err.response.status === 409) {
         await api('https://api.natoshi.app/v1/user/login', {
           method: 'POST',
@@ -66,13 +60,9 @@ export function SolanaContextProvider({ children }: { children: ReactNode }) {
           },
         }).then((res) => {
           setCookie(COOKIES_KEY.JWT, res.data.token, { maxAge: 60 * 60 * 24 })
-          setCookie(
-            COOKIES_KEY.PUBLIC_KEY,
-            output.account.publicKey.toString(),
-            {
-              maxAge: 60 * 60 * 24,
-            },
-          )
+          setCookie(COOKIES_KEY.PUBLIC_KEY, publicKeyBase58, {
+            maxAge: 60 * 60 * 24,
+          })
           push('/')
         })
       }

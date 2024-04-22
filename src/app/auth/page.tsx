@@ -20,7 +20,7 @@ export default function AuthPage() {
     try {
       await connect()
     } catch (err) {
-      console.log('err', err)
+      console.log('error auth page')
     }
   }
 

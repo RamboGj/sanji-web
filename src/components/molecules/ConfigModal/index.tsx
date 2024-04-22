@@ -74,12 +74,12 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      }).then((res) => {
-        console.log('RES BOT', res)
+      }).then(() => {
         onNotify('success', 'BOT successfully updated.')
+        window.location.reload()
       })
     } catch (err) {
-      console.log('err', err)
+      console.log('error config modal')
     }
   }
 
@@ -120,11 +120,7 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
 
         <div className="mt-4 h-px w-full bg-gray500" />
 
-        <form
-          onSubmit={handleSubmit(onSubmit, (err) => {
-            console.log('ERR', err)
-          })}
-        >
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mt-5 flex flex-col gap-y-6">
             <div className="col-span-1 flex flex-col gap-3">
               <Label

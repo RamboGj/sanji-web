@@ -7,9 +7,9 @@ import { ModalProps } from '@/@types/app'
 import { Label } from '@/components/atoms/Label'
 import { COOKIES_KEY } from '@/utils/cookies'
 import { getCookie } from 'cookies-next'
-import axios from 'axios'
 import { BotDataProps } from '@/utils/types'
 import { onNotify } from '@/utils/alert'
+import { api } from '@/services/api'
 
 interface ChangeSnipeModalProps extends ModalProps {
   data: BotDataProps
@@ -24,7 +24,7 @@ export function ChangeSnipeModal({ data, onClose }: ChangeSnipeModalProps) {
     const textWithNewlines = snipeConfig.replace(/\n/g, '\\n') // Replace line breaks with \n
 
     try {
-      await axios(`https://api.natoshi.app/v1/bot/${data._id}`, {
+      await api(`https://api.natoshi.app/v1/bot/${data._id}`, {
         method: 'PUT',
         data: {
           snipeList: textWithNewlines,
@@ -32,12 +32,12 @@ export function ChangeSnipeModal({ data, onClose }: ChangeSnipeModalProps) {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      }).then((res) => {
-        console.log('RES BOT', res)
+      }).then(() => {
         onNotify('success', 'Snipe list configuration successfully updated.')
+        window.location.reload()
       })
     } catch (err) {
-      console.log('err', err)
+      console.log('error snipe modal')
     }
   }
 
