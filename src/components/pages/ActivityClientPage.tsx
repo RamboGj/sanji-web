@@ -43,7 +43,7 @@ export function ActivityClientPage() {
     const apiKey = process.env.NEXT_PUBLIC_SHYFT_API_KEY
 
     await api(
-      `https://api.shyft.to/sol/v1/transaction/history?network=mainnet-beta&tx_num=50&account=${publicKey}&enable_raw=true`,
+      `https://api.shyft.to/sol/v1/transaction/history?network=mainnet-beta&tx_num=20&account=${publicKey}&enable_raw=true`,
       {
         method: 'GET',
         headers: {

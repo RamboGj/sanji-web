@@ -141,7 +141,7 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
                 className="col-span-1"
                 label="Quote amount"
                 id="minting"
-                placeholder="200 $SOL"
+                placeholder="0.001"
                 tooltipContent="Quote amount is the value in SOL you want to send for each one of your snipes."
               />
               <Input
@@ -152,7 +152,7 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
                 className="col-span-1"
                 label="Minimum pool size"
                 id="minting"
-                placeholder="1.000 $SOL"
+                placeholder="0.01"
                 tooltipContent="The minimum Liquidity value in SOL you want to a LP to have. If the LP liquidity does not satisfy this field, it is gonna be skipped."
               />
             </div>
@@ -210,7 +210,7 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
                   className="col-span-1"
                   label="Sell delay"
                   id="minting"
-                  placeholder="500ms"
+                  placeholder="1000"
                   type="number"
                   tooltipContent="hello tootltip"
                 />
@@ -220,7 +220,7 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
                   className="col-span-1"
                   label="Sell retries"
                   id="minting"
-                  placeholder="5"
+                  placeholder="3"
                   type="number"
                   tooltipContent="hello tootltip"
                 />
