@@ -13,24 +13,26 @@ const transactionCard = tv({
 })
 
 interface TransactionCardProps extends ComponentProps<'div'> {
-  date?: string
-  amount?: number
-  fee?: number
-  type?: string
-  from?: string
-  to?: string
-  transactionUrl?: string
+  date: string
+  amount: number
+  fee: number
+  type: string
+  from: string
+  to: string
+  transactionUrl: string
+  feePayer: string
 }
 
 export function TransactionCard({
   className,
   transactionUrl,
-  date = '04/04/2024 16:32',
-  amount = 0.27,
-  type = 'SOL TRANSFER',
-  fee = 0.0001,
-  from = '9B5X...Ns6g',
-  to = '9B5X...Ns6g',
+  date,
+  amount,
+  type,
+  fee,
+  from,
+  to,
+  feePayer,
   ...rest
 }: TransactionCardProps) {
   const { container, dataContainer, dataItemContainer } = transactionCard({
@@ -46,6 +48,8 @@ export function TransactionCard({
   })
 
   function formatAddress(address: string) {
+    if (typeof address === 'undefined') return 'unknown'
+
     return (
       address.slice(0, 5) +
       '...' +
@@ -56,27 +60,28 @@ export function TransactionCard({
   const data = [
     {
       title: 'Date',
-      value: formattedDate,
+      value: formattedDate || '--',
     },
     {
       title: 'Amount',
-      value: `${amount} $SOL`,
+      value:
+        `${typeof amount !== 'undefined' ? amount : 'unknown'} $SOL` || '--',
     },
     {
       title: 'Fee',
-      value: `${fee} $SOL`,
+      value: `${fee} $SOL` || '--',
     },
     {
       title: 'Type',
-      value: type,
+      value: type || '--',
     },
     {
       title: 'From',
-      value: formatAddress(from),
+      value: formatAddress(from || feePayer) || '--',
     },
     {
       title: 'To',
-      value: formatAddress(to),
+      value: formatAddress(to) || '--',
     },
   ]
 
@@ -99,6 +104,7 @@ export function TransactionCard({
         })}
       </ul>
       <Link
+        target="_blank"
         className="mx-auto mt-9 flex text-lg font-medium text-purple600 transition-colors duration-300 hover:text-purple700 lg:mx-0 lg:mt-0"
         href={transactionUrl || '#'}
       >

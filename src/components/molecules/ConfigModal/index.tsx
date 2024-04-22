@@ -20,6 +20,7 @@ import { api } from '@/services/api'
 
 const configSchema = z.object({
   quoteAmount: z.string().optional(),
+  privateKey: z.string().optional(),
   minimumPoolSize: z.string().optional(),
   sellDelay: z.string().optional(),
   sellRetries: z.string().optional(),
@@ -47,6 +48,7 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
     formState: { errors },
   } = useForm<ConfigSchemaData>({
     defaultValues: {
+      privateKey: '',
       quoteAmount: String(data?.quoteAmount) || '',
       minimumPoolSize: String(data?.minPoolSize) || '',
       sellDelay: String(data?.autoSellDelay) || '0',
@@ -58,10 +60,12 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
   async function onSubmit(formData: ConfigSchemaData) {
     const jwt = getCookie(COOKIES_KEY.JWT)
 
-    try {
-      await api(`https://api.natoshi.app/v1/bot/${data._id}`, {
-        method: 'PUT',
-        data: {
+    const hasPrivateKey =
+      formData?.privateKey && formData.privateKey?.length > 0
+
+    const body = hasPrivateKey
+      ? {
+          privateKey: formData.privateKey,
           quoteAmount: formData.quoteAmount?.replace(',', '.'),
           useSnipeList,
           minPoolSize: formData.minimumPoolSize?.replace(',', '.'),
@@ -70,7 +74,24 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
           maxSellRetries: formData.sellRetries,
           autoSellDelay: formData.sellDelay,
           gasLevel: gasBid,
-        },
+        }
+      : {
+          quoteAmount: formData.quoteAmount?.replace(',', '.'),
+          useSnipeList,
+          minPoolSize: formData.minimumPoolSize?.replace(',', '.'),
+          checkIfMintIsRenounced: isMintRenounced,
+          autoSell: isAutoSell,
+          maxSellRetries: formData.sellRetries,
+          autoSellDelay: formData.sellDelay,
+          gasLevel: gasBid,
+        }
+
+    console.log(body)
+
+    try {
+      await api(`https://api.natoshi.app/v1/bot/${data._id}`, {
+        method: 'PUT',
+        data: body,
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
@@ -105,7 +126,7 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
   return (
     <Dialog.Portal>
       <Dialog.Overlay className="fixed inset-0 bg-gray900/80" />
-      <Dialog.Content className="fixed left-[50%] top-[50%]  z-50 w-full max-w-[596px] translate-x-[-50%] translate-y-[-50%] rounded-[20px] border border-gray600 bg-gray900 px-9 pb-12 pt-6 text-purple50 focus:outline-none">
+      <Dialog.Content className="fixed left-[50%] top-[50%] z-50 w-full max-w-[596px] translate-x-[-50%] translate-y-[-50%] overflow-y-scroll rounded-[20px] border border-gray600 bg-gray900 px-9 pb-12 pt-6 text-purple50 focus:outline-none">
         <div className="flex items-center justify-between">
           <div className="h-6 w-6 opacity-0" />
           <Dialog.Title asChild>
@@ -122,6 +143,16 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mt-5 flex flex-col gap-y-6">
+            <Input
+              {...register('privateKey')}
+              error={errors.privateKey}
+              type="string"
+              className="col-span-1"
+              label="Private key"
+              id="minting"
+              placeholder="0xFbl8...Ab25"
+              tooltipContent="Your wallet's private key."
+            />
             <div className="col-span-1 flex flex-col gap-3">
               <Label
                 label="Use snipe list"

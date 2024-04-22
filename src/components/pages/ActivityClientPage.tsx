@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
@@ -41,7 +42,8 @@ export function ActivityClientPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   async function onFetchLogs() {
-    const publicKey = getCookie(COOKIES_KEY.PUBLIC_KEY)
+    // const publicKey = getCookie(COOKIES_KEY.PUBLIC_KEY)
+    const publicKey = '6YvMfwBcyzFZvh3BtGHzrnD74XWjWux43eLDDZAFTSFN'
     const apiKey = process.env.NEXT_PUBLIC_SHYFT_API_KEY
 
     await api(
@@ -54,6 +56,7 @@ export function ActivityClientPage() {
       },
     )
       .then((response) => {
+        console.log('response', response.data)
         setTransactions(response.data)
         setIsLoading(false)
       })
@@ -70,6 +73,9 @@ export function ActivityClientPage() {
   }, [])
 
   if (isLoading) return <ActivityPageLoadingSkeleton />
+
+  const publicKey = getCookie(COOKIES_KEY.PUBLIC_KEY)
+  const transactionUrl = `https://solscan.io/account/${publicKey}`
 
   return (
     <div className="relative h-full w-full">
@@ -95,7 +101,7 @@ export function ActivityClientPage() {
             {transactions?.success && transactions?.result?.length > 0 ? (
               <ul className="flex flex-col gap-5">
                 {transactions?.result.map(
-                  ({ actions, fee, timestamp, type }) => {
+                  ({ actions, fee, timestamp, type, fee_payer }) => {
                     return (
                       <TransactionCard
                         key={timestamp}
@@ -105,6 +111,8 @@ export function ActivityClientPage() {
                         fee={fee}
                         from={actions[0].info.sender}
                         to={actions[0].info.receiver}
+                        transactionUrl={transactionUrl}
+                        feePayer={fee_payer}
                       />
                     )
                   },
