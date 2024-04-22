@@ -11,7 +11,6 @@ import { getCookie } from 'cookies-next'
 import { COOKIES_KEY } from '@/utils/cookies'
 import { TransactionCard } from '../atoms/TransactionCard'
 import { EmptyLog } from '../atoms/EmptyLogs'
-import ActivityPageLoading from '@/app/activity/loading'
 import ActivityPageLoadingSkeleton from '../skeletons/AcitivtyPageLoading'
 
 interface ActivityProps {
