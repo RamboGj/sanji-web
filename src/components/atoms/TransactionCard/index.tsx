@@ -37,7 +37,7 @@ export function TransactionCard({
     className,
   })
 
-  const formattedDate = new Date(date).toLocaleDateString('pt-BR', {
+  const formattedDate = new Date(date).toLocaleDateString('en-US', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
