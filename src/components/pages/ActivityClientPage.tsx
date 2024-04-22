@@ -11,6 +11,8 @@ import { getCookie } from 'cookies-next'
 import { COOKIES_KEY } from '@/utils/cookies'
 import { TransactionCard } from '../atoms/TransactionCard'
 import { EmptyLog } from '../atoms/EmptyLogs'
+import ActivityPageLoading from '@/app/activity/loading'
+import ActivityPageLoadingSkeleton from '../skeletons/AcitivtyPageLoading'
 
 interface ActivityProps {
   success: boolean
@@ -37,6 +39,7 @@ interface ActivityProps {
 
 export function ActivityClientPage() {
   const [transactions, setTransactions] = useState<ActivityProps>()
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   async function onFetchLogs() {
     const publicKey = getCookie(COOKIES_KEY.PUBLIC_KEY)
@@ -53,14 +56,21 @@ export function ActivityClientPage() {
     )
       .then((response) => {
         setTransactions(response.data)
+        setIsLoading(false)
       })
-      .then(() => {})
-      .catch(() => {})
+      .then(() => {
+        setIsLoading(false)
+      })
+      .catch(() => {
+        setIsLoading(false)
+      })
   }
 
   useEffect(() => {
     onFetchLogs()
   }, [])
+
+  if (isLoading) return <ActivityPageLoadingSkeleton />
 
   return (
     <div className="relative h-full w-full">
