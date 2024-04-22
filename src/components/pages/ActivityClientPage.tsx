@@ -42,8 +42,7 @@ export function ActivityClientPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   async function onFetchLogs() {
-    // const publicKey = getCookie(COOKIES_KEY.PUBLIC_KEY)
-    const publicKey = '6YvMfwBcyzFZvh3BtGHzrnD74XWjWux43eLDDZAFTSFN'
+    const publicKey = getCookie(COOKIES_KEY.PUBLIC_KEY)
     const apiKey = process.env.NEXT_PUBLIC_SHYFT_API_KEY
 
     await api(
