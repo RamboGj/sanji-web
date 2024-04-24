@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation'
 import { api } from '@/services/api'
 
 export function SolanaContextProvider({ children }: { children: ReactNode }) {
-  const network = 'devnet' // Use 'mainnet-beta' for production
+  const network = 'mainnet-beta' // Use 'mainnet-beta' for production
   const endpoint = useMemo(() => clusterApiUrl(network), [network])
   const wallets = useMemo(() => [new PhantomWalletAdapter()], [])
 

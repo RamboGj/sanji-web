@@ -20,14 +20,13 @@ export function ChangeSnipeModal({ data, onClose }: ChangeSnipeModalProps) {
 
   async function onUpdateSnipeList() {
     const jwt = getCookie(COOKIES_KEY.JWT)
-
-    const textWithNewlines = snipeConfig.replace(/\n/g, '\\n') // Replace line breaks with \n
+    // const textWithNewlines = snipeConfig.replace(/\n/g, '\\n') // Replace line breaks with \n
 
     try {
       await api(`https://api.natoshi.app/v1/bot/${data._id}`, {
         method: 'PUT',
         data: {
-          snipeList: textWithNewlines,
+          snipeList: snipeConfig,
         },
         headers: {
           Authorization: `Bearer ${jwt}`,

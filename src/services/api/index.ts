@@ -1,3 +1,4 @@
+import { onNotify } from '@/utils/alert'
 import { COOKIES_KEY } from '@/utils/cookies'
 import axios from 'axios'
 import { deleteCookie } from 'cookies-next'
@@ -15,6 +16,7 @@ axios.interceptors.response.use(
     if (error.response.status === 401) {
       deleteCookie(COOKIES_KEY.JWT)
       deleteCookie(COOKIES_KEY.PUBLIC_KEY)
+      onNotify('error', 'Your session has expired.')
       window.location.replace('/auth')
     }
     return error
