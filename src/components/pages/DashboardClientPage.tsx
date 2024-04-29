@@ -45,9 +45,11 @@ export default function DashboardClientPage({
   const [tab, setTab] = useState<string>('mySnipes')
   const [isRunning, setIsRunning] = useState<boolean>(data?.running || false)
 
-  const snipeList = data?.snipeList?.split('\\n').filter((element) => {
+  const snipeList = data?.snipeList?.split(/\n/g).filter((element) => {
     return element.length > 0
   })
+
+  console.log('data', data.snipeList)
 
   setBotData(data)
 

@@ -15,6 +15,7 @@ import { getCookie, setCookie } from 'cookies-next'
 import { COOKIES_KEY } from '@/utils/cookies'
 import { useRouter } from 'next/navigation'
 import { api } from '@/services/api'
+import { register } from '@/services/api/auth'
 
 export function SolanaContextProvider({ children }: { children: ReactNode }) {
   const network = 'mainnet-beta' // Use 'mainnet-beta' for production
@@ -35,13 +36,10 @@ export function SolanaContextProvider({ children }: { children: ReactNode }) {
     const publicKeyBase58 = base58.encode(output.account.publicKey)
 
     try {
-      await api('https://api.natoshi.app/v1/user/register', {
-        method: 'POST',
-        data: {
-          walletAddress: publicKeyBase58,
-          signature: signatureBase58,
-          message: output.signedMessage.toString(),
-        },
+      await register({
+        walletAddress: publicKeyBase58,
+        signature: signatureBase58,
+        message: output.signedMessage.toString(),
       }).then((res) => {
         setCookie(COOKIES_KEY.JWT, res.data.token, { maxAge: 60 * 60 * 24 })
         setCookie(COOKIES_KEY.PUBLIC_KEY, publicKeyBase58, {
