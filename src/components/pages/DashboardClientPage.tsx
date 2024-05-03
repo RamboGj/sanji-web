@@ -12,7 +12,7 @@ import { useContext, useState } from 'react'
 import { ChangeSnipeModal } from '@/components/molecules/ChangeSnipeModal'
 import { ConfigModal } from '@/components/molecules/ConfigModal'
 import Link from 'next/link'
-import { AppContext } from '@/app/contexts/AppContext'
+import { AppContext } from '@/contexts/AppContext'
 import { MobileBottomNavigation } from '../atoms/MobileBottomNavigation'
 import { Switch } from '../atoms/Switch'
 import { Paragraph } from '../atoms/Paragraph'
@@ -97,7 +97,7 @@ export default function DashboardClientPage({
         <main className="mx-auto mt-20 w-full max-w-[1592px] px-5 pb-[200px] lg:px-[50px]">
           <div className="flex flex-col items-start justify-between lg:flex-row lg:items-center">
             <div className="flex items-center gap-5">
-              <div className="hidden h-[108px] w-[108px] items-center justify-center rounded-[20px] bg-purple600 lg:flex">
+              <div className="hidden h-[108px] w-[108px] items-center justify-center rounded-[20px] lg:flex">
                 <Image src={robotIcon} alt="Robot Icon" />
               </div>
 
@@ -137,7 +137,7 @@ export default function DashboardClientPage({
                 onClick={() => setModalOpen('create-snipe')}
                 className="lg:hidden"
               >
-                <span className="text-[1.25rem] text-purple500">Add</span>
+                <span className="text-[1.25rem]">Add</span>
               </div>
               <div className="flex flex-col items-end">
                 <div className="hidden items-center gap-4 lg:flex">

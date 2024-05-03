@@ -14,6 +14,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   scroll-behavior: smooth;
+  color: white;
 }
 
 @font-face {

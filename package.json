@@ -32,7 +32,7 @@
     "i": "^0.3.7",
     "next": "14.1.4",
     "npm": "^10.5.1",
-    "react": "^18",
+    "react": "^18.3.1",
     "react-dom": "^18",
     "react-hook-form": "^7.51.3",
     "react-hot-toast": "^2.4.1",
@@ -40,6 +40,7 @@
     "reconnecting-websocket": "^4.4.0",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
+    "tailwind-merge": "^2.3.0",
     "tailwind-variants": "^0.2.1",
     "web3-react-phantom": "^1.0.4",
     "zod": "^3.22.4"

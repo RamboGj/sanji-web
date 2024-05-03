@@ -1,6 +1,6 @@
 'use client'
 
-import { AppContext } from '@/app/contexts/AppContext'
+import { AppContext } from '@/contexts/AppContext'
 import { ChartLine, Gear } from '@phosphor-icons/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { ComponentProps, useContext } from 'react'
@@ -37,7 +37,7 @@ export function MobileBottomNavigation({
               color={isActivityPage ? '#A855F7' : '#FFFFFF'}
             />
             <span
-              className={`${isActivityPage ? 'text-xs font-medium text-purple500' : 'text-xs font-medium text-purple50'}`}
+              className={`${isActivityPage ? 'text-xs font-medium' : 'text-xs font-medium'}`}
             >
               Activity
             </span>
@@ -47,7 +47,7 @@ export function MobileBottomNavigation({
             className="flex flex-col items-center"
           >
             <Gear size={32} color={'#FFFFFF'} />
-            <span className="text-xs font-medium text-purple50">Settings</span>
+            <span className="text-xs font-medium">Settings</span>
           </button>
         </div>
       </div>

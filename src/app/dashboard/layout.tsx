@@ -1,9 +1,12 @@
 import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
-import { AppContextProvider } from '../contexts/AppContext'
-import { SolanaContextProvider } from '../contexts/SolanaContext'
-import './globals.css'
+
+import '../globals.css'
+import { Header } from '@/components/atoms/Header'
+import { Aside } from '@/components/atoms/Aside'
+import { AppContextProvider } from '@/contexts/AppContext'
+import { SolanaContextProvider } from '@/contexts/SolanaContext'
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -41,7 +44,11 @@ export default async function RootLayout({
       <AppContextProvider>
         <SolanaContextProvider>
           <body className={montserrat.className + ` bg-gray900`}>
-            {children}
+            <Header />
+            <div className="flex">
+              <Aside />
+              {children}
+            </div>
           </body>
           <Toaster position="top-right" />
         </SolanaContextProvider>

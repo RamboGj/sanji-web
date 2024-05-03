@@ -5,16 +5,28 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        gray900: '#0D0612',
-        gray800: '#120B18',
-        gray700: '#1E1A22',
-        gray600: '#37323C',
-        gray500: '#4D4852',
-        gray400: '#7A7381',
-        gray300: '#B2AABA',
+        gray900: '#120D09',
+        gray800: '#181410',
+        gray700: '#221E1B',
+        gray600: '#3C3632',
+        gray500: '#524D48',
+        gray400: '#817973',
+        gray300: '#BAB2AA',
         gray200: '#E2E2E2',
 
+        yellow700: '#D64016',
+        yellow600: '#ED7A14',
+        yellow500: '#F6C21D',
+        yellow400: '#F5DD4B',
+        yellow300: '#F4E170',
+        yellow200: '#ECEEB8',
+
         green200: '#47FFBB',
+
+        blue500: '#6A8D95',
+        safari500: '#9A9B72',
+
+        black: '#15110E',
 
         warning800: '#431407',
         warning500: '#B45309',
@@ -22,15 +34,6 @@ const config: Config = {
         danger500: '#FF3232',
         danger600: '#CA1717',
         danger700: '#780101',
-
-        purple50: '#FAF5FF',
-        purple200: '#E9D5FF',
-        purple400: '#C084FC',
-        purple500: '#A855F7',
-        purple600: '#9333EA',
-        purple700: '#7E22CE',
-        purple800: '#6B21A8',
-        purple900: '#581C87',
       },
       fontFamily: {
         montserrat: 'var(--montserrat)',

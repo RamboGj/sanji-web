@@ -34,7 +34,7 @@ export default function AuthPage() {
             Sanji App.
           </span>
         </div>
-        <div className="flex w-full flex-col items-center rounded-[24px] px-8 py-10 lg:border lg:border-gray500 lg:bg-gray700">
+        <div className="flex w-full flex-col items-center rounded-[24px] border-[#524D48]/10 px-8 py-10 lg:border lg:bg-black">
           <Heading className="text-center leading-tight" variant="h2">
             Connect your wallet
           </Heading>
