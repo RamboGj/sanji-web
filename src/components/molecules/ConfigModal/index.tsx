@@ -126,7 +126,7 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
   return (
     <Dialog.Portal>
       <Dialog.Overlay className="fixed inset-0 bg-gray900/80" />
-      <Dialog.Content className="fixed left-[50%] top-[50%] z-50 w-full max-w-[596px] translate-x-[-50%] translate-y-[-50%] overflow-y-scroll rounded-[20px] border border-gray600 bg-gray900 px-9 pb-12 pt-6 text-purple50 focus:outline-none">
+      <Dialog.Content className="text-purple50 fixed left-[50%] top-[50%] z-50 w-full max-w-[596px] translate-x-[-50%] translate-y-[-50%] overflow-y-scroll rounded-[20px] border border-gray600 bg-gray900 px-9 pb-12 pt-6 focus:outline-none">
         <div className="flex items-center justify-between">
           <div className="h-6 w-6 opacity-0" />
           <Dialog.Title asChild>
@@ -214,10 +214,10 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
                         <Checkbox.Root
                           onClick={() => setGasBid(value)}
                           checked={true}
-                          className={`h-6 w-6 rounded-full border ${isChecked ? 'border-transparent bg-purple500' : 'border-gray500 '}`}
+                          className={`h-6 w-6 rounded-full border ${isChecked ? 'bg-purple500 border-transparent' : 'border-gray500 '}`}
                           id={value}
                         />
-                        <span className="text-sm font-medium text-purple50">
+                        <span className="text-purple50 text-sm font-medium">
                           {title}
                         </span>
                       </div>

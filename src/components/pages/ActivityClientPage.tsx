@@ -12,7 +12,6 @@ import { getCookie } from 'cookies-next'
 import { COOKIES_KEY } from '@/utils/cookies'
 import { TransactionCard } from '../atoms/TransactionCard'
 import { EmptyLog } from '../atoms/EmptyLogs'
-import ActivityPageLoadingSkeleton from '../skeletons/AcitivtyPageLoading'
 
 interface ActivityProps {
   success: boolean
@@ -40,6 +39,8 @@ interface ActivityProps {
 export function ActivityClientPage() {
   const [transactions, setTransactions] = useState<ActivityProps>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
+
+  console.log(isLoading)
 
   async function onFetchLogs() {
     const publicKey = getCookie(COOKIES_KEY.PUBLIC_KEY)
@@ -71,8 +72,6 @@ export function ActivityClientPage() {
     onFetchLogs()
   }, [])
 
-  if (isLoading) return <ActivityPageLoadingSkeleton />
-
   const publicKey = getCookie(COOKIES_KEY.PUBLIC_KEY)
   const transactionUrl = `https://solscan.io/account/${publicKey}`
 
@@ -82,7 +81,7 @@ export function ActivityClientPage() {
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-5">
             <Link href={'/'}>
-              <div className="transtion flex h-7 w-7 items-center justify-center rounded-lg bg-purple600 duration-300 hover:bg-purple700 lg:h-[52px] lg:w-[52px]">
+              <div className="transtion bg-purple600 hover:bg-purple700 flex h-7 w-7 items-center justify-center rounded-lg duration-300 lg:h-[52px] lg:w-[52px]">
                 <CaretLeft size={24} color="#FFF" />
               </div>
             </Link>

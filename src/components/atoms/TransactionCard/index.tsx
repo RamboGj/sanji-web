@@ -105,7 +105,7 @@ export function TransactionCard({
       </ul>
       <Link
         target="_blank"
-        className="mx-auto mt-9 flex text-lg font-medium text-purple600 transition-colors duration-300 hover:text-purple700 lg:mx-0 lg:mt-0"
+        className="text-purple600 hover:text-purple700 mx-auto mt-9 flex text-lg font-medium transition-colors duration-300 lg:mx-0 lg:mt-0"
         href={transactionUrl || '#'}
       >
         View in block explorer
