@@ -1,6 +1,12 @@
 'use client'
 
-import { Globe, Icon } from '@phosphor-icons/react'
+import {
+  ClockCountdown,
+  Eraser,
+  Globe,
+  Icon,
+  Target,
+} from '@phosphor-icons/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { twMerge } from 'tailwind-merge'
@@ -22,10 +28,22 @@ export function Aside() {
       path: '/dashboard/overview',
     },
     {
-      title: 'Instances',
-      icon: <Globe size={24} color="#524D48" />,
-      activeIcon: <Globe size={24} color="#FFFFFF" />,
-      path: '/dashboard/instances',
+      title: 'Snipe BOT',
+      icon: <Target size={24} color="#524D48" />,
+      activeIcon: <Target size={24} color="#FFFFFF" />,
+      path: '/dashboard/snipe-bot',
+    },
+    {
+      title: 'Scalp BOT',
+      icon: <Eraser size={24} color="#524D48" />,
+      activeIcon: <Eraser size={24} color="#FFFFFF" />,
+      path: '/dashboard/scalp-bot',
+    },
+    {
+      title: 'Arbitrage BOT',
+      icon: <ClockCountdown size={24} color="#524D48" />,
+      activeIcon: <ClockCountdown size={24} color="#FFFFFF" />,
+      path: '/dashboard/arbitrage-bot',
     },
   ]
 
@@ -41,7 +59,9 @@ export function Aside() {
                 <div
                   className={twMerge(
                     'flex h-[52px] w-[270px] items-center gap-3 rounded-[4px] px-4',
-                    isActive ? 'bg-yellow600' : 'bg-gray900',
+                    isActive
+                      ? 'bg-yellow600'
+                      : 'bg-gray900  transition-colors duration-300 hover:bg-gray800',
                   )}
                 >
                   {isActive ? activeIcon : icon}

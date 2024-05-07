@@ -61,7 +61,7 @@ export function SolanaContextProvider({ children }: { children: ReactNode }) {
           setCookie(COOKIES_KEY.PUBLIC_KEY, publicKeyBase58, {
             maxAge: 60 * 60 * 24,
           })
-          push('/')
+          push('/dashboard/overview')
         })
       }
     }

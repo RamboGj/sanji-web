@@ -7,20 +7,20 @@ import { VariantProps, tv } from 'tailwind-variants'
 const button = tv({
   slots: {
     container:
-      'w-full h-[42px] lg:h-[52px] w-full px-2 border rounded-lg hover:transtion-colors duration-300 group flex justify-center items-center',
-    label: 'text-purple50 text-sm lg:text-lg font-bold drop-shadow-sm',
+      'w-full h-[42px] lg:h-[44px] w-full px-2 border border-transparent rounded-lg hover:transtion-colors duration-300 group flex justify-center items-center',
+    label: 'text-white text-sm lg:text-base font-semibold drop-shadow-sm',
   },
   variants: {
     variant: {
       primary: {
         container:
-          'bg-purple600 border-purple500 hover:bg-purple800 disabled:bg-purple800 disabled:border-transparent',
-        label: 'group-disabled:text-gray300',
+          'bg-yellow600 hover:bg-yellow600/70 disabled:bg-yellow600/40',
+        label: 'group-disabled:text-white/50',
       },
       ghost: {
         container:
-          'bg-transparent border-purple500 hover:border-purple200 disabled:border-gray500',
-        label: 'group-disabled:text-gray500',
+          'bg-transparent border-yellow600 bg-transparent hover:border-yellow700 disabled:border-yellow600/20',
+        label: 'group-disabled:text-white/20',
       },
       danger: {
         container:
