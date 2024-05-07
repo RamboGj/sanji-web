@@ -12,7 +12,7 @@ import { onNotify } from '@/utils/alert'
 import { api } from '@/services/api'
 
 interface ChangeSnipeModalProps extends ModalProps {
-  data: BotDataProps
+  data: BotDataProps | null
 }
 
 export function ChangeSnipeModal({ data, onClose }: ChangeSnipeModalProps) {
@@ -23,7 +23,7 @@ export function ChangeSnipeModal({ data, onClose }: ChangeSnipeModalProps) {
     // const textWithNewlines = snipeConfig.replace(/\n/g, '\\n') // Replace line breaks with \n
 
     try {
-      await api(`https://api.natoshi.app/v1/bot/${data._id}`, {
+      await api(`https://api.natoshi.app/v1/bot/${data?._id}`, {
         method: 'PUT',
         data: {
           snipeList: snipeConfig,
@@ -59,7 +59,7 @@ export function ChangeSnipeModal({ data, onClose }: ChangeSnipeModalProps) {
             </Heading>
           </Dialog.Title>
           <Dialog.Close onClick={onClose}>
-            <XCircle size={32} className="text-purple500" />
+            <XCircle size={32} className="text-yellow600" color="#ED7A14" />
           </Dialog.Close>
         </div>
 

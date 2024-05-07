@@ -7,25 +7,28 @@ import { Button } from '@/components/atoms/Button'
 import { Heading } from '@/components/atoms/Heading'
 import { CaretRight, CircleNotch, Power } from '@phosphor-icons/react'
 import { ArrowCounterClockwise } from '@phosphor-icons/react/dist/ssr'
-import { useEffect, useState } from 'react'
+import { useEffect, useReducer } from 'react'
 import { TableSkeleton } from '@/components/skeletons/OverviewSkeleton/TableSkeleton'
 import { Tag } from '@/components/atoms/Tag'
+import { snipeReducer } from '@/reducers/SnipeReducer/SnipeReducer'
+import { SnipeInitialState } from '@/reducers/SnipeReducer/SnipeState'
+import { SnipeActionType } from '@/reducers/SnipeReducer/SnipeActions'
 
 export default function OverviewPage() {
-  const [refreshing, setRefreshing] = useState<boolean>(false)
+  const [state, dispatch] = useReducer(snipeReducer, SnipeInitialState)
 
-  // const [state, dispatch] = useReducer()
+  console.log('state', state)
 
   function handleRefresh() {
-    setRefreshing(true)
+    dispatch({ type: SnipeActionType.SNIPE_TOGGLE_LOADING })
 
     setTimeout(() => {
-      setRefreshing(false)
+      dispatch({ type: SnipeActionType.SNIPE_TOGGLE_LOADING })
     }, 3000)
   }
 
   useEffect(() => {
-    console.log('Hello')
+    dispatch({ type: SnipeActionType.SNIPE_TOGGLE_LOADING })
   }, [])
 
   return (
@@ -76,7 +79,7 @@ export default function OverviewPage() {
               onClick={handleRefresh}
               className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-yellow600 transition-colors duration-300 hover:border-yellow700"
             >
-              {refreshing ? (
+              {state.isLoading ? (
                 <CircleNotch
                   className="animate-spin"
                   size={24}
@@ -111,7 +114,7 @@ export default function OverviewPage() {
               onClick={handleRefresh}
               className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-yellow600 transition-colors duration-300 hover:border-yellow700"
             >
-              {refreshing ? (
+              {state.isLoading ? (
                 <CircleNotch
                   className="animate-spin"
                   size={24}
@@ -125,7 +128,7 @@ export default function OverviewPage() {
 
           <div className="h-px w-full bg-gray500/10" />
 
-          {refreshing ? (
+          {state.isLoading ? (
             <TableSkeleton />
           ) : (
             <table className="w-full divide-y-[1px] divide-gray500/10">

@@ -3,6 +3,8 @@
 import 'react-loading-skeleton/dist/skeleton.css'
 // import Skeleton from 'react-loading-skeleton'
 
+import * as Dialog from '@radix-ui/react-dialog'
+
 import { Heading } from '@/components/atoms/Heading'
 import {
   ArrowCounterClockwise,
@@ -13,6 +15,8 @@ import {
   Power,
 } from '@phosphor-icons/react'
 import { useState } from 'react'
+import { ChangeSnipeModal } from '@/components/molecules/ChangeSnipeModal'
+import { ConfigModal } from '@/components/molecules/ConfigModal'
 
 export default function SnipeBotPage() {
   const [refreshing, setRefreshing] = useState<boolean>(false)
@@ -39,12 +43,18 @@ export default function SnipeBotPage() {
             </div>
           </div>
           <div className="item-center flex gap-x-4">
-            <div
-              role="button"
-              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-yellow600 transition-colors duration-300 hover:border-yellow700"
-            >
-              <Gear size={24} color="#ED7A14" />
-            </div>
+            <Dialog.Root>
+              <Dialog.Trigger>
+                <div
+                  role="button"
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-yellow600 transition-colors duration-300 hover:border-yellow700"
+                >
+                  <Gear size={24} color="#ED7A14" />
+                </div>
+              </Dialog.Trigger>
+              <ConfigModal data={null} onClose={() => {}} />
+            </Dialog.Root>
+
             <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-green200">
               <Power size={24} color="#47FFBB" />
             </div>
@@ -65,12 +75,18 @@ export default function SnipeBotPage() {
             </div>
 
             <div className="flex items-center gap-x-4">
-              <div
-                role="button"
-                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-yellow600 transition-colors duration-300 hover:border-yellow700"
-              >
-                <Pencil size={24} color="#ED7A14" />
-              </div>
+              <Dialog.Root>
+                <Dialog.Trigger>
+                  <div
+                    role="button"
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-yellow600 transition-colors duration-300 hover:border-yellow700"
+                  >
+                    <Pencil size={24} color="#ED7A14" />
+                  </div>
+                </Dialog.Trigger>
+                <ChangeSnipeModal data={null} onClose={() => {}} />
+              </Dialog.Root>
+
               <div
                 role="button"
                 onClick={handleRefresh}

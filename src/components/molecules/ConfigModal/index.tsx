@@ -29,7 +29,7 @@ const configSchema = z.object({
 type ConfigSchemaData = z.infer<typeof configSchema>
 
 interface ConfigModalProps extends ModalProps {
-  data: BotDataProps
+  data: BotDataProps | null
 }
 
 export function ConfigModal({ data, onClose }: ConfigModalProps) {
@@ -89,7 +89,7 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
     console.log(body)
 
     try {
-      await api(`https://api.natoshi.app/v1/bot/${data._id}`, {
+      await api(`https://api.natoshi.app/v1/bot/${data?._id}`, {
         method: 'PUT',
         data: body,
         headers: {
