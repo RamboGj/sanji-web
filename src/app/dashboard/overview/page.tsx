@@ -17,8 +17,6 @@ import { SnipeActionType } from '@/reducers/SnipeReducer/SnipeActions'
 export default function OverviewPage() {
   const [state, dispatch] = useReducer(snipeReducer, SnipeInitialState)
 
-  console.log('state', state)
-
   function handleRefresh() {
     dispatch({ type: SnipeActionType.SNIPE_TOGGLE_LOADING })
 

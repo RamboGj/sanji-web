@@ -2,28 +2,42 @@ import { Button } from '@/components/atoms/Button'
 import { Heading } from '@/components/atoms/Heading'
 import { XCircle } from '@phosphor-icons/react'
 import * as Dialog from '@radix-ui/react-dialog'
-import { useState } from 'react'
+import { Dispatch, useState } from 'react'
 import { ModalProps } from '@/@types/app'
 import { Label } from '@/components/atoms/Label'
 import { COOKIES_KEY } from '@/utils/cookies'
 import { getCookie } from 'cookies-next'
-import { BotDataProps } from '@/utils/types'
 import { onNotify } from '@/utils/alert'
 import { api } from '@/services/api'
+import { SnipeState } from '@/reducers/SnipeReducer/SnipeState'
+import {
+  SnipeAction,
+  SnipeActionType,
+} from '@/reducers/SnipeReducer/SnipeActions'
 
 interface ChangeSnipeModalProps extends ModalProps {
-  data: BotDataProps | null
+  dispatch: Dispatch<SnipeAction>
+  state: SnipeState
 }
 
-export function ChangeSnipeModal({ data, onClose }: ChangeSnipeModalProps) {
-  const [snipeConfig, setSnipeConfig] = useState<string>(data?.snipeList || '')
+export function ChangeSnipeModal({
+  state,
+  onClose,
+  dispatch,
+}: ChangeSnipeModalProps) {
+  const [snipeConfig, setSnipeConfig] = useState<string>(
+    state?.snipe?.snipeList || '',
+  )
 
   async function onUpdateSnipeList() {
+    dispatch({ type: SnipeActionType.SNIPE_TOGGLE_LOADING })
+
     const jwt = getCookie(COOKIES_KEY.JWT)
     // const textWithNewlines = snipeConfig.replace(/\n/g, '\\n') // Replace line breaks with \n
+    console.log('snipeConfigState', snipeConfig)
 
     try {
-      await api(`https://api.natoshi.app/v1/bot/${data?._id}`, {
+      await api(`https://api.natoshi.app/v1/bot/${state.snipe?._id}`, {
         method: 'PUT',
         data: {
           snipeList: snipeConfig,
@@ -31,12 +45,21 @@ export function ChangeSnipeModal({ data, onClose }: ChangeSnipeModalProps) {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      }).then(() => {
+      }).then((response) => {
+        console.log('response', response)
+
+        dispatch({
+          type: SnipeActionType.SNIPE_SAVE,
+          payload: {
+            snipeList: response.data.snipeList,
+          },
+        })
+
         onNotify('success', 'Snipe list configuration successfully updated.')
-        window.location.reload()
+        onClose()
       })
     } catch (err) {
-      console.log('error snipe modal')
+      console.log('error snipe modal', err)
     }
   }
 

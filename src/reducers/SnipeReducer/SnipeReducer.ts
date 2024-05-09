@@ -9,10 +9,13 @@ export function snipeReducer(state: SnipeState, action: SnipeAction) {
         isLoading: !state.isLoading,
       }
 
-    // case SnipeActionType.SNIPE_SAVE:
-    //   return {
-    //     snipe: action.payload,
-    //     isLoading: false,
-    //   }
+    case SnipeActionType.SNIPE_SAVE:
+      return {
+        snipe: {
+          ...state.snipe,
+          ...action.payload,
+        },
+        isLoading: false,
+      }
   }
 }

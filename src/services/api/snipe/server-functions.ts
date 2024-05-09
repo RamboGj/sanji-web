@@ -1,5 +1,3 @@
-import SnipeBotClientPage from '@/components/pages/SnipeBotClientPage'
-import { SnipeProps } from '@/reducers/SnipeReducer/SnipeState'
 import { COOKIES_KEY } from '@/utils/cookies'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
@@ -29,10 +27,4 @@ export async function getSnipeBot() {
   }
 
   return data
-}
-
-export default async function SnipeBotPage() {
-  const data: SnipeProps = await getSnipeBot()
-
-  return <SnipeBotClientPage data={data} />
 }

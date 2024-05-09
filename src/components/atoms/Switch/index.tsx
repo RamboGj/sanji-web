@@ -10,8 +10,8 @@ const switchStyle = tv({
   variants: {
     checked: {
       true: {
-        root: 'bg-gray900 border-purple500',
-        thumb: 'bg-purple500 translate-x-[24px]',
+        root: 'bg-gray900 border-yellow600',
+        thumb: 'bg-yellow600 translate-x-[24px]',
       },
       false: {
         root: 'bg-gray900 border-gray500 hover:border-gray300',

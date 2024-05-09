@@ -1,86 +1,86 @@
 /* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client'
+"use client";
 
-import { Heading } from '@/components/atoms/Heading'
-import { CaretLeft } from '@phosphor-icons/react'
-import { useEffect, useState } from 'react'
-import { MobileBottomNavigation } from '../atoms/MobileBottomNavigation'
-import { api } from '@/services/api'
-import Link from 'next/link'
-import { getCookie } from 'cookies-next'
-import { COOKIES_KEY } from '@/utils/cookies'
-import { TransactionCard } from '../atoms/TransactionCard'
-import { EmptyLog } from '../atoms/EmptyLogs'
+import { Heading } from "@/components/atoms/Heading";
+import { CaretLeft } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
+import { MobileBottomNavigation } from "../../atoms/MobileBottomNavigation";
+import { api } from "@/services/api";
+import Link from "next/link";
+import { getCookie } from "cookies-next";
+import { COOKIES_KEY } from "@/utils/cookies";
+import { TransactionCard } from "../../atoms/TransactionCard";
+import { EmptyLog } from "../../atoms/EmptyLogs";
 
 interface ActivityProps {
-  success: boolean
-  message: string
+  success: boolean;
+  message: string;
   result: {
-    timestamp: string
-    fee: number
-    fee_payer: string
-    signers: string[]
-    type: string
+    timestamp: string;
+    fee: number;
+    fee_payer: string;
+    signers: string[];
+    type: string;
     actions: [
       {
         info: {
-          sender: string
-          receiver: string
-          amount: number
-        }
-        source_protocol: '11111111111111111111111111111111'
-        type: 'SOL_TRANSFER'
+          sender: string;
+          receiver: string;
+          amount: number;
+        };
+        source_protocol: "11111111111111111111111111111111";
+        type: "SOL_TRANSFER";
       },
-    ]
-  }[]
+    ];
+  }[];
 }
 
 export function ActivityClientPage() {
-  const [transactions, setTransactions] = useState<ActivityProps>()
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [transactions, setTransactions] = useState<ActivityProps>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  console.log(isLoading)
+  console.log(isLoading);
 
   async function onFetchLogs() {
-    const publicKey = getCookie(COOKIES_KEY.PUBLIC_KEY)
-    const apiKey = process.env.NEXT_PUBLIC_SHYFT_API_KEY
+    const publicKey = getCookie(COOKIES_KEY.PUBLIC_KEY);
+    const apiKey = process.env.NEXT_PUBLIC_SHYFT_API_KEY;
 
     await api(
       `https://api.shyft.to/sol/v1/transaction/history?network=mainnet-beta&tx_num=20&account=${publicKey}&enable_raw=true`,
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'x-api-key': apiKey,
+          "x-api-key": apiKey,
         },
       },
     )
       .then((response) => {
-        console.log('response', response.data)
-        setTransactions(response.data)
-        setIsLoading(false)
+        console.log("response", response.data);
+        setTransactions(response.data);
+        setIsLoading(false);
       })
       .then(() => {
-        setIsLoading(false)
+        setIsLoading(false);
       })
       .catch(() => {
-        setIsLoading(false)
-      })
+        setIsLoading(false);
+      });
   }
 
   useEffect(() => {
-    onFetchLogs()
-  }, [])
+    onFetchLogs();
+  }, []);
 
-  const publicKey = getCookie(COOKIES_KEY.PUBLIC_KEY)
-  const transactionUrl = `https://solscan.io/account/${publicKey}`
+  const publicKey = getCookie(COOKIES_KEY.PUBLIC_KEY);
+  const transactionUrl = `https://solscan.io/account/${publicKey}`;
 
   return (
     <div className="relative h-full w-full">
       <main className="mx-auto mt-20 w-full max-w-[1592px] px-5 pb-[200px] lg:px-[50px]">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-5">
-            <Link href={'/'}>
+            <Link href={"/"}>
               <div className="transtion bg-purple600 hover:bg-purple700 flex h-7 w-7 items-center justify-center rounded-lg duration-300 lg:h-[52px] lg:w-[52px]">
                 <CaretLeft size={24} color="#FFF" />
               </div>
@@ -112,7 +112,7 @@ export function ActivityClientPage() {
                         transactionUrl={transactionUrl}
                         feePayer={fee_payer}
                       />
-                    )
+                    );
                   },
                 )}
               </ul>
@@ -125,5 +125,5 @@ export function ActivityClientPage() {
 
       <MobileBottomNavigation />
     </div>
-  )
+  );
 }

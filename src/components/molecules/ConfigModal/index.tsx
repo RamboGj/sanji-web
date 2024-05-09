@@ -7,16 +7,20 @@ import * as Checkbox from '@radix-ui/react-checkbox'
 import { ModalProps } from '@/@types/app'
 import { Label } from '@/components/atoms/Label'
 import { Switch } from '@/components/atoms/Switch'
-import { useState } from 'react'
+import { Dispatch, useState } from 'react'
 
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { onNotify } from '@/utils/alert'
-import { BotDataProps } from '@/utils/types'
 import { getCookie } from 'cookies-next'
 import { COOKIES_KEY } from '@/utils/cookies'
 import { api } from '@/services/api'
+import { SnipeProps, SnipeState } from '@/reducers/SnipeReducer/SnipeState'
+import {
+  SnipeAction,
+  SnipeActionType,
+} from '@/reducers/SnipeReducer/SnipeActions'
 
 const configSchema = z.object({
   quoteAmount: z.string().optional(),
@@ -29,10 +33,17 @@ const configSchema = z.object({
 type ConfigSchemaData = z.infer<typeof configSchema>
 
 interface ConfigModalProps extends ModalProps {
-  data: BotDataProps | null
+  data: SnipeProps | null
+  dispatch: Dispatch<SnipeAction>
+  state: SnipeState
 }
 
-export function ConfigModal({ data, onClose }: ConfigModalProps) {
+export function ConfigModal({
+  data,
+  onClose,
+  dispatch,
+  state,
+}: ConfigModalProps) {
   const [isMintRenounced, setIsMintRenounced] = useState<boolean>(
     data?.checkIfMintIsRenounced || false,
   )
@@ -58,6 +69,8 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
   })
 
   async function onSubmit(formData: ConfigSchemaData) {
+    dispatch({ type: SnipeActionType.SNIPE_TOGGLE_LOADING })
+
     const jwt = getCookie(COOKIES_KEY.JWT)
 
     const hasPrivateKey =
@@ -86,8 +99,6 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
           gasLevel: gasBid,
         }
 
-    console.log(body)
-
     try {
       await api(`https://api.natoshi.app/v1/bot/${data?._id}`, {
         method: 'PUT',
@@ -95,9 +106,12 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
-      }).then(() => {
+      }).then((response) => {
+        console.log('response', response)
+        dispatch({ type: SnipeActionType.SNIPE_TOGGLE_LOADING })
+        dispatch({ type: SnipeActionType.SNIPE_SAVE, payload: response.data })
+        onClose()
         onNotify('success', 'BOT successfully updated.')
-        window.location.reload()
       })
     } catch (err) {
       console.log('error config modal')
@@ -214,7 +228,7 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
                         <Checkbox.Root
                           onClick={() => setGasBid(value)}
                           checked={true}
-                          className={`h-6 w-6 rounded-full border ${isChecked ? 'bg-purple500 border-transparent' : 'border-gray500 '}`}
+                          className={`h-6 w-6 rounded-full border ${isChecked ? 'border-transparent bg-yellow600' : 'border-gray500 '}`}
                           id={value}
                         />
                         <span className="text-purple50 text-sm font-medium">
@@ -259,7 +273,7 @@ export function ConfigModal({ data, onClose }: ConfigModalProps) {
             ) : null}
           </div>
           <div className="mt-5 flex flex-col gap-y-6">
-            <Button type="submit" variant="primary">
+            <Button isLoading={state.isLoading} type="submit" variant="primary">
               <Button.Label>Save</Button.Label>
             </Button>
           </div>
