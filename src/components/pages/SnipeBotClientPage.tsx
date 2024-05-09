@@ -1,22 +1,23 @@
 'use client'
 
 import * as Dialog from '@radix-ui/react-dialog'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 import { Heading } from '@/components/atoms/Heading'
-import {
-  ArrowCounterClockwise,
-  CircleNotch,
-  Funnel,
-  Gear,
-  Pencil,
-  Power,
-} from '@phosphor-icons/react'
-import { useEffect, useReducer, useState } from 'react'
+import { Funnel, Gear, Pencil, Power } from '@phosphor-icons/react'
+import { useReducer, useState } from 'react'
 import { ChangeSnipeModal } from '@/components/molecules/ChangeSnipeModal'
 import { ConfigModal } from '@/components/molecules/ConfigModal'
 import { SnipeProps } from '@/reducers/SnipeReducer/SnipeState'
 import { snipeReducer } from '@/reducers/SnipeReducer/SnipeReducer'
 import { Paragraph } from '../atoms/Paragraph'
+import { api } from '@/services/api'
+import { COOKIES_KEY } from '@/utils/cookies'
+import { getCookie } from 'cookies-next'
+import { onNotify } from '@/utils/alert'
+import { Tag } from '../atoms/Tag'
+import Skeleton from 'react-loading-skeleton'
+import { SnipeActionType } from '@/reducers/SnipeReducer/SnipeActions'
 
 interface SnipeBotClientPageProps {
   data: SnipeProps
@@ -37,7 +38,6 @@ export default function SnipeBotClientPage({
     useSnipeList,
   },
 }: SnipeBotClientPageProps) {
-  const [refreshing, setRefreshing] = useState<boolean>(false)
   const [isConfigModalOpen, setIsConfigModalOpen] = useState<boolean>(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
 
@@ -58,17 +58,40 @@ export default function SnipeBotClientPage({
     isLoading: false,
   })
 
-  function handleRefresh() {
-    setRefreshing(true)
+  async function onToggleBot() {
+    dispatch({ type: SnipeActionType.SNIPE_TOGGLE_LOADING })
 
-    setTimeout(() => {
-      setRefreshing(false)
-    }, 3000)
+    const jwt = getCookie(COOKIES_KEY.JWT)
+    try {
+      await api(`https://api.natoshi.app/v1/bot/toggle/${state.snipe._id}`, {
+        method: 'GET',
+
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }).then((res) => {
+        if (res.data.message.includes('stopped')) {
+          onNotify('success', 'BOT successfully turned off.')
+          dispatch({
+            type: SnipeActionType.SNIPE_SAVE,
+            payload: {
+              running: false,
+            },
+          })
+        } else {
+          onNotify('success', 'BOT successfully turned on.')
+          dispatch({
+            type: SnipeActionType.SNIPE_SAVE,
+            payload: {
+              running: true,
+            },
+          })
+        }
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
-
-  useEffect(() => {
-    console.log('state.snipes.list', state)
-  }, [state])
 
   const snipes = state?.snipe?.snipeList?.split('\n')
 
@@ -79,11 +102,20 @@ export default function SnipeBotClientPage({
           <div>
             <div className="flex items-center gap-4">
               <Heading variant="h2">Snipe Instance</Heading>
-              <div className="flex h-6 w-fit items-center rounded-[24px] border border-green200/10 bg-[#0E1512] px-[10px]">
-                <span className="text-xs font-medium text-green200">
-                  Running
-                </span>
-              </div>
+              {state.isLoading ? (
+                <Skeleton
+                  baseColor="#221E1B"
+                  highlightColor="#524D48"
+                  width={80}
+                  height={20}
+                  borderRadius={24}
+                />
+              ) : (
+                <Tag
+                  label={state.snipe.running ? 'RUNNING' : 'OFFLINE'}
+                  feedback={state.snipe.running ? 'success' : 'error'}
+                />
+              )}
             </div>
           </div>
           <div className="item-center flex gap-x-4">
@@ -106,8 +138,15 @@ export default function SnipeBotClientPage({
               />
             </Dialog.Root>
 
-            <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-green200">
-              <Power size={24} color="#47FFBB" />
+            <div
+              role="button"
+              onClick={onToggleBot}
+              className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border ${state.snipe.running ? 'border-gray500' : 'border-green200'}`}
+            >
+              <Power
+                size={24}
+                color={state.snipe.running ? '#524D48' : '#47FFBB'}
+              />
             </div>
           </div>
         </div>
@@ -142,7 +181,7 @@ export default function SnipeBotClientPage({
                 />
               </Dialog.Root>
 
-              <div
+              {/* <div
                 role="button"
                 onClick={handleRefresh}
                 className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-yellow600 transition-colors duration-300 hover:border-yellow700"
@@ -156,7 +195,7 @@ export default function SnipeBotClientPage({
                 ) : (
                   <ArrowCounterClockwise size={24} color="#ED7A14" />
                 )}
-              </div>
+              </div> */}
             </div>
           </header>
 

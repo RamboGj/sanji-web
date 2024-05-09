@@ -13,7 +13,7 @@ export default function SnipeBotPageSkeleton() {
               baseColor="#221E1B"
               highlightColor="#524D48"
               width={98}
-              height={23}
+              height={20}
               borderRadius={24}
             />
           </div>
@@ -72,27 +72,33 @@ export default function SnipeBotPageSkeleton() {
           <div className="h-px w-full bg-gray500/10" />
 
           <ul className="flex flex-col divide-y-[1px] divide-gray500/10">
-            <Skeleton
-              baseColor="#221E1B"
-              highlightColor="#524D48"
-              width={320}
-              height={24}
-              borderRadius={4}
-            />
-            <Skeleton
-              baseColor="#221E1B"
-              highlightColor="#524D48"
-              width={320}
-              height={24}
-              borderRadius={4}
-            />
-            <Skeleton
-              baseColor="#221E1B"
-              highlightColor="#524D48"
-              width={320}
-              height={24}
-              borderRadius={4}
-            />
+            <li className="p-3">
+              <Skeleton
+                baseColor="#221E1B"
+                highlightColor="#524D48"
+                width={320}
+                height={24}
+                borderRadius={4}
+              />
+            </li>
+            <li className="p-3">
+              <Skeleton
+                baseColor="#221E1B"
+                highlightColor="#524D48"
+                width={320}
+                height={24}
+                borderRadius={4}
+              />
+            </li>
+            <li className="p-3">
+              <Skeleton
+                baseColor="#221E1B"
+                highlightColor="#524D48"
+                width={320}
+                height={24}
+                borderRadius={4}
+              />
+            </li>
           </ul>
         </div>
       </div>

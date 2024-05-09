@@ -37,6 +37,10 @@ export default function OverviewPage() {
             <div>
               <div className="flex items-center gap-4">
                 <Heading variant="h2">Root Instance</Heading>
+                <Tag
+                  label={state.snipe.running ? 'RUNNING' : 'OFFLINE'}
+                  feedback={state.snipe.running ? 'success' : 'error'}
+                />
                 <div className="flex h-6 w-fit items-center rounded-[24px] border border-green200/10 bg-[#0E1512] px-[10px]">
                   <span className="text-xs font-medium text-green200">
                     Running
@@ -54,8 +58,13 @@ export default function OverviewPage() {
                 </span>
               </div>
             </div>
-            <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-green200">
-              <Power size={24} color="#47FFBB" />
+            <div
+              className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border ${state.snipe.running ? 'border-gray500' : 'border-green200'}`}
+            >
+              <Power
+                size={24}
+                color={state.snipe.running ? '#524D48' : '#47FFBB'}
+              />
             </div>
           </div>
           <div className="mt-12 flex gap-5">
