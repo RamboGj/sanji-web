@@ -1,6 +1,7 @@
 'use client'
 
 import * as Dialog from '@radix-ui/react-dialog'
+import * as Tooltip from '@radix-ui/react-tooltip'
 import 'react-loading-skeleton/dist/skeleton.css'
 
 import { Heading } from '@/components/atoms/Heading'
@@ -40,6 +41,8 @@ export default function SnipeBotClientPage({
 }: SnipeBotClientPageProps) {
   const [isConfigModalOpen, setIsConfigModalOpen] = useState<boolean>(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
+
+  const [snipesTab, setSnipesTab] = useState<string>('yourSnipes')
 
   const [state, dispatch] = useReducer(snipeReducer, {
     snipe: {
@@ -93,14 +96,30 @@ export default function SnipeBotClientPage({
     }
   }
 
-  const snipes = state?.snipe?.snipeList?.split('\n')
+  const snipes =
+    state.snipe.snipeList && state.snipe.snipeList.length > 0
+      ? state.snipe.snipeList.split('\n')
+      : []
+
+  console.log('snipes', snipes)
+
+  const snipeTabs = [
+    {
+      label: 'Your snipes',
+      value: 'yourSnipes',
+    },
+    {
+      label: 'Alpha snipes',
+      value: 'alphaSnipes',
+    },
+  ]
 
   return (
     <main className="flex w-full flex-col gap-y-7 p-6">
       <div className="flex w-full flex-col border border-gray500/10 bg-gray800/60 p-6">
         <div className="flex w-full items-start justify-between ">
           <div>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center">
               <Heading variant="h2">Snipe Instance</Heading>
               {state.isLoading ? (
                 <Skeleton
@@ -156,12 +175,44 @@ export default function SnipeBotClientPage({
           <header className="mb-3 flex items-center justify-between">
             <div className="flex items-center gap-x-4">
               <Heading variant="h3">Your Snipes</Heading>
-              <div
-                role="button"
-                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-yellow600 transition-colors duration-300 hover:border-yellow700"
-              >
-                <Funnel size={24} color="#ED7A14" />
-              </div>
+              <Tooltip.Provider delayDuration={0}>
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild className="hidden lg:block">
+                    <div
+                      role="button"
+                      className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-yellow600 transition-colors duration-300 hover:border-yellow700"
+                    >
+                      <Funnel size={24} color="#ED7A14" />
+                    </div>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content
+                      className="text-purple50 z-50 max-w-[320px] rounded-lg border border-gray500/10 bg-gray800 text-sm"
+                      sideOffset={5}
+                    >
+                      <div className="flex cursor-pointer flex-col">
+                        {snipeTabs.map(({ label, value }) => {
+                          const isActive = snipesTab === value
+
+                          return (
+                            <span
+                              role="button"
+                              onClick={() => {
+                                setSnipesTab(value)
+                              }}
+                              key={value}
+                              className={`select-none rounded-t-lg px-12 py-4 transition-colors duration-300 hover:bg-gray700 ${isActive ? 'text-yellow600' : ''}`}
+                            >
+                              {label}
+                            </span>
+                          )
+                        })}
+                      </div>
+                      <Tooltip.Arrow className="fill-gray700" />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              </Tooltip.Provider>
             </div>
 
             <div className="flex items-center gap-x-4">
@@ -202,7 +253,7 @@ export default function SnipeBotClientPage({
           <div className="h-px w-full bg-gray500/10" />
 
           <ul className="flex flex-col divide-y-[1px] divide-gray500/10">
-            {snipes ? (
+            {snipes && snipes.length > 0 ? (
               snipes.map((item: string) => {
                 return (
                   <li key={item} className="p-3">
@@ -212,7 +263,7 @@ export default function SnipeBotClientPage({
               })
             ) : (
               <div className="flex w-full items-center justify-center p-12">
-                <Paragraph>No snipes found</Paragraph>
+                <Paragraph className="text-gray500">No snipes found</Paragraph>
               </div>
             )}
           </ul>

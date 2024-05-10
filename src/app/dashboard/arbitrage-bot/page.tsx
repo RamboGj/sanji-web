@@ -12,7 +12,7 @@ export default function ArbitrageBotPage() {
       <div className="flex w-full flex-col border border-gray500/10 bg-gray800/60 p-6">
         <div className="flex w-full items-start justify-between ">
           <div>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center">
               <Heading variant="h2">Arbitrage Instance</Heading>
               <div className="flex h-6 w-fit items-center rounded-[24px] border border-green200/10 bg-[#0E1512] px-[10px]">
                 <span className="text-xs font-medium text-green200">

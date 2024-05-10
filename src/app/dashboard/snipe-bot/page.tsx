@@ -4,7 +4,7 @@ import { COOKIES_KEY } from '@/utils/cookies'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-export async function getSnipeBot() {
+async function getSnipeBot() {
   const jwt = cookies().get(COOKIES_KEY.JWT)
 
   if (!jwt) {

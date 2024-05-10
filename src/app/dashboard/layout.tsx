@@ -7,6 +7,7 @@ import { Header } from '@/components/atoms/Header'
 import { Aside } from '@/components/atoms/Aside'
 import { AppContextProvider } from '@/contexts/AppContext'
 import { SolanaContextProvider } from '@/contexts/SolanaContext'
+import { MobileBottomNavigation } from '@/components/atoms/MobileBottomNavigation'
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -49,6 +50,7 @@ export default async function RootLayout({
               <Aside />
               {children}
             </div>
+            <MobileBottomNavigation />
           </body>
           <Toaster position="top-right" />
         </SolanaContextProvider>

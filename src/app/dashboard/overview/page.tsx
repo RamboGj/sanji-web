@@ -33,19 +33,14 @@ export default function OverviewPage() {
     <main className="flex w-full flex-col gap-y-7 p-6">
       <div className="flex w-full items-stretch gap-x-7">
         <div className="flex w-full flex-1 flex-col border border-gray500/10 bg-gray800/60 p-6">
-          <div className="flex w-full items-start justify-between ">
+          <div className="flex w-full items-start justify-between">
             <div>
-              <div className="flex items-center gap-4">
+              <div className="flex flex-col items-start gap-2 lg:flex-row lg:items-center lg:gap-4">
                 <Heading variant="h2">Root Instance</Heading>
                 <Tag
                   label={state.snipe.running ? 'RUNNING' : 'OFFLINE'}
                   feedback={state.snipe.running ? 'success' : 'error'}
                 />
-                <div className="flex h-6 w-fit items-center rounded-[24px] border border-green200/10 bg-[#0E1512] px-[10px]">
-                  <span className="text-xs font-medium text-green200">
-                    Running
-                  </span>
-                </div>
               </div>
               <div className="mt-2 flex flex-col">
                 <span className="text-base font-medium">
@@ -77,7 +72,7 @@ export default function OverviewPage() {
           </div>
         </div>
 
-        <div className="flex h-full min-w-[466px] flex-col justify-between border border-gray500/10 bg-gray800/60 p-6">
+        <div className="hidden h-full min-w-[466px] flex-col justify-between border border-gray500/10 bg-gray800/60 p-6 lg:flex">
           <div className="flex items-start justify-between">
             <Heading variant="h2">Balance</Heading>
 
@@ -140,23 +135,23 @@ export default function OverviewPage() {
           ) : (
             <table className="w-full divide-y-[1px] divide-gray500/10">
               <thead>
-                <tr className="grid grid-cols-7 place-items-start py-4">
-                  <th className="col-span-1 content-start items-start justify-start ">
-                    Instance ID
+                <tr className="grid grid-cols-4 place-items-start py-4 lg:grid-cols-6">
+                  <th className="col-span-1 content-start items-start justify-start text-xs lg:text-base">
+                    Instance
                   </th>
-                  <th className="col-span-1">Instance Name</th>
-                  <th className="col-span-1">Incoming</th>
-                  <th className="col-span-1">Status</th>
-                  <th className="col-span-3"></th>
+                  <th className="col-span-1 text-xs lg:text-base">Incoming</th>
+                  <th className="col-span-1 text-xs lg:text-base">Status</th>
+                  <th className="col-span-1 lg:col-span-3"></th>
                 </tr>
               </thead>
               <tbody className="divide-y-[1px] divide-gray500/10">
-                <tr className="grid cursor-pointer grid-cols-7 py-4 transition-colors duration-300 hover:bg-gray700">
-                  <td className="col-span-1">Instance ID</td>
-                  <td className="col-span-1">Instance Name</td>
-                  <td className="col-span-1">Incoming</td>
-                  <td className="col-span-1">Status</td>
-                  <td className="col-span-3 grid place-content-end place-items-end content-center">
+                <tr className="grid cursor-pointer grid-cols-4 py-4 transition-colors duration-300 hover:bg-gray700 lg:grid-cols-6">
+                  <td className="col-span-1 text-xs lg:text-base">
+                    Instance Snipe
+                  </td>
+                  <td className="col-span-1 text-xs lg:text-base">Incoming</td>
+                  <td className="col-span-1 text-xs lg:text-base">Status</td>
+                  <td className="col-span-1 grid place-content-end place-items-end content-center lg:col-span-3">
                     <CaretRight />
                   </td>
                 </tr>

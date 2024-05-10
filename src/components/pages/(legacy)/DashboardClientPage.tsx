@@ -9,8 +9,6 @@ import { Heading } from '@/components/atoms/Heading'
 import { Button } from '@/components/atoms/Button'
 import { Gear, Target } from '@phosphor-icons/react'
 import { useContext, useState } from 'react'
-import { ChangeSnipeModal } from '@/components/molecules/ChangeSnipeModal'
-import { ConfigModal } from '@/components/molecules/ConfigModal'
 import Link from 'next/link'
 import { AppContext } from '@/contexts/AppContext'
 import { MobileBottomNavigation } from '../../atoms/MobileBottomNavigation'
@@ -22,8 +20,6 @@ import { getCookie } from 'cookies-next'
 import { COOKIES_KEY } from '@/utils/cookies'
 import { api } from '@/services/api'
 import { onNotify } from '@/utils/alert'
-import { DeleteSnipeModal } from '../../molecules/DeleteSnipeModal'
-import { TurnOnSnipeModal } from '../../molecules/TurnOnSnipeModal'
 
 export type ModalOpenProps =
   | 'create-snipe'
@@ -76,9 +72,9 @@ export default function DashboardClientPage({
     }
   }
 
-  function onClose() {
-    setModalOpen('none')
-  }
+  // function onClose() {
+  //   setModalOpen('none')
+  // }
 
   const tabsTrigger = [
     {
@@ -261,7 +257,7 @@ export default function DashboardClientPage({
       </div>
 
       <Dialog.Root open={modalOpen !== 'none'}>
-        {modalOpen === 'create-snipe' ? (
+        {/* {modalOpen === 'create-snipe' ? (
           <ChangeSnipeModal data={data} onClose={onClose} />
         ) : null}
         {modalOpen === 'delete-snipe' ? (
@@ -272,7 +268,7 @@ export default function DashboardClientPage({
         ) : null}
         {modalOpen === 'config' && typeof data !== 'undefined' ? (
           <ConfigModal data={data} onClose={onClose} />
-        ) : null}
+        ) : null} */}
       </Dialog.Root>
     </>
   )

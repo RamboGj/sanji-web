@@ -48,7 +48,7 @@ export function Aside() {
   ]
 
   return (
-    <aside className="flex h-screen w-[300px] flex-col border-b border-r border-gray500/10 bg-gray800/60 px-4 py-8">
+    <aside className="hidden h-screen w-[300px] flex-col border-b border-r border-gray500/10 bg-gray800/60 px-4 py-8 lg:flex">
       <ul className="flex flex-col gap-y-5">
         {asideItems.map(({ icon, title, path, activeIcon }) => {
           const isActive = pathname.includes(path)
