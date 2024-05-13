@@ -45,8 +45,6 @@ export default function DashboardClientPage({
     return element.length > 0
   })
 
-  console.log('data', data.snipeList)
-
   setBotData(data)
 
   async function onToggleBot() {
@@ -71,10 +69,6 @@ export default function DashboardClientPage({
       console.log(err)
     }
   }
-
-  // function onClose() {
-  //   setModalOpen('none')
-  // }
 
   const tabsTrigger = [
     {

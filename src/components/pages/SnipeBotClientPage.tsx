@@ -1,7 +1,8 @@
 'use client'
 
 import * as Dialog from '@radix-ui/react-dialog'
-import * as Tooltip from '@radix-ui/react-tooltip'
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
+
 import 'react-loading-skeleton/dist/skeleton.css'
 
 import { Heading } from '@/components/atoms/Heading'
@@ -175,44 +176,42 @@ export default function SnipeBotClientPage({
           <header className="mb-3 flex items-center justify-between">
             <div className="flex items-center gap-x-4">
               <Heading variant="h3">Your Snipes</Heading>
-              <Tooltip.Provider delayDuration={0}>
-                <Tooltip.Root>
-                  <Tooltip.Trigger asChild className="hidden lg:block">
-                    <div
-                      role="button"
-                      className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-yellow600 transition-colors duration-300 hover:border-yellow700"
-                    >
-                      <Funnel size={24} color="#ED7A14" />
-                    </div>
-                  </Tooltip.Trigger>
-                  <Tooltip.Portal>
-                    <Tooltip.Content
-                      className="text-purple50 z-50 max-w-[320px] rounded-lg border border-gray500/10 bg-gray800 text-sm"
-                      sideOffset={5}
-                    >
-                      <div className="flex cursor-pointer flex-col">
-                        {snipeTabs.map(({ label, value }) => {
-                          const isActive = snipesTab === value
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger asChild className="flex">
+                  <div
+                    role="button"
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-yellow600 transition-colors duration-300 hover:border-yellow700"
+                  >
+                    <Funnel size={24} color="#ED7A14" />
+                  </div>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Portal>
+                  <DropdownMenu.Content
+                    className="text-purple50 z-50 max-w-[320px] rounded-lg border border-gray500/10 bg-gray800 text-sm"
+                    sideOffset={5}
+                  >
+                    <div className="flex cursor-pointer flex-col">
+                      {snipeTabs.map(({ label, value }) => {
+                        const isActive = snipesTab === value
 
-                          return (
-                            <span
-                              role="button"
-                              onClick={() => {
-                                setSnipesTab(value)
-                              }}
-                              key={value}
-                              className={`select-none rounded-t-lg px-12 py-4 transition-colors duration-300 hover:bg-gray700 ${isActive ? 'text-yellow600' : ''}`}
-                            >
-                              {label}
-                            </span>
-                          )
-                        })}
-                      </div>
-                      <Tooltip.Arrow className="fill-gray700" />
-                    </Tooltip.Content>
-                  </Tooltip.Portal>
-                </Tooltip.Root>
-              </Tooltip.Provider>
+                        return (
+                          <span
+                            role="button"
+                            onClick={() => {
+                              setSnipesTab(value)
+                            }}
+                            key={value}
+                            className={`select-none rounded-t-lg px-12 py-4 transition-colors duration-300 hover:bg-gray700 ${isActive ? 'text-yellow600' : ''}`}
+                          >
+                            {label}
+                          </span>
+                        )
+                      })}
+                    </div>
+                    <DropdownMenu.Arrow className="fill-gray700" />
+                  </DropdownMenu.Content>
+                </DropdownMenu.Portal>
+              </DropdownMenu.Root>
             </div>
 
             <div className="flex items-center gap-x-4">
