@@ -4,7 +4,7 @@ import { ModalOpenProps } from '@/components/pages/(legacy)/DashboardClientPage'
 import { api } from '@/services/api'
 import { COOKIES_KEY } from '@/utils/cookies'
 import { BotDataProps } from '@/utils/types'
-import { deleteCookie } from 'cookies-next'
+import { deleteCookie, getCookie } from 'cookies-next'
 import { useRouter } from 'next/navigation'
 import {
   Dispatch,
@@ -35,13 +35,17 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
   const { push } = useRouter()
 
   useEffect(() => {
+    const jwt = getCookie(COOKIES_KEY.JWT)
+
+    // if (!jwt) push('/auth')
+
     const interceptor = api.interceptors.response.use(
       (response) => {
         return response
       },
       (error) => {
         if (error.response.status === 401) {
-          push('/auth')
+          // push('/auth')
           deleteCookie(COOKIES_KEY.JWT)
           deleteCookie(COOKIES_KEY.PUBLIC_KEY)
         }

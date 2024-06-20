@@ -17,7 +17,7 @@ axios.interceptors.response.use(
       deleteCookie(COOKIES_KEY.JWT)
       deleteCookie(COOKIES_KEY.PUBLIC_KEY)
       onNotify('error', 'Your session has expired.')
-      window.location.replace('/auth')
+      // window.location.replace('/auth')
     }
     return error
   },

@@ -9,7 +9,7 @@ async function onFetchBotData() {
   const jwt = cookies().get(COOKIES_KEY.JWT)
 
   if (!jwt) {
-    redirect('/auth')
+    // redirect('/auth')
   }
 
   const response = await fetch('https://api.natoshi.app/v1/bot/active', {
@@ -25,7 +25,7 @@ async function onFetchBotData() {
   if (data.message === 'User not found with the provided token') {
     deleteCookie(COOKIES_KEY.JWT)
     deleteCookie(COOKIES_KEY.PUBLIC_KEY)
-    redirect('/auth')
+    // redirect('/auth')
   }
 
   return data

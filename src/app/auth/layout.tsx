@@ -1,5 +1,14 @@
+import { Header } from '@/components/atoms/Header'
+import { SolanaContextProvider } from '@/contexts/SolanaContext'
 import { Metadata } from 'next'
+import { Montserrat } from 'next/font/google'
 import { ReactNode } from 'react'
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  variable: '--montserrat',
+})
 
 export const metadata: Metadata = {
   title: 'Sanji | Authorization',
@@ -22,5 +31,12 @@ export const metadata: Metadata = {
 }
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
-  return children
+  return (
+    <SolanaContextProvider>
+      <div className={montserrat.className + ` bg-gray900`}>
+        <Header />
+        <div className="flex">{children}</div>
+      </div>
+    </SolanaContextProvider>
+  )
 }

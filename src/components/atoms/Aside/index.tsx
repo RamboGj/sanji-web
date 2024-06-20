@@ -34,16 +34,16 @@ export function Aside() {
       path: '/dashboard/snipe-bot',
     },
     {
-      title: 'Scalp BOT',
-      icon: <Eraser size={24} color="#524D48" />,
-      activeIcon: <Eraser size={24} color="#FFFFFF" />,
-      path: '/dashboard/scalp-bot',
-    },
-    {
       title: 'Arbitrage BOT',
       icon: <ClockCountdown size={24} color="#524D48" />,
       activeIcon: <ClockCountdown size={24} color="#FFFFFF" />,
       path: '/dashboard/arbitrage-bot',
+    },
+    {
+      title: 'Scalp BOT (coming soon)',
+      icon: <Eraser size={24} color="#524D48" />,
+      activeIcon: <Eraser size={24} color="#FFFFFF" />,
+      path: '/dashboard/scalp',
     },
   ]
 
@@ -53,29 +53,46 @@ export function Aside() {
         {asideItems.map(({ icon, title, path, activeIcon }) => {
           const isActive = pathname.includes(path)
 
-          return (
-            <li key={path}>
-              <Link href={path}>
+          const isComingSoon = path.includes('scalp')
+
+          if (isComingSoon) {
+            return (
+              <li key={path}>
                 <div
-                  className={twMerge(
-                    'flex h-[52px] w-[270px] items-center gap-3 rounded-[4px] px-4',
-                    isActive
-                      ? 'bg-yellow600'
-                      : 'bg-gray900  transition-colors duration-300 hover:bg-gray800',
-                  )}
+                  className={
+                    'flex h-[52px] w-[270px] cursor-not-allowed items-center gap-3 rounded-[4px] bg-gray900 px-4  transition-colors duration-300'
+                  }
                 >
-                  {isActive ? activeIcon : icon}
-                  <span
+                  {icon}
+                  <span className={'text-gray500'}>{title}</span>
+                </div>
+              </li>
+            )
+          } else {
+            return (
+              <li key={path}>
+                <Link href={path}>
+                  <div
                     className={twMerge(
-                      isActive ? 'text-white' : 'text-gray500',
+                      'flex h-[52px] w-[270px] items-center gap-3 rounded-[4px] px-4',
+                      isActive
+                        ? 'bg-yellow600'
+                        : 'bg-gray900  transition-colors duration-300 hover:bg-gray800',
                     )}
                   >
-                    {title}
-                  </span>
-                </div>
-              </Link>
-            </li>
-          )
+                    {isActive ? activeIcon : icon}
+                    <span
+                      className={twMerge(
+                        isActive ? 'text-white' : 'text-gray500',
+                      )}
+                    >
+                      {title}
+                    </span>
+                  </div>
+                </Link>
+              </li>
+            )
+          }
         })}
       </ul>
     </aside>

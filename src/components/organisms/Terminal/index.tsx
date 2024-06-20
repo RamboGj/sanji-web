@@ -1,48 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useRef } from 'react'
-import { XTerm } from 'xterm-for-react'
+import Script from 'next/script'
+import { Terminal } from '@xterm/xterm'
 
-export function Terminal() {
-  const xtermRef = useRef<any>(null)
-  // const socketRef = useRef<any>(null)
+export function Terminalinternal() {
+  const term = new Terminal({
+    cursorBlink: true,
+  })
 
-  // useEffect(() => {
-  //   connectToSocket()
-  //     .then((socket) => {
-  //       socketRef.current = socket
-  //       xtermRef.current.terminal.write(`\r\n$ `)
-  //       socketRef.current.on('output', (data) => {
-  //         xtermRef.current.terminal.write(data)
-  //       })
-  //     })
-  //     .catch((e) => {
-  //       console.log('Error Failed to connect to server: ', e)
-  //     })
-  //   return function cleanup() {
-  //     socketRef.current.disconnect()
-  //   }
-  // }, [])
+  if (document?.getElementById('terminal') !== null) {
+    term.open(document?.getElementById('terminal') as HTMLElement)
+  }
 
-  // const onDataCallback = (data) => {
-  //   if (socketRef.current) {
-  //     socketRef.current.emit('input', data)
-  //   }
-  // }
-
-  // const connectToSocket = () => {
-  //   return new Promise((res) => {
-  //     const socket = io(connectAddress)
-  //     res(socket)
-  //   })
-  // }
+  console.log(
+    "document?.getElementById('terminal')",
+    document?.getElementById('terminal'),
+  )
 
   return (
-    <XTerm
-      ref={xtermRef}
-      onKey={(e) => {
-        console.log('e key', e)
-        xtermRef.current.terminal.write(e)
-      }}
-    />
+    <div>
+      <Script src="https://cdn.jsdelivr.net/npm/xterm@4.19.0/lib/xterm.js" />
+      <div id="terminal"></div>
+    </div>
   )
 }

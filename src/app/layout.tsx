@@ -38,6 +38,12 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
+      {/* <head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/xterm@4.19.0/css/xterm.css"
+        />
+      </head> */}
       <AppContextProvider>
         <SolanaContextProvider>
           <body className={montserrat.className + ` bg-gray900`}>

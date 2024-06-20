@@ -8,13 +8,14 @@ async function getSnipeBot() {
   const jwt = cookies().get(COOKIES_KEY.JWT)
 
   if (!jwt) {
-    redirect('/auth')
+    // redirect('/auth')
   }
 
   const response = await fetch('https://api.natoshi.app/v1/bot/active', {
     method: 'GET',
     headers: {
-      Authorization: `Bearer ${jwt.value}`,
+      // Authorization: `Bearer ${jwt.value}`,
+      Authorization: `Bearer`,
     },
     cache: 'no-cache',
   })
@@ -25,14 +26,16 @@ async function getSnipeBot() {
     cookies().delete(COOKIES_KEY.JWT)
     cookies().delete(COOKIES_KEY.PUBLIC_KEY)
 
-    redirect('/auth')
+    // redirect('/auth')
   }
 
   return data
 }
 
 export default async function SnipeBotPage() {
-  const data: SnipeProps = await getSnipeBot()
+  // const data: SnipeProps = await getSnipeBot()
+
+  const data: any = ''
 
   return <SnipeBotClientPage data={data} />
 }
