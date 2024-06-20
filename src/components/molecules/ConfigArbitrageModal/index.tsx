@@ -20,7 +20,7 @@ import { onNotify } from '@/utils/alert'
 
 const configSchema = z.object({
   isActive: z.boolean().optional(),
-  tradingMode: z.enum(['classic', 'delta', 'neutral']).optional(),
+  tradingMode: z.enum(['classic', 'neutral-delta']).optional(),
   profitCriteriaPercentage: z.string().optional(),
   profitCriteriaAbsoluteUSD: z.string().optional(),
   profitCriteriaTimeout: z.string().optional(),
@@ -156,7 +156,7 @@ export function ConfigArbitrageModal({ onClose }: ConfigArbitrageModalProps) {
 
   const tradingModeOptions: {
     title: string
-    value: 'classic' | 'neutral' | 'delta'
+    value: 'classic' | 'neutral-delta'
   }[] = [
     {
       title: 'Classic',
@@ -164,11 +164,7 @@ export function ConfigArbitrageModal({ onClose }: ConfigArbitrageModalProps) {
     },
     {
       title: 'Neutral',
-      value: 'neutral',
-    },
-    {
-      title: 'Delta',
-      value: 'delta',
+      value: 'neutral-delta',
     },
   ]
 
