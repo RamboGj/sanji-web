@@ -8,7 +8,23 @@ interface AuthServiceProps {
   message: string
 }
 
-export async function login({
+interface RegisterBodyProps {
+  email: string
+  password: string
+}
+
+interface RegisterResultProps {
+  token: string
+  user: {
+    email: string
+    password: string
+    subscriptionStatus: string
+    _id: string
+    __v: number
+  }
+}
+
+export async function signin({
   message,
   signature,
   walletAddress,
@@ -23,17 +39,15 @@ export async function login({
   })
 }
 
-export async function register({
-  message,
-  signature,
-  walletAddress,
-}: AuthServiceProps): Promise<AxiosResponse> {
+export async function signup({
+  email,
+  password,
+}: RegisterBodyProps): Promise<AxiosResponse<RegisterResultProps>> {
   return await api(API_ENDPOINTS.REGISTER, {
     method: 'POST',
     data: {
-      walletAddress,
-      signature,
-      message,
+      email,
+      password,
     },
   })
 }

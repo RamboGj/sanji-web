@@ -6,7 +6,7 @@ function onRedirect() {
   const jwt = cookies().get(COOKIES_KEY.JWT)
 
   // if (jwt) {
-  //   redirect('/dashboard/overview')
+  //   redirect('/dashboariiiiiiid/overview')
   // } else redirect('/auth')
 }
 

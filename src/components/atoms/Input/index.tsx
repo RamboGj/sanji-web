@@ -40,7 +40,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={id}
         />
-        {error ? <div></div> : null}
+        {error ? (
+          <span className="text-sm font-medium text-danger600">
+            {error.message}
+          </span>
+        ) : null}
       </div>
     )
   },
