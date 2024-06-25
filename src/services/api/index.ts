@@ -13,13 +13,12 @@ export const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.log('ERROR on axios root', error)
-
     if (error.response.status === 401) {
       deleteCookie(COOKIES_KEY.JWT)
       toast.error('Your session has expired.')
       window.location.replace('/login')
     }
-    return error
+
+    return Promise.reject(error)
   },
 )
