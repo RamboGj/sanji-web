@@ -1,15 +1,15 @@
 export interface SnipeProps {
   _id: string
-  quoteAmount: number
-  minPoolSize: number
+  running: boolean
+  quoteAmount: string
+  useSnipeList: boolean
+  minPoolSize: string
   checkIfMintIsRenounced: boolean
   autoSell: boolean
-  useSnipeList: boolean
-  snipeList: string | null
   maxSellRetries: number
   autoSellDelay: number
   gasLevel: 'Low' | 'Medium' | 'High' | 'Maximum'
-  running: boolean
+  snipeList: string | null
 }
 
 export interface SnipeState {
@@ -20,8 +20,8 @@ export interface SnipeState {
 export const SnipeInitialState: SnipeState = {
   snipe: {
     _id: '',
-    quoteAmount: 0,
-    minPoolSize: 0,
+    quoteAmount: '0',
+    minPoolSize: '0',
     checkIfMintIsRenounced: false,
     autoSell: false,
     useSnipeList: false,

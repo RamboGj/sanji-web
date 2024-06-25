@@ -7,20 +7,19 @@ import * as Checkbox from '@radix-ui/react-checkbox'
 import { ModalProps } from '@/@types/app'
 import { Label } from '@/components/atoms/Label'
 import { Switch } from '@/components/atoms/Switch'
-import { Dispatch, useState } from 'react'
+import { Dispatch, useState, useTransition } from 'react'
 
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { onNotify } from '@/utils/alert'
-import { getCookie } from 'cookies-next'
-import { COOKIES_KEY } from '@/utils/cookies'
-import { api } from '@/services/api'
 import { SnipeProps, SnipeState } from '@/reducers/SnipeReducer/SnipeState'
 import {
   SnipeAction,
   SnipeActionType,
 } from '@/reducers/SnipeReducer/SnipeActions'
+import { isAxiosError } from 'axios'
+import toast from 'react-hot-toast'
+import { updateSnipeBot } from '@/services/api/snipe'
 
 const configSchema = z.object({
   quoteAmount: z.string().optional(),
@@ -44,6 +43,8 @@ export function ConfigModal({
   dispatch,
   state,
 }: ConfigModalProps) {
+  const [isPending, startTransition] = useTransition()
+
   const [isMintRenounced, setIsMintRenounced] = useState<boolean>(
     data?.checkIfMintIsRenounced || false,
   )
@@ -69,53 +70,46 @@ export function ConfigModal({
   })
 
   async function onSubmit(formData: ConfigSchemaData) {
-    dispatch({ type: SnipeActionType.SNIPE_TOGGLE_LOADING })
+    startTransition(async () => {
+      try {
+        const hasPrivateKey =
+          formData?.privateKey && formData.privateKey?.length > 0
 
-    const jwt = getCookie(COOKIES_KEY.JWT)
+        const body = hasPrivateKey
+          ? {
+              privateKey: formData.privateKey,
+              quoteAmount: formData.quoteAmount?.replace(',', '.'),
+              useSnipeList,
+              minPoolSize: formData.minimumPoolSize?.replace(',', '.'),
+              checkIfMintIsRenounced: isMintRenounced,
+              autoSell: isAutoSell,
+              maxSellRetries: formData.sellRetries,
+              autoSellDelay: formData.sellDelay,
+              gasLevel: gasBid,
+            }
+          : {
+              quoteAmount: formData.quoteAmount?.replace(',', '.'),
+              useSnipeList,
+              minPoolSize: formData.minimumPoolSize?.replace(',', '.'),
+              checkIfMintIsRenounced: isMintRenounced,
+              autoSell: isAutoSell,
+              maxSellRetries: formData.sellRetries,
+              autoSellDelay: formData.sellDelay,
+              gasLevel: gasBid,
+            }
 
-    const hasPrivateKey =
-      formData?.privateKey && formData.privateKey?.length > 0
+        const response = await updateSnipeBot({ body, botId: state.snipe._id })
 
-    const body = hasPrivateKey
-      ? {
-          privateKey: formData.privateKey,
-          quoteAmount: formData.quoteAmount?.replace(',', '.'),
-          useSnipeList,
-          minPoolSize: formData.minimumPoolSize?.replace(',', '.'),
-          checkIfMintIsRenounced: isMintRenounced,
-          autoSell: isAutoSell,
-          maxSellRetries: formData.sellRetries,
-          autoSellDelay: formData.sellDelay,
-          gasLevel: gasBid,
-        }
-      : {
-          quoteAmount: formData.quoteAmount?.replace(',', '.'),
-          useSnipeList,
-          minPoolSize: formData.minimumPoolSize?.replace(',', '.'),
-          checkIfMintIsRenounced: isMintRenounced,
-          autoSell: isAutoSell,
-          maxSellRetries: formData.sellRetries,
-          autoSellDelay: formData.sellDelay,
-          gasLevel: gasBid,
-        }
-
-    try {
-      await api(`https://api.natoshi.app/v1/bot/${data?._id}`, {
-        method: 'PUT',
-        data: body,
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      }).then((response) => {
-        console.log('response', response)
-        dispatch({ type: SnipeActionType.SNIPE_TOGGLE_LOADING })
         dispatch({ type: SnipeActionType.SNIPE_SAVE, payload: response.data })
+        toast.success('BOT successfully updated.')
         onClose()
-        onNotify('success', 'BOT successfully updated.')
-      })
-    } catch (err) {
-      console.log('error config modal')
-    }
+      } catch (err) {
+        if (isAxiosError(err)) {
+          console.log('err', err)
+          toast.error(err.response?.data.message)
+        }
+      }
+    })
   }
 
   const gasBidMocks = [
@@ -273,7 +267,7 @@ export function ConfigModal({
             ) : null}
           </div>
           <div className="mt-5 flex flex-col gap-y-6">
-            <Button isLoading={state.isLoading} type="submit" variant="primary">
+            <Button isLoading={isPending} type="submit" variant="primary">
               <Button.Label>Save</Button.Label>
             </Button>
           </div>

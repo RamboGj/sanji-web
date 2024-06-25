@@ -7,19 +7,18 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 import { Heading } from '@/components/atoms/Heading'
 import { Funnel, Gear, Pencil, Power } from '@phosphor-icons/react'
-import { useReducer, useState } from 'react'
+import { useReducer, useState, useTransition } from 'react'
 import { ChangeSnipeModal } from '@/components/molecules/ChangeSnipeModal'
 import { ConfigModal } from '@/components/molecules/ConfigModal'
-import { SnipeProps } from '@/reducers/SnipeReducer/SnipeState'
 import { snipeReducer } from '@/reducers/SnipeReducer/SnipeReducer'
 import { Paragraph } from '../atoms/Paragraph'
-import { api } from '@/services/api'
-import { COOKIES_KEY } from '@/utils/cookies'
-import { getCookie } from 'cookies-next'
-import { onNotify } from '@/utils/alert'
 import { Tag } from '../atoms/Tag'
 import Skeleton from 'react-loading-skeleton'
 import { SnipeActionType } from '@/reducers/SnipeReducer/SnipeActions'
+import { SnipeProps } from '@/reducers/SnipeReducer/SnipeState'
+import { toggleSnipeBot } from '@/services/api/snipe'
+import toast from 'react-hot-toast'
+import { isAxiosError } from 'axios'
 
 interface SnipeBotClientPageProps {
   data: SnipeProps
@@ -43,6 +42,8 @@ export default function SnipeBotClientPage({
   const [isConfigModalOpen, setIsConfigModalOpen] = useState<boolean>(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
 
+  const [isPending, startTransition] = useTransition()
+
   const [snipesTab, setSnipesTab] = useState<string>('yourSnipes')
 
   const [state, dispatch] = useReducer(snipeReducer, {
@@ -63,19 +64,14 @@ export default function SnipeBotClientPage({
   })
 
   async function onToggleBot() {
-    dispatch({ type: SnipeActionType.SNIPE_TOGGLE_LOADING })
+    startTransition(async () => {
+      try {
+        const response = await toggleSnipeBot({ botId: state.snipe._id })
 
-    const jwt = getCookie(COOKIES_KEY.JWT)
-    try {
-      await api(`https://api.natoshi.app/v1/bot/toggle/${state.snipe._id}`, {
-        method: 'GET',
+        console.log('response', response)
 
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      }).then((res) => {
-        if (res.data.message.includes('stopped')) {
-          onNotify('success', 'BOT successfully turned off.')
+        if (response.data.message.includes('stopped')) {
+          toast.success('BOT successfully turned off.')
           dispatch({
             type: SnipeActionType.SNIPE_SAVE,
             payload: {
@@ -83,7 +79,7 @@ export default function SnipeBotClientPage({
             },
           })
         } else {
-          onNotify('success', 'BOT successfully turned on.')
+          toast.success('BOT successfully turned on.')
           dispatch({
             type: SnipeActionType.SNIPE_SAVE,
             payload: {
@@ -91,18 +87,19 @@ export default function SnipeBotClientPage({
             },
           })
         }
-      })
-    } catch (err) {
-      console.log(err)
-    }
+      } catch (err) {
+        if (isAxiosError(err)) {
+          console.log('err', err)
+          toast.error(err.response?.data.message)
+        }
+      }
+    })
   }
 
   const snipes =
     state.snipe.snipeList && state.snipe.snipeList.length > 0
       ? state.snipe.snipeList.split('\n')
       : []
-
-  console.log('snipes', snipes)
 
   const snipeTabs = [
     {
@@ -122,7 +119,7 @@ export default function SnipeBotClientPage({
           <div>
             <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center">
               <Heading variant="h2">Snipe Instance</Heading>
-              {state.isLoading ? (
+              {isPending ? (
                 <Skeleton
                   baseColor="#221E1B"
                   highlightColor="#524D48"

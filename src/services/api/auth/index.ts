@@ -2,13 +2,7 @@ import { AxiosResponse } from 'axios'
 import { api } from '..'
 import { API_ENDPOINTS } from '../endpoints'
 
-interface AuthServiceProps {
-  walletAddress: string
-  signature: string
-  message: string
-}
-
-interface RegisterBodyProps {
+interface RegisterPayloadProps {
   email: string
   password: string
 }
@@ -24,17 +18,32 @@ interface RegisterResultProps {
   }
 }
 
+interface LoginPayloadProps {
+  email: string
+  password: string
+}
+
+interface LoginResultProps {
+  message: string
+  token: string
+  user: {
+    _id: string
+    email: string
+    password: string
+    subscriptionStatus: string
+    __v: number
+  }
+}
+
 export async function signin({
-  message,
-  signature,
-  walletAddress,
-}: AuthServiceProps): Promise<AxiosResponse> {
+  email,
+  password,
+}: LoginPayloadProps): Promise<AxiosResponse<LoginResultProps>> {
   return await api(API_ENDPOINTS.LOGIN, {
     method: 'POST',
     data: {
-      walletAddress,
-      signature,
-      message,
+      email,
+      password,
     },
   })
 }
@@ -42,7 +51,7 @@ export async function signin({
 export async function signup({
   email,
   password,
-}: RegisterBodyProps): Promise<AxiosResponse<RegisterResultProps>> {
+}: RegisterPayloadProps): Promise<AxiosResponse<RegisterResultProps>> {
   return await api(API_ENDPOINTS.REGISTER, {
     method: 'POST',
     data: {

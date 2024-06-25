@@ -1,5 +1,6 @@
 'use client'
 
+import { COOKIES_KEY } from '@/utils/cookies'
 import {
   ClockCountdown,
   Eraser,
@@ -7,8 +8,9 @@ import {
   Icon,
   Target,
 } from '@phosphor-icons/react'
+import { deleteCookie } from 'cookies-next'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { twMerge } from 'tailwind-merge'
 
 export interface AsideNavigationItemProps {
@@ -18,32 +20,38 @@ export interface AsideNavigationItemProps {
 }
 
 export function Aside() {
+  const { push } = useRouter()
   const pathname = usePathname()
+
+  async function onSignout() {
+    deleteCookie(COOKIES_KEY.JWT)
+    push('/login')
+  }
 
   const asideItems = [
     {
       title: 'Overview',
       icon: <Globe size={24} color="#524D48" />,
       activeIcon: <Globe size={24} color="#FFFFFF" />,
-      path: '/dashboard/overview',
+      path: '/',
     },
     {
       title: 'Snipe BOT',
       icon: <Target size={24} color="#524D48" />,
       activeIcon: <Target size={24} color="#FFFFFF" />,
-      path: '/dashboard/snipe-bot',
+      path: '/snipe-bot',
     },
     {
       title: 'Arbitrage BOT',
       icon: <ClockCountdown size={24} color="#524D48" />,
       activeIcon: <ClockCountdown size={24} color="#FFFFFF" />,
-      path: '/dashboard/arbitrage-bot',
+      path: '/arbitrage-bot',
     },
     {
       title: 'Scalp BOT (coming soon)',
       icon: <Eraser size={24} color="#524D48" />,
       activeIcon: <Eraser size={24} color="#FFFFFF" />,
-      path: '/dashboard/scalp',
+      path: '/scalp',
     },
   ]
 
@@ -51,7 +59,7 @@ export function Aside() {
     <aside className="hidden h-screen w-[300px] flex-col border-b border-r border-gray500/10 bg-gray800/60 px-4 py-8 lg:flex">
       <ul className="flex flex-col gap-y-5">
         {asideItems.map(({ icon, title, path, activeIcon }) => {
-          const isActive = pathname.includes(path)
+          const isActive = pathname === path
 
           const isComingSoon = path.includes('scalp')
 
@@ -94,6 +102,15 @@ export function Aside() {
             )
           }
         })}
+
+        <button
+          onClick={onSignout}
+          className={
+            'flex h-[52px] w-[270px] items-center gap-3 rounded-[4px] bg-gray900 px-4  transition-colors duration-300 hover:bg-gray800'
+          }
+        >
+          <span className="text-danger500">Sign out</span>
+        </button>
       </ul>
     </aside>
   )

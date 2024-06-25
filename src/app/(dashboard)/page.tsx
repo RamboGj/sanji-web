@@ -1,7 +1,6 @@
 'use client'
 
 import 'react-loading-skeleton/dist/skeleton.css'
-// import Skeleton from 'react-loading-skeleton'
 
 import { Button } from '@/components/atoms/Button'
 import { Heading } from '@/components/atoms/Heading'

@@ -3,11 +3,16 @@
 import { Button } from '@/components/atoms/Button'
 import { Heading } from '@/components/atoms/Heading'
 import Input from '@/components/atoms/Input'
-import { InputUnref } from '@/components/atoms/InputUnref'
+import { signin } from '@/services/api/auth'
+import { COOKIES_KEY } from '@/utils/cookies'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { isAxiosError } from 'axios'
+import { setCookie } from 'cookies-next'
 import Link from 'next/link'
-import { useRef, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
+import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { z } from 'zod'
 
 const loginSchema = z.object({
@@ -27,9 +32,9 @@ const loginSchema = z.object({
 type LoginSchemaData = z.infer<typeof loginSchema>
 
 export default function LoginPage() {
-  const [isPending, startTranstion] = useTransition()
+  const { push } = useRouter()
 
-  const emailRef = useRef()
+  const [isPending, startTranstion] = useTransition()
 
   const {
     register,
@@ -46,15 +51,20 @@ export default function LoginPage() {
   async function onLogin(data: LoginSchemaData) {
     startTranstion(async () => {
       try {
-        console.log('data', data)
-
-        await new Promise((resolve) => {
-          setTimeout(() => {
-            resolve('resolved')
-          }, 3000)
+        const response = await signin({
+          email: data.email,
+          password: data.password,
         })
+
+        if (response.data.token) {
+          setCookie(COOKIES_KEY.JWT, response.data.token)
+          push('/')
+        }
       } catch (err) {
-        console.log('err', err)
+        if (isAxiosError(err)) {
+          console.log('err', err)
+          toast.error(err.response?.data.message)
+        }
       }
     })
   }
@@ -75,7 +85,6 @@ export default function LoginPage() {
               label="Email"
               id="email"
               placeholder="johndoe@gmail.com"
-              ref={emailRef}
             />
             <Input
               {...register('password')}

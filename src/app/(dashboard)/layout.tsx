@@ -50,7 +50,12 @@ export default async function RootLayout({
           </div>
           <MobileBottomNavigation />
         </body>
-        <Toaster position="top-right" />
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            style: { backgroundColor: '#181410', color: '#FFFFFF' },
+          }}
+        />
       </AppContextProvider>
     </html>
   )

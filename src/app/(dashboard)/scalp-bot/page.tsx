@@ -5,7 +5,6 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 import { Heading } from '@/components/atoms/Heading'
 import { Power } from '@phosphor-icons/react'
-import { Terminalinternal } from '@/components/organisms/Terminal'
 
 export default function ScalpBotPage() {
   return (
@@ -27,9 +26,7 @@ export default function ScalpBotPage() {
           </div>
         </div>
       </div>
-      <div className="flex h-full w-full flex-1 flex-col border border-gray500/10 bg-gray800/60 p-6">
-        <Terminalinternal />
-      </div>
+      <div className="flex h-full w-full flex-1 flex-col border border-gray500/10 bg-gray800/60 p-6"></div>
     </main>
   )
 }

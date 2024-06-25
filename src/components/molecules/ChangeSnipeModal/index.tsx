@@ -2,18 +2,17 @@ import { Button } from '@/components/atoms/Button'
 import { Heading } from '@/components/atoms/Heading'
 import { XCircle } from '@phosphor-icons/react'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Dispatch, useState } from 'react'
+import { Dispatch, useState, useTransition } from 'react'
 import { ModalProps } from '@/@types/app'
 import { Label } from '@/components/atoms/Label'
-import { COOKIES_KEY } from '@/utils/cookies'
-import { getCookie } from 'cookies-next'
-import { onNotify } from '@/utils/alert'
-import { api } from '@/services/api'
 import { SnipeState } from '@/reducers/SnipeReducer/SnipeState'
 import {
   SnipeAction,
   SnipeActionType,
 } from '@/reducers/SnipeReducer/SnipeActions'
+import { updateSnipeBot } from '@/services/api/snipe'
+import { isAxiosError } from 'axios'
+import toast from 'react-hot-toast'
 
 interface ChangeSnipeModalProps extends ModalProps {
   dispatch: Dispatch<SnipeAction>
@@ -25,28 +24,20 @@ export function ChangeSnipeModal({
   onClose,
   dispatch,
 }: ChangeSnipeModalProps) {
+  const [isPending, startTransition] = useTransition()
   const [snipeConfig, setSnipeConfig] = useState<string>(
     state?.snipe?.snipeList || '',
   )
 
   async function onUpdateSnipeList() {
-    dispatch({ type: SnipeActionType.SNIPE_TOGGLE_LOADING })
-
-    const jwt = getCookie(COOKIES_KEY.JWT)
-    // const textWithNewlines = snipeConfig.replace(/\n/g, '\\n') // Replace line breaks with \n
-    console.log('snipeConfigState', snipeConfig)
-
-    try {
-      await api(`https://api.natoshi.app/v1/bot/${state.snipe?._id}`, {
-        method: 'PUT',
-        data: {
-          snipeList: snipeConfig,
-        },
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      }).then((response) => {
-        console.log('response', response)
+    startTransition(async () => {
+      try {
+        const response = await updateSnipeBot({
+          body: {
+            snipeList: snipeConfig,
+          },
+          botId: state.snipe._id,
+        })
 
         dispatch({
           type: SnipeActionType.SNIPE_SAVE,
@@ -55,12 +46,15 @@ export function ChangeSnipeModal({
           },
         })
 
-        onNotify('success', 'Snipe list configuration successfully updated.')
+        toast.success('Snipe list configuration successfully updated.')
         onClose()
-      })
-    } catch (err) {
-      console.log('error snipe modal', err)
-    }
+      } catch (err) {
+        if (isAxiosError(err)) {
+          console.log('err', err)
+          toast.error(err.response?.data.message)
+        }
+      }
+    })
   }
 
   const defaultValue = snipeConfig
@@ -109,7 +103,11 @@ export function ChangeSnipeModal({
         </div>
 
         <div className="mt-12 flex flex-col items-stretch gap-4">
-          <Button variant="primary" onClick={onUpdateSnipeList}>
+          <Button
+            variant="primary"
+            isLoading={isPending}
+            onClick={onUpdateSnipeList}
+          >
             <Button.Label>Save</Button.Label>
           </Button>
           <Button variant="ghost" onClick={onClose}>
