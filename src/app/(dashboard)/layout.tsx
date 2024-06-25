@@ -5,7 +5,6 @@ import { Toaster } from 'react-hot-toast'
 import '../globals.css'
 import { Header } from '@/components/atoms/Header'
 import { Aside } from '@/components/atoms/Aside'
-import { AppContextProvider } from '@/contexts/AppContext'
 import { MobileBottomNavigation } from '@/components/atoms/MobileBottomNavigation'
 
 const montserrat = Montserrat({
@@ -41,22 +40,20 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AppContextProvider>
-        <body className={montserrat.className + ` bg-gray900`}>
-          <Header />
-          <div className="flex">
-            <Aside />
-            {children}
-          </div>
-          <MobileBottomNavigation />
-        </body>
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            style: { backgroundColor: '#181410', color: '#FFFFFF' },
-          }}
-        />
-      </AppContextProvider>
+      <body className={montserrat.className + ` bg-gray900`}>
+        <Header />
+        <div className="flex">
+          <Aside />
+          {children}
+        </div>
+        <MobileBottomNavigation />
+      </body>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: { backgroundColor: '#181410', color: '#FFFFFF' },
+        }}
+      />
     </html>
   )
 }

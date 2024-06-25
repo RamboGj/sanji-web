@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
-import { AppContextProvider } from '../contexts/AppContext'
 import './globals.css'
 
 const montserrat = Montserrat({
@@ -37,15 +36,13 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AppContextProvider>
-        <body className={montserrat.className + ` bg-gray900`}>{children}</body>
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            style: { backgroundColor: '#181410', color: '#FFFFFF' },
-          }}
-        />
-      </AppContextProvider>
+      <body className={montserrat.className + ` bg-gray900`}>{children}</body>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: { backgroundColor: '#181410', color: '#FFFFFF' },
+        }}
+      />
     </html>
   )
 }
