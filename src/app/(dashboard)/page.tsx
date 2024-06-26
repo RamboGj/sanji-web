@@ -3,8 +3,8 @@ import { verifyToken } from '@/services/session'
 import { verifySubscription } from '@/services/subscription'
 
 async function getSession() {
-  verifySubscription()
   verifyToken()
+  verifySubscription()
 }
 
 export default async function OverviewPage() {

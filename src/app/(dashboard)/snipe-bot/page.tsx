@@ -8,8 +8,8 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 async function getSnipeBot() {
-  verifySubscription()
   const jwt = verifyToken()
+  verifySubscription()
 
   const response = await fetch(API_ENDPOINTS.GET_SNIPE_BOT, {
     method: 'GET',

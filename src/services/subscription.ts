@@ -4,8 +4,9 @@ import { redirect } from 'next/navigation'
 
 export function verifySubscription() {
   const subscription = cookies().get(COOKIES_KEY.SUBSCRIPTION)
+  const jwt = cookies().get(COOKIES_KEY.JWT)
 
   const isActive = subscription?.value === 'active'
 
-  if (!isActive) redirect('/blocked')
+  if (!isActive && !jwt) redirect('/blocked')
 }
