@@ -6,27 +6,16 @@ import { Button } from '@/components/atoms/Button'
 import { Heading } from '@/components/atoms/Heading'
 import { CaretRight, CircleNotch, Power } from '@phosphor-icons/react'
 import { ArrowCounterClockwise } from '@phosphor-icons/react/dist/ssr'
-import { useEffect, useReducer } from 'react'
+import { useReducer } from 'react'
 import { TableSkeleton } from '@/components/skeletons/OverviewSkeleton/TableSkeleton'
 import { Tag } from '@/components/atoms/Tag'
 import { snipeReducer } from '@/reducers/SnipeReducer/SnipeReducer'
 import { SnipeInitialState } from '@/reducers/SnipeReducer/SnipeState'
-import { SnipeActionType } from '@/reducers/SnipeReducer/SnipeActions'
 
 export default function OverviewClientPage() {
   const [state, dispatch] = useReducer(snipeReducer, SnipeInitialState)
 
-  function handleRefresh() {
-    dispatch({ type: SnipeActionType.SNIPE_TOGGLE_LOADING })
-
-    setTimeout(() => {
-      dispatch({ type: SnipeActionType.SNIPE_TOGGLE_LOADING })
-    }, 3000)
-  }
-
-  useEffect(() => {
-    dispatch({ type: SnipeActionType.SNIPE_TOGGLE_LOADING })
-  }, [])
+  console.log('dispatch', dispatch)
 
   return (
     <main className="flex w-full flex-col gap-y-7 p-6">
@@ -77,7 +66,7 @@ export default function OverviewClientPage() {
 
             <div
               role="button"
-              onClick={handleRefresh}
+              // onClick={handleRefresh}
               className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-yellow600 transition-colors duration-300 hover:border-yellow700"
             >
               {state.isLoading ? (
@@ -112,7 +101,7 @@ export default function OverviewClientPage() {
 
             <div
               role="button"
-              onClick={handleRefresh}
+              // onClick={handleRefresh}
               className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-yellow600 transition-colors duration-300 hover:border-yellow700"
             >
               {state.isLoading ? (
