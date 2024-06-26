@@ -65,16 +65,16 @@ export default function RegisterPage() {
 
         const response = await signup({ email, password })
 
-        console.log(response.data.token)
-
         if (response.data.token) {
           setCookie(COOKIES_KEY.JWT, response.data.token)
+          setCookie(
+            COOKIES_KEY.SUBSCRIPTION,
+            response.data.user.subscriptionStatus,
+          )
+          setCookie(COOKIES_KEY.USER_ID, response.data.user._id)
 
           push('/setup')
         }
-
-        console.log('response', response)
-        console.log('status', response.status)
       } catch (err) {
         if (isAxiosError(err)) {
           console.log('err', err)
@@ -109,7 +109,7 @@ export default function RegisterPage() {
               label="Password"
               id="password"
               placeholder="johndoe123@"
-              type="string"
+              type="password"
             />
             <Input
               {...register('confirmPassword')}
@@ -118,7 +118,7 @@ export default function RegisterPage() {
               label="Confirm password"
               id="confirmPassword"
               placeholder="johndoe123@"
-              type="string"
+              type="password"
             />
           </div>
           <Button type="submit" variant="primary" isLoading={isPending}>

@@ -1,15 +1,10 @@
 import OverviewClientPage from '@/components/pages/OverviewClientPage'
-
-import { COOKIES_KEY } from '@/utils/cookies'
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
+import { verifyToken } from '@/services/session'
+import { verifySubscription } from '@/services/subscription'
 
 async function getSession() {
-  const jwt = cookies().get(COOKIES_KEY.JWT)
-
-  if (!jwt) {
-    redirect('/login')
-  }
+  verifySubscription()
+  verifyToken()
 }
 
 export default async function OverviewPage() {

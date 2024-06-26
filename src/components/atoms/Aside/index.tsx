@@ -25,6 +25,9 @@ export function Aside() {
 
   async function onSignout() {
     deleteCookie(COOKIES_KEY.JWT)
+    deleteCookie(COOKIES_KEY.SUBSCRIPTION)
+    deleteCookie(COOKIES_KEY.USER_ID)
+
     push('/login')
   }
 

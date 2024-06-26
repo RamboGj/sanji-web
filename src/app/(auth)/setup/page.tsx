@@ -12,6 +12,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { createSnipeBot } from '@/services/api/snipe'
 import { isAxiosError } from 'axios'
 import toast from 'react-hot-toast'
+import { onCreateArbitrageBot } from '@/services/api/arbitrage'
+import { Paragraph } from '@/components/atoms/Paragraph'
 
 const setupSchema = z.object({
   privateKey: z
@@ -41,11 +43,12 @@ export default function SetupPage() {
   async function onSendPrivateKey(data: SetupSchemaData) {
     startTransition(async () => {
       try {
-        const response = await createSnipeBot({
+        await createSnipeBot({
           privateKey: data.privateKey,
         })
+        await onCreateArbitrageBot()
 
-        if (response.data) push('/')
+        push('/')
       } catch (err) {
         if (isAxiosError(err)) {
           console.log('err', err)
@@ -61,9 +64,15 @@ export default function SetupPage() {
         <Heading variant="h1">Finish setup</Heading>
 
         <form
-          className="mt-8 w-full max-w-[512px] border border-gray500/10 bg-gray800/60 p-4 lg:px-10 lg:py-12"
+          className="mt-8 flex w-full max-w-[512px] flex-col gap-y-8 border border-gray500/10 bg-gray800/60 p-4 lg:px-10 lg:py-12"
           onSubmit={handleSubmit(onSendPrivateKey)}
         >
+          <Paragraph className="text-gray400" variant="p2">
+            Configure your Sniper Bot private key. You must initialize a new
+            wallet (Phantom) and fund it with WSOL and SOL. DO NOT USE EXISTING
+            WALLETS.
+          </Paragraph>
+
           <Input
             {...register('privateKey')}
             error={errors.privateKey}
@@ -74,7 +83,7 @@ export default function SetupPage() {
           />
 
           <Button type="submit" variant="primary" isLoading={isPending}>
-            <Button.Label>Create bot</Button.Label>
+            <Button.Label>Create account</Button.Label>
           </Button>
         </form>
       </div>
