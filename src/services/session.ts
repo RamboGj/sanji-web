@@ -9,8 +9,6 @@ export function verifyToken(): string {
 
   if (!jwt) redirect('/login')
 
-  console.log('jwt', jwt)
-
   const decodedToken = jwtDecode(jwt.value)
 
   const nowTimestamp = new Date().getTime()

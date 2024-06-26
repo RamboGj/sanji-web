@@ -11,9 +11,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createSnipeBot } from '@/services/api/snipe'
 import { isAxiosError } from 'axios'
-import toast from 'react-hot-toast'
 import { onCreateArbitrageBot } from '@/services/api/arbitrage'
 import { Paragraph } from '@/components/atoms/Paragraph'
+import { onNotify } from '@/utils/alert'
 
 const setupSchema = z.object({
   privateKey: z
@@ -52,7 +52,7 @@ export default function SetupPage() {
       } catch (err) {
         if (isAxiosError(err)) {
           console.log('err', err)
-          toast.error(err.response?.data.message)
+          onNotify('error', err.response?.data.message)
         }
       }
     })

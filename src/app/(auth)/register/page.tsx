@@ -8,12 +8,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { isAxiosError } from 'axios'
 import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import { z } from 'zod'
 
 import { setCookie } from 'cookies-next'
 import { COOKIES_KEY } from '@/utils/cookies'
 import { useRouter } from 'next/navigation'
+import { onNotify } from '@/utils/alert'
 
 const registerSchema = z
   .object({
@@ -78,7 +78,7 @@ export default function RegisterPage() {
       } catch (err) {
         if (isAxiosError(err)) {
           console.log('err', err)
-          toast.error(err.response?.data.message)
+          onNotify('error', err.response?.data.message)
         }
       }
     })

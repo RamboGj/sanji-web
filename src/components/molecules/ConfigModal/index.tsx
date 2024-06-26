@@ -18,8 +18,8 @@ import {
   SnipeActionType,
 } from '@/reducers/SnipeReducer/SnipeActions'
 import { isAxiosError } from 'axios'
-import toast from 'react-hot-toast'
 import { updateSnipeBot } from '@/services/api/snipe'
+import { onNotify } from '@/utils/alert'
 
 const configSchema = z.object({
   quoteAmount: z.string().optional(),
@@ -101,12 +101,12 @@ export function ConfigModal({
         const response = await updateSnipeBot({ body, botId: state.snipe._id })
 
         dispatch({ type: SnipeActionType.SNIPE_SAVE, payload: response.data })
-        toast.success('BOT successfully updated.')
+        onNotify('success', 'BOT successfully updated.')
         onClose()
       } catch (err) {
         if (isAxiosError(err)) {
           console.log('err', err)
-          toast.error(err.response?.data.message)
+          onNotify('error', err.response?.data.message)
         }
       }
     })

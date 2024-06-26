@@ -12,7 +12,7 @@ import {
 } from '@/reducers/SnipeReducer/SnipeActions'
 import { updateSnipeBot } from '@/services/api/snipe'
 import { isAxiosError } from 'axios'
-import toast from 'react-hot-toast'
+import { onNotify } from '@/utils/alert'
 
 interface ChangeSnipeModalProps extends ModalProps {
   dispatch: Dispatch<SnipeAction>
@@ -46,12 +46,12 @@ export function ChangeSnipeModal({
           },
         })
 
-        toast.success('Snipe list configuration successfully updated.')
+        onNotify('success', 'Snipe list configuration successfully updated.')
         onClose()
       } catch (err) {
         if (isAxiosError(err)) {
           console.log('err', err)
-          toast.error(err.response?.data.message)
+          onNotify('error', err.response?.data.message)
         }
       }
     })

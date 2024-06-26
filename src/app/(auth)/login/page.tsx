@@ -4,6 +4,7 @@ import { Button } from '@/components/atoms/Button'
 import { Heading } from '@/components/atoms/Heading'
 import Input from '@/components/atoms/Input'
 import { signin } from '@/services/api/auth'
+import { onNotify } from '@/utils/alert'
 import { COOKIES_KEY } from '@/utils/cookies'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { isAxiosError } from 'axios'
@@ -12,7 +13,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import { z } from 'zod'
 
 const loginSchema = z.object({
@@ -68,7 +68,7 @@ export default function LoginPage() {
       } catch (err) {
         if (isAxiosError(err)) {
           console.log('err', err)
-          toast.error(err.response?.data.message)
+          onNotify('error', err.response?.data.message)
         }
       }
     })

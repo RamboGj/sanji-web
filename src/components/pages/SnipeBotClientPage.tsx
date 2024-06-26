@@ -17,8 +17,8 @@ import Skeleton from 'react-loading-skeleton'
 import { SnipeActionType } from '@/reducers/SnipeReducer/SnipeActions'
 import { SnipeProps } from '@/reducers/SnipeReducer/SnipeState'
 import { toggleSnipeBot } from '@/services/api/snipe'
-import toast from 'react-hot-toast'
 import { isAxiosError } from 'axios'
+import { onNotify } from '@/utils/alert'
 
 interface SnipeBotClientPageProps {
   data: SnipeProps
@@ -71,7 +71,7 @@ export default function SnipeBotClientPage({
         console.log('response', response)
 
         if (response.data.message.includes('stopped')) {
-          toast.success('BOT successfully turned off.')
+          onNotify('success', 'BOT successfully turned off.')
           dispatch({
             type: SnipeActionType.SNIPE_SAVE,
             payload: {
@@ -79,7 +79,7 @@ export default function SnipeBotClientPage({
             },
           })
         } else {
-          toast.success('BOT successfully turned on.')
+          onNotify('success', 'BOT successfully turned on.')
           dispatch({
             type: SnipeActionType.SNIPE_SAVE,
             payload: {
@@ -90,7 +90,7 @@ export default function SnipeBotClientPage({
       } catch (err) {
         if (isAxiosError(err)) {
           console.log('err', err)
-          toast.error(err.response?.data.message)
+          onNotify('error', err.response?.data.message)
         }
       }
     })
