@@ -1,12 +1,12 @@
 'use client'
 
 import * as Dialog from '@radix-ui/react-dialog'
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
+// import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 
 import 'react-loading-skeleton/dist/skeleton.css'
 
 import { Heading } from '@/components/atoms/Heading'
-import { Funnel, Gear, Pencil, Power } from '@phosphor-icons/react'
+import { Gear, Pencil, Power } from '@phosphor-icons/react'
 import { useReducer, useState, useTransition } from 'react'
 import { ChangeSnipeModal } from '@/components/molecules/ChangeSnipeModal'
 import { ConfigModal } from '@/components/molecules/ConfigModal'
@@ -44,7 +44,7 @@ export default function SnipeBotClientPage({
 
   const [isPending, startTransition] = useTransition()
 
-  const [snipesTab, setSnipesTab] = useState<string>('yourSnipes')
+  // const [snipesTab, setSnipesTab] = useState<string>('yourSnipes')
 
   const [state, dispatch] = useReducer(snipeReducer, {
     snipe: {
@@ -101,16 +101,16 @@ export default function SnipeBotClientPage({
       ? state.snipe.snipeList.split('\n')
       : []
 
-  const snipeTabs = [
-    {
-      label: 'Your snipes',
-      value: 'yourSnipes',
-    },
-    {
-      label: 'Alpha snipes',
-      value: 'alphaSnipes',
-    },
-  ]
+  // const snipeTabs = [
+  //   {
+  //     label: 'Your snipes',
+  //     value: 'yourSnipes',
+  //   },
+  //   {
+  //     label: 'Alpha snipes',
+  //     value: 'alphaSnipes',
+  //   },
+  // ]
 
   return (
     <main className="flex w-full flex-col gap-y-7 p-6">
@@ -173,7 +173,7 @@ export default function SnipeBotClientPage({
           <header className="mb-3 flex items-center justify-between">
             <div className="flex items-center gap-x-4">
               <Heading variant="h3">Your Snipes</Heading>
-              <DropdownMenu.Root>
+              {/* <DropdownMenu.Root>
                 <DropdownMenu.Trigger asChild className="flex">
                   <div
                     role="button"
@@ -208,7 +208,7 @@ export default function SnipeBotClientPage({
                     <DropdownMenu.Arrow className="fill-gray700" />
                   </DropdownMenu.Content>
                 </DropdownMenu.Portal>
-              </DropdownMenu.Root>
+              </DropdownMenu.Root> */}
             </div>
 
             <div className="flex items-center gap-x-4">
