@@ -22,7 +22,8 @@ export default function BlockedPage() {
 
           <Link
             className="mt-12 font-bold text-yellow500 transition-colors duration-300 hover:text-yellow500/70"
-            href={'#'}
+            href={'https://buy.stripe.com/fZeg1c35k4hQgGk9AA'}
+            target="_blank"
           >
             Subscribe now
           </Link>

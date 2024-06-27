@@ -7,10 +7,15 @@ import { Heading } from '@/components/atoms/Heading'
 import { Gear, Power } from '@phosphor-icons/react'
 
 import * as Dialog from '@radix-ui/react-dialog'
-import { useReducer, useState } from 'react'
+import { useReducer, useState, useTransition } from 'react'
 import { ConfigArbitrageModal } from '@/components/molecules/ConfigArbitrageModal'
 import { ArbitrageBotProps } from '@/reducers/ArbitrageReducer/ArbitrageState'
 import { arbitrageReducer } from '@/reducers/ArbitrageReducer/ArbitrageReducer'
+import Skeleton from 'react-loading-skeleton'
+import { Tag } from '../atoms/Tag'
+import { isAxiosError } from 'axios'
+import { onNotify } from '@/utils/alert'
+import { toggleArbitrageBot } from '@/services/api/arbitrage'
 
 interface ArbitrageBotClientPageProps {
   data: ArbitrageBotProps
@@ -19,12 +24,49 @@ interface ArbitrageBotClientPageProps {
 export default function ArbitrageBotClientPage({
   data,
 }: ArbitrageBotClientPageProps) {
+  const [isPending, startTransition] = useTransition()
+
   const [isConfigModalOpen, setIsConfigModalOpen] = useState<boolean>(false)
 
   const [state, dispatch] = useReducer(arbitrageReducer, {
     arbitrage: data,
     isLoading: false,
   })
+
+  async function onToggleBot() {
+    startTransition(async () => {
+      try {
+        const response = await toggleArbitrageBot({
+          botId: state.arbitrage._id,
+        })
+
+        console.log('response', response)
+
+        // if (response.data.message.includes('stopped')) {
+        //   onNotify('success', 'BOT successfully turned off.')
+        //   dispatch({
+        //     type: ArbitrageActionType.ARBITRAGE_SAVE,
+        //     payload: {
+        //       isActive: false,
+        //     },
+        //   })
+        // } else {
+        //   onNotify('success', 'BOT successfully turned on.')
+        //   dispatch({
+        //     type: ArbitrageActionType.ARBITRAGE_SAVE,
+        //     payload: {
+        //       isActive: true,
+        //     },
+        //   })
+        // }
+      } catch (err) {
+        if (isAxiosError(err)) {
+          console.log('err', err)
+          onNotify('error', err.response?.data.message)
+        }
+      }
+    })
+  }
 
   console.log('state', state)
   console.log('dispatch', dispatch)
@@ -36,11 +78,20 @@ export default function ArbitrageBotClientPage({
           <div>
             <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center">
               <Heading variant="h2">Arbitrage Instance</Heading>
-              <div className="flex h-6 w-fit items-center rounded-[24px] border border-green200/10 bg-[#0E1512] px-[10px]">
-                <span className="text-xs font-medium text-green200">
-                  Running
-                </span>
-              </div>
+              {isPending ? (
+                <Skeleton
+                  baseColor="#221E1B"
+                  highlightColor="#524D48"
+                  width={80}
+                  height={20}
+                  borderRadius={24}
+                />
+              ) : (
+                <Tag
+                  label={state.arbitrage.isActive ? 'RUNNING' : 'OFFLINE'}
+                  feedback={state.arbitrage.isActive ? 'success' : 'error'}
+                />
+              )}
             </div>
           </div>
           <div className="flex gap-x-3">
@@ -59,8 +110,15 @@ export default function ArbitrageBotClientPage({
                 }}
               />
             </Dialog.Root>
-            <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-green200">
-              <Power size={24} color="#47FFBB" />
+            <div
+              role="button"
+              onClick={onToggleBot}
+              className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border ${state.arbitrage.isActive ? 'border-gray500' : 'border-green200'}`}
+            >
+              <Power
+                size={24}
+                color={state.arbitrage.isActive ? '#524D48' : '#47FFBB'}
+              />
             </div>
           </div>
         </div>

@@ -160,13 +160,13 @@ export async function onUpdateArbitrageBotData({
   return data
 }
 
-export async function onToggleArbitrageBot({
+export async function toggleArbitrageBot({
   botId,
 }: ToggleArbitrageBotParamsProps): Promise<unknown> {
   const token = getCookie(COOKIES_KEY.JWT)
 
   const response = await api(`/v1/arbitrage/toggle/${botId}`, {
-    method: 'PUT',
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
     },
