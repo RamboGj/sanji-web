@@ -45,6 +45,12 @@ export function Aside() {
       path: '/arbitrage-bot',
     },
     // {
+    //   title: 'My account',
+    //   icon: <User size={24} color="#524D48" />,
+    //   activeIcon: <User size={24} color="#FFFFFF" />,
+    //   path: '/my-account',
+    // },
+    // {
     //   title: 'Scalp BOT (coming soon)',
     //   icon: <Eraser size={24} color="#524D48" />,
     //   activeIcon: <Eraser size={24} color="#FFFFFF" />,

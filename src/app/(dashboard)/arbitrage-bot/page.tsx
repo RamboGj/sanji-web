@@ -1,4 +1,5 @@
 import ArbitrageBotClientPage from '@/components/pages/ArbitrageBotClientPage'
+import { ArbitrageBotProps } from '@/reducers/ArbitrageReducer/ArbitrageState'
 import { API_ENDPOINTS } from '@/services/api/endpoints'
 import { verifyToken } from '@/services/session'
 import { verifySubscription } from '@/services/subscription'
@@ -10,16 +11,13 @@ async function getArbitrageBot() {
   const jwt = verifyToken()
   verifySubscription()
 
-  const response = await fetch(
-    `${API_ENDPOINTS.GET_ARBITRAGE_BOT}/667a1b8ba7d10ad24e7dcbf7`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-      cache: 'no-cache',
+  const response = await fetch(`${API_ENDPOINTS.GET_ARBITRAGE_BOT}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${jwt}`,
     },
-  )
+    cache: 'no-cache',
+  })
 
   const data = await response.json()
 
@@ -36,7 +34,7 @@ async function getArbitrageBot() {
 }
 
 export default async function ArbitrageBotPage() {
-  // const data = await getArbitrageBot()
-  await getArbitrageBot()
-  return <ArbitrageBotClientPage />
+  const data: ArbitrageBotProps = await getArbitrageBot()
+
+  return <ArbitrageBotClientPage data={data} />
 }

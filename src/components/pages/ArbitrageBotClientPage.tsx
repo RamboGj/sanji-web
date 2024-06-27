@@ -7,11 +7,27 @@ import { Heading } from '@/components/atoms/Heading'
 import { Gear, Power } from '@phosphor-icons/react'
 
 import * as Dialog from '@radix-ui/react-dialog'
-import { useState } from 'react'
+import { useReducer, useState } from 'react'
 import { ConfigArbitrageModal } from '@/components/molecules/ConfigArbitrageModal'
+import { ArbitrageBotProps } from '@/reducers/ArbitrageReducer/ArbitrageState'
+import { arbitrageReducer } from '@/reducers/ArbitrageReducer/ArbitrageReducer'
 
-export default function ArbitrageBotClientPage() {
+interface ArbitrageBotClientPageProps {
+  data: ArbitrageBotProps
+}
+
+export default function ArbitrageBotClientPage({
+  data,
+}: ArbitrageBotClientPageProps) {
   const [isConfigModalOpen, setIsConfigModalOpen] = useState<boolean>(false)
+
+  const [state, dispatch] = useReducer(arbitrageReducer, {
+    arbitrage: data,
+    isLoading: false,
+  })
+
+  console.log('state', state)
+  console.log('dispatch', dispatch)
 
   return (
     <main className="flex w-full flex-col gap-y-7 p-6">
