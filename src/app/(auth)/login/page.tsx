@@ -117,7 +117,7 @@ export default function LoginPage() {
           </span>
           <Link
             className="font-regularblock text-sm text-white transition-colors duration-300 hover:text-gray300"
-            href="/forgot-password"
+            href="/reset-password"
           >
             Forgot your password?
           </Link>

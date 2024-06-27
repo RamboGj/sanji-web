@@ -7,6 +7,19 @@ interface RegisterPayloadProps {
   password: string
 }
 
+interface RequestPasswordResetPayloadProps {
+  email: string
+}
+
+interface ResetPasswordPayloadProps {
+  resetToken: string
+  newPassword: string
+}
+
+interface RequestPasswordResetResultProps {
+  message: string
+}
+
 interface RegisterResultProps {
   token: string
   user: {
@@ -59,4 +72,36 @@ export async function signup({
       password,
     },
   })
+}
+
+export async function requestPasswordReset({
+  email,
+}: RequestPasswordResetPayloadProps): Promise<RequestPasswordResetResultProps> {
+  const response = await api(API_ENDPOINTS.REQUEST_PASSWORD_RESET, {
+    method: 'POST',
+    data: {
+      email,
+    },
+  })
+
+  const data = response.data
+
+  return data
+}
+
+export async function resetPassword({
+  newPassword,
+  resetToken,
+}: ResetPasswordPayloadProps): Promise<RequestPasswordResetResultProps> {
+  const response = await api(API_ENDPOINTS.REQUEST_PASSWORD_RESET, {
+    method: 'POST',
+    data: {
+      resetToken,
+      newPassword,
+    },
+  })
+
+  const data = response.data
+
+  return data
 }

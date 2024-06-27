@@ -78,8 +78,6 @@ export async function onCreateArbitrageBot(): Promise<unknown> {
 
   const initializeParams = getArbitrageBotInitializeParams(String(userId))
 
-  console.log('initializeParams', initializeParams)
-
   const response = await api(`/v1/arbitrage`, {
     method: 'POST',
     data: initializeParams,
@@ -165,10 +163,12 @@ export async function onUpdateArbitrageBotData({
 export async function onToggleArbitrageBot({
   botId,
 }: ToggleArbitrageBotParamsProps): Promise<unknown> {
+  const token = getCookie(COOKIES_KEY.JWT)
+
   const response = await api(`/v1/arbitrage/toggle/${botId}`, {
     method: 'PUT',
     headers: {
-      Authorization: `Bearer jwt_here`,
+      Authorization: `Bearer ${token}`,
     },
   })
 

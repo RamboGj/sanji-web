@@ -3,7 +3,10 @@
 import { Button } from '@/components/atoms/Button'
 import { Heading } from '@/components/atoms/Heading'
 import Input from '@/components/atoms/Input'
+import { requestPasswordReset } from '@/services/api/auth'
+import { onNotify } from '@/utils/alert'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { isAxiosError } from 'axios'
 import Link from 'next/link'
 import { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
@@ -21,7 +24,7 @@ const forgotPasswordSchema = z.object({
 
 type ForgotPasswordSchemaData = z.infer<typeof forgotPasswordSchema>
 
-export default function ForgotPasswordPage() {
+export default function RequestResetPasswordPage() {
   const [isPending, startTranstion] = useTransition()
 
   const {
@@ -35,18 +38,25 @@ export default function ForgotPasswordPage() {
     resolver: zodResolver(forgotPasswordSchema),
   })
 
-  async function onSendEmailCode(data: ForgotPasswordSchemaData) {
+  async function onRequestResetPassword(data: ForgotPasswordSchemaData) {
     startTranstion(async () => {
       try {
-        console.log('data', data)
-
-        await new Promise((resolve) => {
-          setTimeout(() => {
-            resolve('resolved')
-          }, 3000)
+        const result = await requestPasswordReset({
+          email: data.email,
         })
+
+        if (result.message) {
+          console.log('entrou')
+
+          onNotify(
+            'success',
+            'An email was sent to your mail box. Check it in order to change your password.',
+          )
+        }
       } catch (err) {
-        console.log('err', err)
+        if (isAxiosError(err)) {
+          onNotify('error', err.response?.data.message)
+        }
       }
     })
   }
@@ -54,11 +64,11 @@ export default function ForgotPasswordPage() {
   return (
     <div className="w-full">
       <div className="flex w-full flex-col items-center justify-center py-24">
-        <Heading variant="h1">Send recover e-mail</Heading>
+        <Heading variant="h1">Send reset password e-mail</Heading>
 
         <form
           className="mt-8 w-full max-w-[512px] border border-gray500/10 bg-gray800/60 p-4 lg:px-10 lg:py-12"
-          onSubmit={handleSubmit(onSendEmailCode)}
+          onSubmit={handleSubmit(onRequestResetPassword)}
         >
           <div className="mb-8">
             <Input

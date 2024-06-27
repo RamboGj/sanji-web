@@ -19,8 +19,12 @@ type IconsMapping = {
 }
 
 const iconsMapping: IconsMapping = {
-  success: <CheckCircle size={24} fill="#4ade80" weight="bold" />,
-  error: <XCircle size={24} fill="#FF3232" weight="bold" />,
+  success: (
+    <CheckCircle className="shrink-0" size={24} fill="#4ade80" weight="bold" />
+  ),
+  error: (
+    <XCircle className="shrink-0" size={24} fill="#FF3232" weight="bold" />
+  ),
 }
 
 export function Alert({
