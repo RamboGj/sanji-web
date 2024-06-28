@@ -5,6 +5,7 @@ export const API_ENDPOINTS = {
   REGISTER: `${BASE_URL}/user/register`,
   REQUEST_PASSWORD_RESET: `${BASE_URL}/user/request-password-reset`,
   RESET_PASSWORD: `${BASE_URL}/user/password-reset`,
+  CHANGE_PASSWORD: `${BASE_URL}/user/change-password`,
 
   GET_SNIPE_BOT: `${BASE_URL}/sniper/active`,
   CREATE_SNIPE_BOT: `${BASE_URL}/sniper`,
@@ -12,4 +13,6 @@ export const API_ENDPOINTS = {
   TOGGLE_SNIPE_BOT: `${BASE_URL}/sniper/toggle`,
 
   GET_ARBITRAGE_BOT: `${BASE_URL}/arbitrage/active`,
+
+  GET_ALL_NOTIFICATIONS: `${BASE_URL}/notifications`,
 }

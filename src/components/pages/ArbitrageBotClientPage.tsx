@@ -16,6 +16,7 @@ import { Tag } from '../atoms/Tag'
 import { isAxiosError } from 'axios'
 import { onNotify } from '@/utils/alert'
 import { toggleArbitrageBot } from '@/services/api/arbitrage'
+import { Paragraph } from '../atoms/Paragraph'
 
 interface ArbitrageBotClientPageProps {
   data: ArbitrageBotProps
@@ -41,24 +42,6 @@ export default function ArbitrageBotClientPage({
         })
 
         console.log('response', response)
-
-        // if (response.data.message.includes('stopped')) {
-        //   onNotify('success', 'BOT successfully turned off.')
-        //   dispatch({
-        //     type: ArbitrageActionType.ARBITRAGE_SAVE,
-        //     payload: {
-        //       isActive: false,
-        //     },
-        //   })
-        // } else {
-        //   onNotify('success', 'BOT successfully turned on.')
-        //   dispatch({
-        //     type: ArbitrageActionType.ARBITRAGE_SAVE,
-        //     payload: {
-        //       isActive: true,
-        //     },
-        //   })
-        // }
       } catch (err) {
         if (isAxiosError(err)) {
           console.log('err', err)
@@ -67,9 +50,6 @@ export default function ArbitrageBotClientPage({
       }
     })
   }
-
-  console.log('state', state)
-  console.log('dispatch', dispatch)
 
   return (
     <main className="flex w-full flex-col gap-y-7 p-6">
@@ -87,10 +67,24 @@ export default function ArbitrageBotClientPage({
                   borderRadius={24}
                 />
               ) : (
-                <Tag
-                  label={state.arbitrage.isActive ? 'RUNNING' : 'OFFLINE'}
-                  feedback={state.arbitrage.isActive ? 'success' : 'error'}
-                />
+                <div className="flex gap-x-3">
+                  <Tag
+                    label={state.arbitrage.isActive ? 'RUNNING' : 'OFFLINE'}
+                    feedback={state.arbitrage.isActive ? 'success' : 'error'}
+                  />
+                  <Tag
+                    label={
+                      state.arbitrage.notificationSettings.telegram.enabled
+                        ? 'TELEGRAM NOTIFICATIONS ENABLED'
+                        : 'TELEGRAM NOTIFICATIONS DISABLED'
+                    }
+                    feedback={
+                      state.arbitrage.notificationSettings.telegram.enabled
+                        ? 'success'
+                        : 'error'
+                    }
+                  />
+                </div>
               )}
             </div>
           </div>
@@ -105,6 +99,9 @@ export default function ArbitrageBotClientPage({
                 </div>
               </Dialog.Trigger>
               <ConfigArbitrageModal
+                state={state}
+                data={state.arbitrage}
+                dispatch={dispatch}
                 onClose={() => {
                   setIsConfigModalOpen((prev) => !prev)
                 }}
@@ -123,7 +120,34 @@ export default function ArbitrageBotClientPage({
           </div>
         </div>
       </div>
-      <div className="flex h-full w-full flex-1 flex-col border border-gray500/10 bg-gray800/60 p-6"></div>
+      <div className="flex h-full w-full flex-1 flex-col gap-y-6 border border-gray500/10 bg-gray800/60 p-6">
+        <Paragraph className="text-gray300">
+          Please be aware of the following key points regarding the API keys and
+          secrets you provide:
+        </Paragraph>
+
+        <Paragraph className="text-gray300">
+          Security Responsibility: You are responsible for the secure handling
+          of your API keys. Our platform ensures their secure storage and usage,
+          but we are not liable for any misuse or unauthorized access outside
+          our application.
+        </Paragraph>
+
+        <Paragraph className="text-gray300">API Key Management:</Paragraph>
+
+        <div>
+          <Paragraph className="text-gray300">
+            Use API keys with minimal necessary permissions.
+          </Paragraph>
+          <Paragraph className="text-gray300">
+            Regularly monitor your exchange account activities.
+          </Paragraph>
+          <Paragraph className="text-gray300">
+            Immediately revoke and replace keys if you suspect any unauthorized
+            access.
+          </Paragraph>
+        </div>
+      </div>
     </main>
   )
 }

@@ -1,27 +1,28 @@
 import { getCookie } from 'cookies-next'
 import { api } from '..'
 import { COOKIES_KEY } from '@/utils/cookies'
+import { ArbitrageBotProps } from '@/reducers/ArbitrageReducer/ArbitrageState'
 
 export interface ExchangeProps {
-  exchangeName: string
-  apiKey: string
-  secret: string
+  exchangeName?: string
+  apiKey?: string
+  secret?: string
 }
 
 export interface ArbitrageTradingParams {
-  tradingMode: string
-  profitTakingCriteria: {
-    percentage: string
-    absoluteValueUSD: string
+  tradingMode?: string
+  profitTakingCriteria?: {
+    percentage?: number
+    absoluteValueUSD?: number
   }
-  operationTimeout: string
+  operationTimeout?: number
 }
 
 export interface ArbitrageNotificationSettings {
-  telegram: {
-    enabled: string
-    apiKey: string
-    chatId: string
+  telegram?: {
+    enabled?: boolean
+    apiKey?: string
+    chatId?: string
   }
 }
 
@@ -37,14 +38,14 @@ interface ToggleArbitrageBotParamsProps {
   botId: string
 }
 
-interface UpdateArbitrageBotBodyProps {
-  exchangeAPIKeys: ExchangeProps[]
-  tradingParameters: ArbitrageTradingParams
-  notificationSettings: ArbitrageNotificationSettings
+export interface UpdateArbitrageBotBodyProps {
+  exchangeAPIKeys?: ExchangeProps[]
+  tradingParameters?: ArbitrageTradingParams
+  notificationSettings?: ArbitrageNotificationSettings
 }
 
 interface UpdateArbitrageBotParamsProps {
-  body: UpdateArbitrageBotBodyProps
+  body: Partial<UpdateArbitrageBotBodyProps>
   botId: string
 }
 
@@ -144,11 +145,11 @@ export async function onGetArbitrageBotDataById({
 export async function onUpdateArbitrageBotData({
   body,
   botId,
-}: UpdateArbitrageBotParamsProps): Promise<unknown> {
+}: UpdateArbitrageBotParamsProps): Promise<ArbitrageBotProps> {
   const token = getCookie(COOKIES_KEY.JWT)
 
   const response = await api(`/v1/arbitrage/${botId}`, {
-    method: 'GET',
+    method: 'PUT',
     data: body,
     headers: {
       Authorization: `Bearer ${token}`,

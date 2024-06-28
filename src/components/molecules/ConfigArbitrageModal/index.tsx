@@ -13,13 +13,22 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { SnipeProps, SnipeState } from '@/reducers/SnipeReducer/SnipeState'
-import { SnipeAction } from '@/reducers/SnipeReducer/SnipeActions'
-import { api } from '@/services/api'
 import { onNotify } from '@/utils/alert'
+import {
+  ArbitrageBotProps,
+  ArbitrageState,
+} from '@/reducers/ArbitrageReducer/ArbitrageState'
+import {
+  ArbitrageAction,
+  ArbitrageActionType,
+} from '@/reducers/ArbitrageReducer/ArbitrageAction'
+import {
+  UpdateArbitrageBotBodyProps,
+  onUpdateArbitrageBotData,
+} from '@/services/api/arbitrage'
+import { isAxiosError } from 'axios'
 
 const configSchema = z.object({
-  isActive: z.boolean().optional(),
   tradingMode: z.enum(['classic', 'neutral-delta']).optional(),
   profitCriteriaPercentage: z.string().optional(),
   profitCriteriaAbsoluteUSD: z.string().optional(),
@@ -38,19 +47,38 @@ const configSchema = z.object({
   okxAPIKey: z.string().optional(),
   okxSecretKey: z.string().optional(),
 
-  poloniexAPIKey: z.string().optional(),
-  poloniexSecretKey: z.string().optional(),
+  poliniexAPIKey: z.string().optional(),
+  poliniexSecretKey: z.string().optional(),
 })
 
 type ConfigArbitrageSchemaData = z.infer<typeof configSchema>
 
 interface ConfigArbitrageModalProps extends ModalProps {
-  data?: SnipeProps | null
-  dispatch?: Dispatch<SnipeAction>
-  state?: SnipeState
+  data: ArbitrageBotProps | null
+  dispatch: Dispatch<ArbitrageAction>
+  state: ArbitrageState
 }
 
-export function ConfigArbitrageModal({ onClose }: ConfigArbitrageModalProps) {
+export function ConfigArbitrageModal({
+  onClose,
+  state,
+  dispatch,
+}: ConfigArbitrageModalProps) {
+  const arbitrage = state?.arbitrage
+
+  const binance = state.arbitrage.exchangeAPIKeys.find(
+    (exchange) => exchange.exchangeName === 'binance',
+  )
+  const kucoin = state.arbitrage.exchangeAPIKeys.find(
+    (exchange) => exchange.exchangeName === 'kucoin',
+  )
+  const okx = state.arbitrage.exchangeAPIKeys.find(
+    (exchange) => exchange.exchangeName === 'okx',
+  )
+  const poliniex = state.arbitrage.exchangeAPIKeys.find(
+    (exchange) => exchange.exchangeName === 'poliniex',
+  )
+
   const {
     register,
     handleSubmit,
@@ -59,39 +87,41 @@ export function ConfigArbitrageModal({ onClose }: ConfigArbitrageModalProps) {
     formState: { errors },
   } = useForm<ConfigArbitrageSchemaData>({
     defaultValues: {
-      isActive: false,
-      tradingMode: 'classic',
-      profitCriteriaAbsoluteUSD: '',
-      profitCriteriaPercentage: '',
-      profitCriteriaTimeout: '0',
+      tradingMode: arbitrage?.tradingParameters.tradingMode,
+      profitCriteriaAbsoluteUSD: String(
+        arbitrage?.tradingParameters.profitTakingCriteria.absoluteValueUSD,
+      ),
+      profitCriteriaPercentage: String(
+        arbitrage?.tradingParameters.profitTakingCriteria.percentage,
+      ),
+      profitCriteriaTimeout: String(
+        arbitrage?.tradingParameters.operationTimeout,
+      ),
 
-      telegramNotificationEnabled: false,
-      telegramNotificationApiKey: '',
-      telegramNotificationChatID: '',
+      telegramNotificationEnabled:
+        arbitrage?.notificationSettings.telegram.enabled || false,
+      telegramNotificationApiKey:
+        arbitrage?.notificationSettings.telegram.apiKey,
+      telegramNotificationChatID:
+        arbitrage?.notificationSettings.telegram.chatId,
 
-      kucoinAPIKey: '',
-      kucoinSecretKey: '',
+      kucoinAPIKey: kucoin?.apiKey,
+      kucoinSecretKey: kucoin?.secret,
 
-      binanceAPIKey: '',
-      binanceSecretKey: '',
+      binanceAPIKey: binance?.apiKey,
+      binanceSecretKey: binance?.secret,
 
-      okxAPIKey: '',
-      okxSecretKey: '',
+      okxAPIKey: okx?.apiKey,
+      okxSecretKey: okx?.secret,
 
-      poloniexAPIKey: '',
-      poloniexSecretKey: '',
+      poliniexAPIKey: poliniex?.apiKey,
+      poliniexSecretKey: poliniex?.secret,
     },
     resolver: zodResolver(configSchema),
   })
 
   async function onSubmit(formData: ConfigArbitrageSchemaData) {
-    console.log('formDate', formData)
-
-    // dispatch({ type: SnipeActionType.SNIPE_TOGGLE_LOADING })
-
-    // const jwt = getCookie(COOKIES_KEY.JWT)
-
-    const body = {
+    const body: UpdateArbitrageBotBodyProps = {
       exchangeAPIKeys: [
         {
           exchangeName: 'binance',
@@ -110,17 +140,17 @@ export function ConfigArbitrageModal({ onClose }: ConfigArbitrageModalProps) {
         },
         {
           exchangeName: 'poliniex',
-          apiKey: formData.poloniexAPIKey,
-          secret: formData.poloniexSecretKey,
+          apiKey: formData.poliniexAPIKey,
+          secret: formData.poliniexSecretKey,
         },
       ],
       tradingParameters: {
         tradingMode: formData.tradingMode,
         profitTakingCriteria: {
-          percentage: formData.profitCriteriaPercentage,
-          absoluteValueUSD: formData.profitCriteriaAbsoluteUSD,
+          percentage: Number(formData.profitCriteriaPercentage),
+          absoluteValueUSD: Number(formData.profitCriteriaAbsoluteUSD),
         },
-        operationTimeout: formData.profitCriteriaTimeout,
+        operationTimeout: Number(formData.profitCriteriaTimeout),
       },
       notificationSettings: {
         telegram: {
@@ -130,24 +160,29 @@ export function ConfigArbitrageModal({ onClose }: ConfigArbitrageModalProps) {
         },
       },
     }
-    // router.put('/v1/arbitrage/:botId', protect, updateArbitrageBot);
 
     try {
-      await api(`https://api.natoshi.app/v1/bot/${''}`, {
-        method: 'PUT',
-        data: body,
-        headers: {
-          Authorization: `Bearer ${'jwt'}`,
-        },
-      }).then((response) => {
-        console.log('response', response)
-        // dispatch({ type: SnipeActionType.SNIPE_TOGGLE_LOADING })
-        // dispatch({ type: SnipeActionType.SNIPE_SAVE, payload: response.data })
-        onClose()
-        onNotify('success', 'BOT successfully updated.')
+      const response = await onUpdateArbitrageBotData({
+        body,
+        botId: state.arbitrage._id,
       })
+
+      console.log('response', response)
+
+      dispatch({
+        type: ArbitrageActionType.ARBITRAGE_SAVE,
+        payload: {
+          ...response,
+        },
+      })
+
+      onClose()
+      onNotify('success', 'BOT successfully updated.')
     } catch (err) {
-      console.log('error config modal')
+      if (isAxiosError(err)) {
+        console.log('error config modal', err)
+        onNotify('error', err.response?.data.message)
+      }
     }
   }
 
@@ -163,7 +198,7 @@ export function ConfigArbitrageModal({ onClose }: ConfigArbitrageModalProps) {
       value: 'classic',
     },
     {
-      title: 'Neutral',
+      title: 'Neutral delta',
       value: 'neutral-delta',
     },
   ]
@@ -187,7 +222,11 @@ export function ConfigArbitrageModal({ onClose }: ConfigArbitrageModalProps) {
 
         <div className="mt-4 h-px w-full bg-gray500" />
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form
+          onSubmit={handleSubmit(onSubmit, (err) => {
+            console.log('err', err)
+          })}
+        >
           <div className="mt-8">
             <Label
               label="Trading mode"
@@ -225,16 +264,16 @@ export function ConfigArbitrageModal({ onClose }: ConfigArbitrageModalProps) {
               <Input
                 {...register('profitCriteriaPercentage')}
                 error={errors.profitCriteriaPercentage}
-                type="string"
+                type="number"
                 label="%"
                 id="profitCriteriaPercentage"
-                placeholder="20%"
+                placeholder="20"
               />
 
               <Input
                 {...register('profitCriteriaAbsoluteUSD')}
                 error={errors.profitCriteriaAbsoluteUSD}
-                type="string"
+                type="number"
                 label="USD"
                 id="profitCriteriaAbsoluteUSD"
                 placeholder="100"
@@ -364,25 +403,25 @@ export function ConfigArbitrageModal({ onClose }: ConfigArbitrageModalProps) {
               </div>
 
               <div>
-                <Heading variant="h3">Poloniex</Heading>
+                <Heading variant="h3">Poliniex</Heading>
                 <div className="mt-4 flex flex-col gap-y-4">
                   <Input
-                    {...register('poloniexAPIKey')}
-                    error={errors.poloniexAPIKey}
+                    {...register('poliniexAPIKey')}
+                    error={errors.poliniexAPIKey}
                     type="string"
-                    label="Poloniex API Key"
-                    id="poloniexAPIKey"
+                    label="Poliniex API Key"
+                    id="poliniexAPIKey"
                     placeholder="API key"
-                    tooltipContent="Your Poloniex api key."
+                    tooltipContent="Your Poliniex api key."
                   />
                   <Input
-                    {...register('poloniexSecretKey')}
-                    error={errors.poloniexSecretKey}
+                    {...register('poliniexSecretKey')}
+                    error={errors.poliniexSecretKey}
                     type="string"
-                    label="Poloniex Secret ID"
-                    id="poloniexSecretKey"
+                    label="Poliniex Secret ID"
+                    id="poliniexSecretKey"
                     placeholder="Secret key"
-                    tooltipContent="Your Poloniex secret key."
+                    tooltipContent="Your Poliniex secret key."
                   />
                 </div>
               </div>

@@ -8,5 +8,5 @@ export function verifySubscription() {
 
   const isActive = subscription?.value === 'active'
 
-  if (!isActive && jwt) redirect('/blocked')
+  if (!isActive && jwt) redirect('/access-blocked')
 }

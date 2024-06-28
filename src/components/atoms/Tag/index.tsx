@@ -16,6 +16,10 @@ const tagStyles = tv({
         container: 'border-danger500/10 bg-[#120909]',
         labelText: 'text-xs font-medium text-danger500',
       },
+      neutral: {
+        container: 'border-blue500 bg-blue500/20',
+        labelText: 'text-xs font-medium text-blue500',
+      },
     },
   },
 })
