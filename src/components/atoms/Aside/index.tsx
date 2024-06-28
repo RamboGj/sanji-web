@@ -33,7 +33,7 @@ export function Aside() {
       path: '/',
     },
     {
-      title: 'Snipe BOT',
+      title: 'Sniper BOT',
       icon: <Target size={24} color="#524D48" />,
       activeIcon: <Target size={24} color="#FFFFFF" />,
       path: '/snipe-bot',

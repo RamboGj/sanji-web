@@ -51,12 +51,15 @@ export default function ArbitrageBotClientPage({
           })
         }
 
-        dispatch({
-          type: ArbitrageActionType.ARBITRAGE_SAVE,
-          payload: {
-            isActive: false,
-          },
-        })
+        if (!response.isActive) {
+          dispatch({
+            type: ArbitrageActionType.ARBITRAGE_SAVE,
+            payload: {
+              isActive: false,
+            },
+          })
+        }
+
         onNotify('success', response.message)
       } catch (err) {
         if (isAxiosError(err)) {
@@ -73,7 +76,7 @@ export default function ArbitrageBotClientPage({
         <div className="flex w-full items-start justify-between ">
           <div>
             <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center">
-              <Heading variant="h2">Arbitrage Instance</Heading>
+              <Heading variant="h2">Time Sensitive Bot</Heading>
               {isPending ? (
                 <Skeleton
                   baseColor="#221E1B"

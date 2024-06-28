@@ -12,6 +12,8 @@ export const API_ENDPOINTS = {
   UPDATE_SNIPE_BOT: `${BASE_URL}/sniper`,
   TOGGLE_SNIPE_BOT: `${BASE_URL}/sniper/toggle`,
 
+  GET_USER_DATA: `${BASE_URL}/user`,
+
   GET_ARBITRAGE_BOT: `${BASE_URL}/arbitrage/active`,
 
   GET_ALL_NOTIFICATIONS: `${BASE_URL}/notifications`,

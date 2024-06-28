@@ -68,8 +68,6 @@ export default function SnipeBotClientPage({
       try {
         const response = await toggleSnipeBot({ botId: state.snipe._id })
 
-        console.log('response', response)
-
         if (response.data.message.includes('stopped')) {
           onNotify('success', 'BOT successfully turned off.')
           dispatch({
@@ -118,7 +116,7 @@ export default function SnipeBotClientPage({
         <div className="flex w-full items-start justify-between ">
           <div>
             <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center">
-              <Heading variant="h2">Snipe Instance</Heading>
+              <Heading variant="h2">Sniper Bot</Heading>
               {isPending ? (
                 <Skeleton
                   baseColor="#221E1B"

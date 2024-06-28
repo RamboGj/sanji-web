@@ -131,3 +131,18 @@ export async function changePassword({
 
   return data
 }
+
+export async function getUserData(): Promise<unknown> {
+  const jwt = getCookie(COOKIES_KEY.JWT)
+
+  const response = await api(API_ENDPOINTS.GET_USER_DATA, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+    },
+  })
+
+  const data = response.data
+
+  return data
+}
