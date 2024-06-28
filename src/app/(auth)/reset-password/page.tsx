@@ -46,8 +46,6 @@ export default function RequestResetPasswordPage() {
         })
 
         if (result.message) {
-          console.log('entrou')
-
           onNotify(
             'success',
             'An email was sent to your mail box. Check it in order to change your password.',

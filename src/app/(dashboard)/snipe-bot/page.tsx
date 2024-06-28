@@ -9,7 +9,9 @@ import { redirect } from 'next/navigation'
 
 async function getSnipeBot() {
   const jwt = verifyToken()
-  verifySubscription()
+  const { isActive } = await verifySubscription()
+
+  console.log(isActive)
 
   const response = await fetch(API_ENDPOINTS.GET_SNIPE_BOT, {
     method: 'GET',

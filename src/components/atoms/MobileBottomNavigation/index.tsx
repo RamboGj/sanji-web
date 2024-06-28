@@ -1,6 +1,11 @@
 'use client'
 
-import { ClockCountdown, Eraser, Globe, Target } from '@phosphor-icons/react'
+import {
+  BookOpenText,
+  ClockCountdown,
+  Globe,
+  Target,
+} from '@phosphor-icons/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { ComponentProps } from 'react'
 
@@ -19,38 +24,38 @@ export function MobileBottomNavigation({
       title: 'Overview',
       icon: <Globe size={24} color="#524D48" />,
       activeIcon: <Globe size={24} color="#ED7A14" />,
-      path: '/dashboard/overview',
+      path: '/',
     },
     {
       title: 'Snipe',
       icon: <Target size={24} color="#524D48" />,
       activeIcon: <Target size={24} color="#ED7A14" />,
-      path: '/dashboard/snipe-bot',
-    },
-    {
-      title: 'Scalp',
-      icon: <Eraser size={24} color="#524D48" />,
-      activeIcon: <Eraser size={24} color="#ED7A14" />,
-      path: '/dashboard/scalp-bot',
+      path: '/snipe-bot',
     },
     {
       title: 'Arbitrage',
       icon: <ClockCountdown size={24} color="#524D48" />,
       activeIcon: <ClockCountdown size={24} color="#ED7A14" />,
-      path: '/dashboard/arbitrage-bot',
+      path: '/arbitrage-bot',
+    },
+    {
+      title: 'Docs',
+      icon: <BookOpenText size={24} color="#524D48" />,
+      activeIcon: <BookOpenText size={24} color="#ED7A14" />,
+      path: '/documentation',
     },
   ]
 
   return (
     <>
       <div
-        className=" fixed bottom-0 left-0 right-0 h-[72px] border-t border-gray500/10 bg-gray800 lg:hidden"
+        className="fixed bottom-0 left-0 right-0 h-[72px] border-t border-gray500/10 bg-gray800 lg:hidden"
         {...rest}
       >
         <div className="flex h-full w-full items-center justify-between px-8">
           {mobileBottomNavigationItems.map(
             ({ activeIcon, icon, path, title }) => {
-              const isActive = pathname.includes(path)
+              const isActive = pathname === path
 
               return (
                 <button

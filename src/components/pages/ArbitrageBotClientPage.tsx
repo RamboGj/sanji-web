@@ -86,23 +86,40 @@ export default function ArbitrageBotClientPage({
                   borderRadius={24}
                 />
               ) : (
-                <div className="flex gap-x-3">
+                <div className="flex flex-col gap-x-3 lg:flex-row">
                   <Tag
                     label={state.arbitrage.isActive ? 'RUNNING' : 'OFFLINE'}
                     feedback={state.arbitrage.isActive ? 'success' : 'error'}
                   />
-                  <Tag
-                    label={
-                      state.arbitrage.notificationSettings.telegram.enabled
-                        ? 'TELEGRAM NOTIFICATIONS ENABLED'
-                        : 'TELEGRAM NOTIFICATIONS DISABLED'
-                    }
-                    feedback={
-                      state.arbitrage.notificationSettings.telegram.enabled
-                        ? 'success'
-                        : 'error'
-                    }
-                  />
+
+                  <div className="hidden lg:block">
+                    <Tag
+                      label={
+                        state.arbitrage.notificationSettings.telegram.enabled
+                          ? 'TELEGRAM NOTIFICATIONS ENABLED'
+                          : 'TELEGRAM NOTIFICATIONS DISABLED'
+                      }
+                      feedback={
+                        state.arbitrage.notificationSettings.telegram.enabled
+                          ? 'success'
+                          : 'error'
+                      }
+                    />
+                  </div>
+                  <div className="mt-2 lg:hidden">
+                    <Tag
+                      label={
+                        state.arbitrage.notificationSettings.telegram.enabled
+                          ? 'NOTIFICATIONS ENABLED'
+                          : 'NOTIFICATIONS DISABLED'
+                      }
+                      feedback={
+                        state.arbitrage.notificationSettings.telegram.enabled
+                          ? 'success'
+                          : 'error'
+                      }
+                    />
+                  </div>
                 </div>
               )}
             </div>

@@ -9,7 +9,9 @@ import { redirect } from 'next/navigation'
 
 async function getArbitrageBot() {
   const jwt = verifyToken()
-  verifySubscription()
+  const { isActive } = await verifySubscription()
+
+  console.log(isActive)
 
   try {
     const response = await fetch(`${API_ENDPOINTS.GET_ARBITRAGE_BOT}`, {

@@ -67,10 +67,6 @@ export default function RegisterPage() {
 
         if (response.data.token) {
           setCookie(COOKIES_KEY.JWT, response.data.token)
-          setCookie(
-            COOKIES_KEY.SUBSCRIPTION,
-            response.data.user.subscriptionStatus,
-          )
           setCookie(COOKIES_KEY.USER_ID, response.data.user._id)
 
           push('/setup')

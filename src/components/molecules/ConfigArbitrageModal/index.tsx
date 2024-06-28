@@ -167,8 +167,6 @@ export function ConfigArbitrageModal({
         botId: state.arbitrage._id,
       })
 
-      console.log('response', response)
-
       dispatch({
         type: ArbitrageActionType.ARBITRAGE_SAVE,
         payload: {
@@ -207,7 +205,7 @@ export function ConfigArbitrageModal({
     <Dialog.Portal>
       <Dialog.Overlay className="fixed inset-0 overflow-y-auto bg-gray900/80" />
 
-      <Dialog.Content className="text-purple50 fixed left-[50%] top-[50%] z-50 max-h-[90vh] w-full max-w-[596px] translate-x-[-50%] translate-y-[-50%] overflow-y-auto rounded-[20px] border border-gray600 bg-gray900 px-9 pb-12 pt-6 focus:outline-none">
+      <Dialog.Content className="fixed left-[50%] top-[50%] z-50 max-h-[90vh] w-full max-w-[596px] translate-x-[-50%] translate-y-[-50%] overflow-y-auto rounded-[20px] border border-gray600 bg-gray900 px-9 pb-12 pt-6 focus:outline-none">
         <div className="flex items-center justify-between">
           <div className="h-6 w-6 opacity-0" />
           <Dialog.Title asChild>
@@ -260,7 +258,7 @@ export function ConfigArbitrageModal({
               tooltipContent="Place Cell description here."
             />
 
-            <div className="mt-4 flex gap-8">
+            <div className="mt-4 flex flex-col gap-8 lg:flex-row">
               <Input
                 {...register('profitCriteriaPercentage')}
                 error={errors.profitCriteriaPercentage}
@@ -279,14 +277,14 @@ export function ConfigArbitrageModal({
                 placeholder="100"
               />
 
-              {/* <Input
-                {...register('profitCriteriaAbsoluteUSD')}
-                error={errors.profitCriteriaAbsoluteUSD}
+              <Input
+                {...register('profitCriteriaTimeout')}
+                error={errors.profitCriteriaTimeout}
                 type="string"
                 label="USD"
                 id="profitCriteriaAbsoluteUSD"
                 placeholder="100"
-              /> */}
+              />
             </div>
           </div>
 

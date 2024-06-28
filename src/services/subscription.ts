@@ -15,7 +15,9 @@ export async function verifySubscription() {
 
   const data = await response.json()
 
-  if (data.subscriptionStatus !== 'active' && jwt) redirect('/access-blocked')
+  if (data.subscriptionStatus !== 'active' && jwt) {
+    redirect('/access-blocked')
+  }
 
   return {
     isActive: true,
