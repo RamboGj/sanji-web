@@ -44,7 +44,7 @@ export function Aside() {
       path: '/snipe-bot',
     },
     {
-      title: 'Arbitrage BOT',
+      title: 'Time Sensitive BOT',
       icon: <ClockCountdown size={24} color="#524D48" />,
       activeIcon: <ClockCountdown size={24} color="#FFFFFF" />,
       path: '/arbitrage-bot',

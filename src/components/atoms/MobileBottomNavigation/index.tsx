@@ -33,7 +33,7 @@ export function MobileBottomNavigation({
       path: '/snipe-bot',
     },
     {
-      title: 'Arbitrage',
+      title: 'T Sensitive',
       icon: <ClockCountdown size={24} color="#524D48" />,
       activeIcon: <ClockCountdown size={24} color="#ED7A14" />,
       path: '/arbitrage-bot',

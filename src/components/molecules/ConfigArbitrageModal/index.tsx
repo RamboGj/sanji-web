@@ -258,7 +258,7 @@ export function ConfigArbitrageModal({
               tooltipContent="Place Cell description here."
             />
 
-            <div className="mt-4 flex flex-col gap-8 lg:flex-row">
+            <div className="mt-4 flex flex-col gap-8">
               <Input
                 {...register('profitCriteriaPercentage')}
                 error={errors.profitCriteriaPercentage}
@@ -281,7 +281,7 @@ export function ConfigArbitrageModal({
                 {...register('profitCriteriaTimeout')}
                 error={errors.profitCriteriaTimeout}
                 type="string"
-                label="USD"
+                label="Timeout"
                 id="profitCriteriaAbsoluteUSD"
                 placeholder="100"
               />
