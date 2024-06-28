@@ -23,7 +23,6 @@ async function getSnipeBot() {
 
   if (data.message === 'User not found with the provided token') {
     cookies().delete(COOKIES_KEY.JWT)
-    cookies().delete(COOKIES_KEY.SUBSCRIPTION)
     cookies().delete(COOKIES_KEY.USER_ID)
     redirect('/login')
   }

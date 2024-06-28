@@ -5,13 +5,13 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import { Button } from '@/components/atoms/Button'
 import { Heading } from '@/components/atoms/Heading'
 import { Tag } from '@/components/atoms/Tag'
-import { getCookie } from 'cookies-next'
-import { COOKIES_KEY } from '@/utils/cookies'
+
 import * as Dialog from '@radix-ui/react-dialog'
 import { useState } from 'react'
 import { ChangePasswordModal } from '../molecules/ChangePasswordModal'
 
 export interface NotificationsProps {
+  subscriptionActive: boolean
   notifications: {
     _id: string
     date: number
@@ -20,10 +20,12 @@ export interface NotificationsProps {
   }[]
 }
 
-export default function OverviewPage({ notifications }: NotificationsProps) {
-  const subscription = getCookie(COOKIES_KEY.SUBSCRIPTION)
-
+export default function OverviewPage({
+  notifications,
+  subscriptionActive,
+}: NotificationsProps) {
   console.log('notifications', notifications)
+  console.log('subscriptionActive', subscriptionActive)
 
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
     useState<boolean>(false)
@@ -38,11 +40,11 @@ export default function OverviewPage({ notifications }: NotificationsProps) {
                 <Heading variant="h2">My account</Heading>
                 <Tag
                   label={
-                    subscription === 'active'
+                    subscriptionActive
                       ? 'Subscription active'
                       : 'Subscription inactive'
                   }
-                  feedback={subscription === 'active' ? 'success' : 'error'}
+                  feedback={subscriptionActive ? 'success' : 'error'}
                 />
               </div>
             </div>
