@@ -1,7 +1,13 @@
 'use client'
 
 import { COOKIES_KEY } from '@/utils/cookies'
-import { ClockCountdown, Globe, Icon, Target } from '@phosphor-icons/react'
+import {
+  BookOpenText,
+  ClockCountdown,
+  Globe,
+  Icon,
+  Target,
+} from '@phosphor-icons/react'
 import { deleteCookie } from 'cookies-next'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -44,12 +50,12 @@ export function Aside() {
       activeIcon: <ClockCountdown size={24} color="#FFFFFF" />,
       path: '/arbitrage-bot',
     },
-    // {
-    //   title: 'My account',
-    //   icon: <User size={24} color="#524D48" />,
-    //   activeIcon: <User size={24} color="#FFFFFF" />,
-    //   path: '/my-account',
-    // },
+    {
+      title: 'Documentation',
+      icon: <BookOpenText size={24} color="#524D48" />,
+      activeIcon: <BookOpenText size={24} color="#FFFFFF" />,
+      path: '/documentation',
+    },
     // {
     //   title: 'Scalp BOT (coming soon)',
     //   icon: <Eraser size={24} color="#524D48" />,
