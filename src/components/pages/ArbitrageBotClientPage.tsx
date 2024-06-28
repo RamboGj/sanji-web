@@ -17,6 +17,7 @@ import { isAxiosError } from 'axios'
 import { onNotify } from '@/utils/alert'
 import { toggleArbitrageBot } from '@/services/api/arbitrage'
 import { Paragraph } from '../atoms/Paragraph'
+import { ArbitrageActionType } from '@/reducers/ArbitrageReducer/ArbitrageAction'
 
 interface ArbitrageBotClientPageProps {
   data: ArbitrageBotProps
@@ -41,7 +42,22 @@ export default function ArbitrageBotClientPage({
           botId: state.arbitrage._id,
         })
 
-        console.log('response', response)
+        if (response.isActive) {
+          dispatch({
+            type: ArbitrageActionType.ARBITRAGE_SAVE,
+            payload: {
+              isActive: true,
+            },
+          })
+        }
+
+        dispatch({
+          type: ArbitrageActionType.ARBITRAGE_SAVE,
+          payload: {
+            isActive: false,
+          },
+        })
+        onNotify('success', response.message)
       } catch (err) {
         if (isAxiosError(err)) {
           console.log('err', err)

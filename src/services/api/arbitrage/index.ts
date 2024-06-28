@@ -30,6 +30,11 @@ interface GetArbitrageBotLogsParamsProps {
   botId: string
 }
 
+interface ToggleArbitrageBotResultProps {
+  isActive: boolean
+  message: string
+}
+
 interface GetArbitrageBotByIdParamsProps {
   botId: string
 }
@@ -163,7 +168,7 @@ export async function onUpdateArbitrageBotData({
 
 export async function toggleArbitrageBot({
   botId,
-}: ToggleArbitrageBotParamsProps): Promise<unknown> {
+}: ToggleArbitrageBotParamsProps): Promise<ToggleArbitrageBotResultProps> {
   const token = getCookie(COOKIES_KEY.JWT)
 
   const response = await api(`/v1/arbitrage/toggle/${botId}`, {
