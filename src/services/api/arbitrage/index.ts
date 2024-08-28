@@ -93,7 +93,6 @@ export async function onCreateArbitrageBot(): Promise<unknown> {
   })
 
   const data = response.data
-  console.log('data', data)
 
   return data
 }

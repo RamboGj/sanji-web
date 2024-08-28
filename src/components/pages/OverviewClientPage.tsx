@@ -24,9 +24,6 @@ export default function OverviewPage({
   notifications,
   subscriptionActive,
 }: NotificationsProps) {
-  console.log('notifications', notifications)
-  console.log('subscriptionActive', subscriptionActive)
-
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
     useState<boolean>(false)
 

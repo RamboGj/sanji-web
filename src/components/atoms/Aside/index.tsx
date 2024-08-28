@@ -1,13 +1,7 @@
 'use client'
 
 import { COOKIES_KEY } from '@/utils/cookies'
-import {
-  BookOpenText,
-  ClockCountdown,
-  Globe,
-  Icon,
-  Target,
-} from '@phosphor-icons/react'
+import { Globe, Icon, Target } from '@phosphor-icons/react'
 import { deleteCookie } from 'cookies-next'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -43,18 +37,18 @@ export function Aside() {
       activeIcon: <Target size={24} color="#FFFFFF" />,
       path: '/snipe-bot',
     },
-    {
-      title: 'Time Sensitive BOT',
-      icon: <ClockCountdown size={24} color="#524D48" />,
-      activeIcon: <ClockCountdown size={24} color="#FFFFFF" />,
-      path: '/arbitrage-bot',
-    },
-    {
-      title: 'Documentation',
-      icon: <BookOpenText size={24} color="#524D48" />,
-      activeIcon: <BookOpenText size={24} color="#FFFFFF" />,
-      path: '/documentation',
-    },
+    // {
+    //   title: 'Time Sensitive BOT',
+    //   icon: <ClockCountdown size={24} color="#524D48" />,
+    //   activeIcon: <ClockCountdown size={24} color="#FFFFFF" />,
+    //   path: '/arbitrage-bot',
+    // },
+    // {
+    //   title: 'Documentation',
+    //   icon: <BookOpenText size={24} color="#524D48" />,
+    //   activeIcon: <BookOpenText size={24} color="#FFFFFF" />,
+    //   path: '/documentation',
+    // },
     // {
     //   title: 'Scalp BOT (coming soon)',
     //   icon: <Eraser size={24} color="#524D48" />,
